@@ -1,25 +1,26 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\pilar\\OneDrive\\Documentos\\GitHub\\Trabajo-inform-tica\\prueba1\\",
+  "WorkspaceRootPath": "C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9519CD89-5D81-4FA9-B736-07967AE2C71D}|prueba1.vcxproj|C:\\Users\\pilar\\OneDrive\\Documentos\\GitHub\\Trabajo-inform-tica\\prueba1\\Prueba.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{9519CD89-5D81-4FA9-B736-07967AE2C71D}|prueba1.vcxproj|C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\tablero.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9519CD89-5D81-4FA9-B736-07967AE2C71D}|prueba1.vcxproj|solutionrelative:tablero.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9519CD89-5D81-4FA9-B736-07967AE2C71D}|prueba1.vcxproj|C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\Prueba.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{9519CD89-5D81-4FA9-B736-07967AE2C71D}|prueba1.vcxproj|solutionrelative:Prueba.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\segundo.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9519CD89-5D81-4FA9-B736-07967AE2C71D}|prueba1.vcxproj|C:\\Users\\pilar\\OneDrive\\Documentos\\GitHub\\Trabajo-inform-tica\\prueba1\\tablero.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{9519CD89-5D81-4FA9-B736-07967AE2C71D}|prueba1.vcxproj|C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\tablero.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{9519CD89-5D81-4FA9-B736-07967AE2C71D}|prueba1.vcxproj|solutionrelative:tablero.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9519CD89-5D81-4FA9-B736-07967AE2C71D}|prueba1.vcxproj|C:\\Users\\pilar\\OneDrive\\Documentos\\GitHub\\Trabajo-inform-tica\\prueba1\\Source.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{9519CD89-5D81-4FA9-B736-07967AE2C71D}|prueba1.vcxproj|C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\Source.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{9519CD89-5D81-4FA9-B736-07967AE2C71D}|prueba1.vcxproj|solutionrelative:Source.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9519CD89-5D81-4FA9-B736-07967AE2C71D}|prueba1.vcxproj|C:\\Users\\pilar\\OneDrive\\Documentos\\GitHub\\Trabajo-inform-tica\\prueba1\\tablero.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{9519CD89-5D81-4FA9-B736-07967AE2C71D}|prueba1.vcxproj|solutionrelative:tablero.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{9519CD89-5D81-4FA9-B736-07967AE2C71D}|prueba1.vcxproj|C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\segundo.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9519CD89-5D81-4FA9-B736-07967AE2C71D}|prueba1.vcxproj|solutionrelative:segundo.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -29,19 +30,15 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Prueba.cpp",
-              "DocumentMoniker": "C:\\Users\\pilar\\OneDrive\\Documentos\\GitHub\\Trabajo-inform-tica\\prueba1\\Prueba.cpp",
+              "DocumentMoniker": "C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\Prueba.cpp",
               "RelativeDocumentMoniker": "Prueba.cpp",
-              "ToolTip": "C:\\Users\\pilar\\OneDrive\\Documentos\\GitHub\\Trabajo-inform-tica\\prueba1\\Prueba.cpp",
+              "ToolTip": "C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\Prueba.cpp",
               "RelativeToolTip": "Prueba.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
@@ -50,12 +47,12 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "segundo.cpp",
               "DocumentMoniker": "C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\segundo.cpp",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\segundo.cpp",
+              "RelativeDocumentMoniker": "segundo.cpp",
               "ToolTip": "C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\segundo.cpp",
-              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\segundo.cpp",
+              "RelativeToolTip": "segundo.cpp",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-04-29T17:19:04.707Z"
             },
@@ -63,9 +60,9 @@
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "Source.cpp",
-              "DocumentMoniker": "C:\\Users\\pilar\\OneDrive\\Documentos\\GitHub\\Trabajo-inform-tica\\prueba1\\Source.cpp",
+              "DocumentMoniker": "C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\Source.cpp",
               "RelativeDocumentMoniker": "Source.cpp",
-              "ToolTip": "C:\\Users\\pilar\\OneDrive\\Documentos\\GitHub\\Trabajo-inform-tica\\prueba1\\Source.cpp",
+              "ToolTip": "C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\Source.cpp",
               "RelativeToolTip": "Source.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
@@ -73,23 +70,24 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "tablero.cpp",
-              "DocumentMoniker": "C:\\Users\\pilar\\OneDrive\\Documentos\\GitHub\\Trabajo-inform-tica\\prueba1\\tablero.cpp",
+              "DocumentMoniker": "C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\tablero.cpp",
               "RelativeDocumentMoniker": "tablero.cpp",
-              "ToolTip": "C:\\Users\\pilar\\OneDrive\\Documentos\\GitHub\\Trabajo-inform-tica\\prueba1\\tablero.cpp",
+              "ToolTip": "C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\tablero.cpp",
               "RelativeToolTip": "tablero.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-04-29T17:06:19.75Z"
+              "WhenOpened": "2025-04-29T17:06:19.75Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "tablero.h",
-              "DocumentMoniker": "C:\\Users\\pilar\\OneDrive\\Documentos\\GitHub\\Trabajo-inform-tica\\prueba1\\tablero.h",
+              "DocumentMoniker": "C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\tablero.h",
               "RelativeDocumentMoniker": "tablero.h",
-              "ToolTip": "C:\\Users\\pilar\\OneDrive\\Documentos\\GitHub\\Trabajo-inform-tica\\prueba1\\tablero.h",
+              "ToolTip": "C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\tablero.h",
               "RelativeToolTip": "tablero.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
