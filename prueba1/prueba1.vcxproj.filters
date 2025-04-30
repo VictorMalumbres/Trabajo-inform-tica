@@ -21,12 +21,15 @@
     <ClCompile Include="tablero.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Prueba.cpp">
+    <ClCompile Include="piezas.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tablero.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="piezas.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
