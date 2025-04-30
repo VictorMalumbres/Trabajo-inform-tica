@@ -17,10 +17,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{9519CD89-5D81-4FA9-B736-07967AE2C71D}|prueba1.vcxproj|C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\Source.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{9519CD89-5D81-4FA9-B736-07967AE2C71D}|prueba1.vcxproj|solutionrelative:Source.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9519CD89-5D81-4FA9-B736-07967AE2C71D}|prueba1.vcxproj|C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\segundo.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{9519CD89-5D81-4FA9-B736-07967AE2C71D}|prueba1.vcxproj|solutionrelative:segundo.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
@@ -42,19 +38,7 @@
               "RelativeToolTip": "Prueba.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-04-30T10:06:28.158Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "segundo.cpp",
-              "DocumentMoniker": "C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\segundo.cpp",
-              "RelativeDocumentMoniker": "segundo.cpp",
-              "ToolTip": "C:\\Users\\victo\\Documents\\GitHub\\Trabajo-inform-tica\\prueba1\\segundo.cpp",
-              "RelativeToolTip": "segundo.cpp",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-04-29T17:19:04.707Z"
+              "WhenOpened": "2025-04-30T10:06:28.158Z"
             },
             {
               "$type": "Document",
