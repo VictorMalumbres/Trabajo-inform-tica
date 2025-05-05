@@ -1,0 +1,55 @@
+# Archivos y carpetas de configuración de Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Archivos de compilación
+bin/
+obj/
+[Bb]uild/
+[Bb]uild[Ll]og.*
+
+# Archivos de paquetes NuGet
+*.nupkg
+*.snupkg
+packages/
+project.lock.json
+project.assets.json
+
+# Archivos de configuración y temporales
+*.log
+*.tlog
+*.idb
+*.pdb
+*.cache
+*.dbmdl
+*.bak
+
+# Archivos de configuración local
+*.vssscc
+*.vspscc
+*.vsp
+*.psess
+*.vspx
+*.vcxproj.user
+*.csproj.user
+*.sdf
+*.opensdf
+
+# Archivos de test y resultado
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Archivos de publicación
+publish/
+*.publishsettings
+
+# Otros entornos
+node_modules/
+.env
+.vscode/
+.idea/
