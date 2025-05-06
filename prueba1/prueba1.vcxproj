@@ -128,7 +128,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Prueba.cpp" />
-    <ClCompile Include="segundo.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="tablero.cpp" />
   </ItemGroup>
