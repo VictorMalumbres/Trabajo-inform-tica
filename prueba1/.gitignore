@@ -6,7 +6,6 @@
 *.sln.docstates
 
 # Archivos de compilación
-bin/
 obj/
 [Bb]uild/
 [Bb]uild[Ll]og.*
