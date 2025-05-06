@@ -1,4 +1,3 @@
-void main()
-{
+#include <iostream>
+#include <freeglut.h>
 
-}
