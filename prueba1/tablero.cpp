@@ -1,51 +1,35 @@
-#include "tablero.h"
-#include <iostream>
-#include <freeglut.h>
+#include "Tablero.h"
 
-const int windowWidth = 600;
-const int windowHeight = 600;
-const int numSquares = 8;
+Tablero::Tablero(int f, int c) : filas(f), columnas(c) {
+    // Constructor donde se inicializan las filas y columnas del tablero
+}
 
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
+void Tablero::inicializa() {
+    // Por ahora no inicializamos nada en particular en el tablero
+}
 
-    float squareSize = 2.0f / numSquares;  // tamaño de cada cuadrado (de -1.0 a 1.0)
+void Tablero::dibuja() {
+    // Establecer el tamaño de las casillas (puedes ajustar este valor si lo prefieres)
+    float casillaSizeX = 1.0f; // Tamaño de cada casilla en el eje X
+    float casillaSizeY = 1.0f; // Tamaño de cada casilla en el eje Y
 
-    for (int row = 0; row < numSquares; ++row) {
-        for (int col = 0; col < numSquares; ++col) {
-            // Alternar color entre blanco y negro
-            if ((row + col) % 2 == 0)
-                glColor3f(1.0f, 1.0f, 1.0f);  // blanco
-            else
-                glColor3f(0.0f, 0.0f, 0.0f);  // negro
+    for (int i = 0; i < filas; ++i) {
+        for (int j = 0; j < columnas; ++j) {
+            // Alternar colores entre blanco y negro
+            if ((i + j) % 2 == 0) {
+                glColor3f(1.0f, 1.0f, 1.0f);  // Blanco
+            }
+            else {
+                glColor3f(0.0f, 0.0f, 0.0f);  // Negro
+            }
 
-            float x = -1.0f + col * squareSize;
-            float y = -1.0f + row * squareSize;
-
+            // Dibujar un cuadrado por casilla
             glBegin(GL_QUADS);
-            glVertex2f(x, y);
-            glVertex2f(x + squareSize, y);
-            glVertex2f(x + squareSize, y + squareSize);
-            glVertex2f(x, y + squareSize);
+            glVertex3f(j * casillaSizeX, i * casillaSizeY, 0.0f);  // Esquina inferior izquierda
+            glVertex3f((j + 1) * casillaSizeX, i * casillaSizeY, 0.0f);  // Esquina inferior derecha
+            glVertex3f((j + 1) * casillaSizeX, (i + 1) * casillaSizeY, 0.0f);  // Esquina superior derecha
+            glVertex3f(j * casillaSizeX, (i + 1) * casillaSizeY, 0.0f);  // Esquina superior izquierda
             glEnd();
         }
     }
-
-    glFlush();
-}
-
-void initialize() {
-    glClearColor(0.5f, 0.5f, 0.5f, 1.0f); // Color de fondo gris
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowSize(windowWidth, windowHeight);
-    glutCreateWindow("Tablero de Ajedrez - FreeGLUT");
-
-    initialize();
-    glutDisplayFunc(display);
-    glutMainLoop();
-    return 0;
 }
