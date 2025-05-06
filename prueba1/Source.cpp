@@ -31,12 +31,12 @@ int main(int argc, char* argv[]) {
     glutInit(&argc, argv);
     glutInitWindowSize(800, 600);  // Tamaño de la ventana
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);  // Configurar la visualización
-    glutCreateWindow("Tablero 4x5");
+    glutCreateWindow("Tablero 5x4");
 
     // Configuración básica de OpenGL para dibujar en 2D
     glMatrixMode(GL_PROJECTION);  // Usar proyección
     glLoadIdentity();  // Reiniciar la matriz de proyección
-    glOrtho(0.0, 5.0, 0.0, 5.0, -1.0, 1.0);  // Establecer la proyección ortográfica centrada
+    glOrtho(-1.0, 5.0, 0.0, 5.0, -1.0, 1.0);  // Establecer la proyección ortográfica centrada
 
     // Registrar los callbacks
     glutDisplayFunc(OnDraw);
