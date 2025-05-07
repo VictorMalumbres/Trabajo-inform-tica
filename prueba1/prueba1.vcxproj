@@ -129,11 +129,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Mundo.cpp" />
+    <ClCompile Include="Peon.cpp" />
+    <ClCompile Include="Pieza.cpp" />
+    <ClCompile Include="Reina.cpp" />
+    <ClCompile Include="Rey.cpp" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="tablero.cpp" />
+    <ClCompile Include="Tablero.cpp" />
+    <ClCompile Include="Torre.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="tablero.h" />
+    <ClInclude Include="Mundo.h" />
+    <ClInclude Include="Peon.h" />
+    <ClInclude Include="Pieza.h" />
+    <ClInclude Include="Reina.h" />
+    <ClInclude Include="Rey.h" />
+    <ClInclude Include="Tablero.h" />
+    <ClInclude Include="Torre.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,14 +1,17 @@
 #pragma once
-#include <freeglut.h>  // Necesario para OpenGL
+#include "Pieza.h"  
+#include "Torre.h"  
+#include "Reina.h"  
+#include "Rey.h"    
+#include "Peon.h"   
+#include <vector>
 
 class Tablero {
-public:
-    Tablero(int filas, int columnas);
-    void inicializa();  // Inicializa el tablero (vacío por ahora)
-    void dibuja();      // Método para dibujar el tablero con OpenGL
-
 private:
-    int filas;      // Número de filas del tablero
-    int columnas;   // Número de columnas del tablero
-};
+    std::vector<Pieza*> piezas;  // Vector para almacenar las piezas
 
+public:
+    Tablero(); 
+    void inicializa();  
+    void dibuja();  
+};
