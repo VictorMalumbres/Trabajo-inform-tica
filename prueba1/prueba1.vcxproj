@@ -129,23 +129,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Mundo.cpp" />
-    <ClCompile Include="Peon.cpp" />
-    <ClCompile Include="Pieza.cpp" />
-    <ClCompile Include="Reina.cpp" />
-    <ClCompile Include="Rey.cpp" />
-    <ClCompile Include="Source.cpp" />
-    <ClCompile Include="Tablero.cpp" />
-    <ClCompile Include="Torre.cpp" />
+    <ClCompile Include="src\Mundo.cpp" />
+    <ClCompile Include="src\Peon.cpp" />
+    <ClCompile Include="src\Pieza.cpp" />
+    <ClCompile Include="src\Reina.cpp" />
+    <ClCompile Include="src\Rey.cpp" />
+    <ClCompile Include="src\Source.cpp" />
+    <ClCompile Include="src\tablero.cpp" />
+    <ClCompile Include="src\Torre.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Mundo.h" />
-    <ClInclude Include="Peon.h" />
-    <ClInclude Include="Pieza.h" />
-    <ClInclude Include="Reina.h" />
-    <ClInclude Include="Rey.h" />
-    <ClInclude Include="Tablero.h" />
-    <ClInclude Include="Torre.h" />
+    <ClInclude Include="src\Mundo.h" />
+    <ClInclude Include="src\Peon.h" />
+    <ClInclude Include="src\Pieza.h" />
+    <ClInclude Include="src\Reina.h" />
+    <ClInclude Include="src\Rey.h" />
+    <ClInclude Include="src\tablero.h" />
+    <ClInclude Include="src\Torre.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
