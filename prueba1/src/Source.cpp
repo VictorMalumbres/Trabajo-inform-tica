@@ -1,24 +1,27 @@
-#include "Mundo.h"
-#include "freeglut.h"
+#include "Tablero.h"
+#include <freeglut.h>
 
-Mundo mundo;  
+Tablero tablero;
 
-void OnDraw(void) {
-    mundo.dibuja();  
+void displayCallback() {
+    tablero.mostrarMenuEnVentana();
 }
 
-int main(int argc, char* argv[]) {
+void keyboardCallback(unsigned char key, int x, int y) {
+    tablero.manejarEntradaMenu(key, x, y);
+}
+
+int main(int argc, char** argv) {
     glutInit(&argc, argv);
-    glutInitWindowSize(800, 600);  
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    glutCreateWindow("Mini Ajedrez");
+    glutInitWindowSize(800, 600);
+    glutCreateWindow("MiniAjedrez");
 
-    mundo.inicializa();
-    glutDisplayFunc(OnDraw);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Fondo negro
 
-    // Iniciar el bucle de GLUT
+    glutDisplayFunc(displayCallback);
+    glutKeyboardFunc(keyboardCallback);
+
     glutMainLoop();
-
     return 0;
 }
-
