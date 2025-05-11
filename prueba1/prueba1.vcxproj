@@ -149,7 +149,6 @@
     <ClCompile Include="src\Source.cpp" />
     <ClCompile Include="src\tablero.cpp" />
     <ClCompile Include="src\Torre.cpp" />
-    <ClCompile Include="tablero2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Mundo.h" />
@@ -159,7 +158,6 @@
     <ClInclude Include="src\Rey.h" />
     <ClInclude Include="src\tablero.h" />
     <ClInclude Include="src\Torre.h" />
-    <ClInclude Include="tablero2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
