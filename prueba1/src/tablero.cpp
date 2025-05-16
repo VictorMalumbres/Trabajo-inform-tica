@@ -46,9 +46,6 @@ void Tablero::iniciar2dojuego() {
     glutPostRedisplay();
 }
 
-
-
-
 void Tablero::cerrarAplicacion() {
     std::cout << "Saliendo del juego..." << std::endl;
     //glutLeaveMainLoop(); // Cierra la ventana y termina el bucle principal de GLUT
@@ -100,9 +97,6 @@ void Tablero::iniciarPartida(int modoJuego) {
     glutDisplayFunc([]() { mundo.dibuja(); });
     glutPostRedisplay();
 }
-
-
-
 
 void Tablero::dibuja() {
     float casillaSizeX = 1.0f;
@@ -161,51 +155,51 @@ void Tablero::inicializaSilverman() {
     piezas.clear();
 
     // Primer jugador (verde)
-    piezas.push_back(new Torre(0.5f, 0.5f, 0, 255, 0));
-    piezas.push_back(new Reina(1.5f, 0.5f, 0, 255, 0));
-    piezas.push_back(new Rey(2.5f, 0.5f, 0, 255, 0));
-    piezas.push_back(new Torre(3.5f, 0.5f, 0, 255, 0));
+    piezas.push_back(new Torre(0.5f, 0.5f, 0));
+    piezas.push_back(new Reina(1.5f, 0.5f,0));
+    piezas.push_back(new Rey(2.5f, 0.5f, 0));
+    piezas.push_back(new Torre(3.5f, 0.5f, 0));
 
-    piezas.push_back(new Peon(0.5f, 1.5f, 0, 255, 0));
-    piezas.push_back(new Peon(1.5f, 1.5f, 0, 255, 0));
-    piezas.push_back(new Peon(2.5f, 1.5f, 0, 255, 0));
-    piezas.push_back(new Peon(3.5f, 1.5f, 0, 255, 0));
+    piezas.push_back(new Peon(0.5f, 1.5f, 0));
+    piezas.push_back(new Peon(1.5f, 1.5f, 0));
+    piezas.push_back(new Peon(2.5f, 1.5f, 0));
+    piezas.push_back(new Peon(3.5f, 1.5f, 0));
 
     // Segundo jugador (rojo)
-    piezas.push_back(new Torre(0.5f, 4.5f, 255, 0, 0));
-    piezas.push_back(new Reina(1.5f, 4.5f, 255, 0, 0));
-    piezas.push_back(new Rey(2.5f, 4.5f, 255, 0, 0));
-    piezas.push_back(new Torre(3.5f, 4.5f, 255, 0, 0));
+    piezas.push_back(new Torre(0.5f, 4.5f, 1));
+    piezas.push_back(new Reina(1.5f, 4.5f, 1));
+    piezas.push_back(new Rey(2.5f, 4.5f, 1));
+    piezas.push_back(new Torre(3.5f, 4.5f, 1));
 
-    piezas.push_back(new Peon(0.5f, 3.5f, 255, 0, 0));
-    piezas.push_back(new Peon(1.5f, 3.5f, 255, 0, 0));
-    piezas.push_back(new Peon(2.5f, 3.5f, 255, 0, 0));
-    piezas.push_back(new Peon(3.5f, 3.5f, 255, 0, 0));
+    piezas.push_back(new Peon(0.5f, 3.5f, 1));
+    piezas.push_back(new Peon(1.5f, 3.5f, 1));
+    piezas.push_back(new Peon(2.5f, 3.5f, 1));
+    piezas.push_back(new Peon(3.5f, 3.5f, 1));
 }
 
 void Tablero::inicializaDemi() {
     piezas.clear();
 
     // Primer jugador (verde)
-    piezas.push_back(new Torre(0.5f, 0.5f, 0, 255, 0));
-    piezas.push_back(new Rey(1.5f, 0.5f, 0, 255, 0));
-    piezas.push_back(new Torre(3.5f, 0.5f, 0, 255, 0));
+    piezas.push_back(new Torre(0.5f, 0.5f, 0));
+    piezas.push_back(new Rey(1.5f, 0.5f,  0));
+    piezas.push_back(new Torre(3.5f, 0.5f, 0));
 
-    piezas.push_back(new Alfil(2.5f, 0.5f, 0, 200, 0));      // Alfil verde
-    piezas.push_back(new Caballo(0.5f, 1.5f, 0, 150, 0));    // Caballo verde
-    piezas.push_back(new Caballo(1.5f, 1.5f, 0, 150, 0));    // Caballo verde
-    piezas.push_back(new Peon(2.5f, 1.5f, 0, 255, 0));
-    piezas.push_back(new Peon(3.5f, 1.5f, 0, 255, 0));
+    piezas.push_back(new Alfil(2.5f, 0.5f, 0));      // Alfil verde
+    piezas.push_back(new Caballo(0.5f, 1.5f, 0));    // Caballo verde
+    piezas.push_back(new Caballo(1.5f, 1.5f, 0));    // Caballo verde
+    piezas.push_back(new Peon(2.5f, 1.5f, 0));
+    piezas.push_back(new Peon(3.5f, 1.5f, 0));
 
     // Segundo jugador (rojo)
-    piezas.push_back(new Torre(0.5f, 7.5f, 255, 0, 0));
-    piezas.push_back(new Rey(1.5f, 7.5f, 255, 0, 0));
-    piezas.push_back(new Torre(3.5f, 7.5f, 255, 0, 0));
+    piezas.push_back(new Torre(0.5f, 7.5f, 1));
+    piezas.push_back(new Rey(1.5f, 7.5f, 1));
+    piezas.push_back(new Torre(3.5f, 7.5f, 1));
 
-    piezas.push_back(new Alfil(2.5f, 7.5f, 200, 0, 0));      // Alfil rojo
-    piezas.push_back(new Caballo(0.5f, 6.5f, 150, 0, 0));    // Caballo rojo
-    piezas.push_back(new Caballo(1.5f, 6.5f, 150, 0, 0));    // Caballo rojo
-    piezas.push_back(new Peon(2.5f, 6.5f, 255, 0, 0));
-    piezas.push_back(new Peon(3.5f, 6.5f, 255, 0, 0));
+    piezas.push_back(new Alfil(2.5f, 7.5f, 1));      // Alfil rojo
+    piezas.push_back(new Caballo(0.5f, 6.5f, 1));    // Caballo rojo
+    piezas.push_back(new Caballo(1.5f, 6.5f, 1));    // Caballo rojo
+    piezas.push_back(new Peon(2.5f, 6.5f, 1));
+    piezas.push_back(new Peon(3.5f, 6.5f, 1));
 }
 
