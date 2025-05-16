@@ -4,7 +4,8 @@
 
 class Mundo {
 private:
-    Tablero tablero;  // Tablero 
+    Tablero tablero;  // Tablero
+    Tablero tablero2; //2do juego
 
 public:
     Mundo(); 
