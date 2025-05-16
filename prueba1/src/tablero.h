@@ -12,6 +12,8 @@
 class Tablero {
 private:
     std::vector<Pieza*> piezas;
+    int filas;
+    int columnas;
 
     void renderizarTexto(const std::string& texto, float x, float y, void* fuente);
 
@@ -21,12 +23,10 @@ public:
     void manejarEntradaMenu(unsigned char key, int x, int y);
     void mostrarInstruccionesEnVentana();
     void iniciarPartida();
-    void iniciar2dojuego();
     void iniciarJuego();
     void cerrarAplicacion();
     void inicializa();
     void dibuja();
-    void dibuja2();
 };
 
 #endif // TABLERO_H
