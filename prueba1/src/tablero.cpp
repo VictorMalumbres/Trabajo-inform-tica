@@ -81,10 +81,10 @@ void Tablero::mostrarInstruccionesEnVentana() {
     renderizarTexto("1. El objetivo del juego es capturar las piezas del oponente.", -0.8f, 0.4f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("2. Cada pieza tiene movimientos especificos.", -0.8f, 0.2f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("3. El juego termina cuando el Rey de un jugador es capturado.", -0.8f, 0.0f, GLUT_BITMAP_HELVETICA_12);
-    renderizarTexto("Presione cualquier tecla para volver al menu...", -0.8f, -0.2f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("Presione doble click para volver al menu...", -0.8f, -0.2f, GLUT_BITMAP_HELVETICA_12);
 
     glutSwapBuffers(); // Intercambiar buffers para mostrar el contenido
-    glutKeyboardFunc([](unsigned char, int, int) { glutPostRedisplay(); }); // Volver al menú
+    //glutKeyboardFunc([](unsigned char, int, int) { glutPostRedisplay(); }); // Volver al menú
 }
 
 void Tablero::iniciarPartida(int modoJuego) {
