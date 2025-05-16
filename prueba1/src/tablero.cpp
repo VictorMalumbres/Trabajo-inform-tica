@@ -16,8 +16,8 @@ void Tablero::mostrarMenuEnVentana() {
     // Dibujar el título del menú
     renderizarTexto("MENU DEL JUEGO", -0.2f, 0.8f, GLUT_BITMAP_HELVETICA_18);
     renderizarTexto("1. Ver instrucciones del juego", -0.4f, 0.6f, GLUT_BITMAP_HELVETICA_12);
-    renderizarTexto("2. Jugar partida", -0.4f, 0.4f, GLUT_BITMAP_HELVETICA_12);
-    renderizarTexto("3. 2do juego", -0.4f, 0.2f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("2. Jugar partida SILVERMAN 4X5", -0.4f, 0.4f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("3. Jugar partida DEMI", -0.4f, 0.2f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("4. Salir", -0.4f, 0.0f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("Seleccione una opcion con el teclado...", -0.4f, -0.2f, GLUT_BITMAP_HELVETICA_12);
 
