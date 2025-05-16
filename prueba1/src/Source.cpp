@@ -1,6 +1,7 @@
 #include "Tablero.h"
 #include <freeglut.h>
 
+
 Tablero tablero;
 
 void displayCallback() {

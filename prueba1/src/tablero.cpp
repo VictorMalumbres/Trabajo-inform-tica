@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 #include "Mundo.h"
+#pragma warning(disable : 4996) //deshabilita el error por unsafe 
+
 
 Mundo mundo;
 
