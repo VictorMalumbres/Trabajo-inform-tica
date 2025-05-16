@@ -107,7 +107,7 @@ void Tablero2::dibuja() {
     float casillaSizeX = 1.0f;
     float casillaSizeY = 1.0f;
 
-    for (int i = 0; i < 5; ++i) {  // 5 filas
+    for (int i = 0; i < 8; ++i) {  // 8 filas
         for (int j = 0; j < 4; ++j) {  // 4 columnas
             if ((i + j) % 2 == 0) {
                 glColor3f(1.0f, 1.0f, 1.0f);  // Blanco
