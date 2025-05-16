@@ -56,9 +56,11 @@ void Tablero::manejarEntradaMenu(unsigned char key, int x, int y) {
         mostrarInstruccionesEnVentana();
         break;
     case '2':
+        mundo.setModoJuego(1);
         iniciarJuego();
         break;
     case '3':
+        mundo.setModoJuego(2);
         iniciar2dojuego();
         break;
     case '4':
@@ -145,7 +147,7 @@ void Tablero::dibuja2() {
         float casillaSizeX = 1.0f;
         float casillaSizeY = 1.0f;
 
-        for (int i = 0; i < 5; ++i) {  // 5 filas
+        for (int i = 0; i < 8; ++i) {  // 8 filas
             for (int j = 0; j < 4; ++j) {  // 4 columnas
                 if ((i + j) % 2 == 0) {
                     glColor3f(1.0f, 1.0f, 1.0f);  // Blanco
@@ -165,6 +167,6 @@ void Tablero::dibuja2() {
 
         // Dibujar las piezas
         for (Pieza* pieza : piezas) {
-            pieza->dibuja();
+            
         }
 }

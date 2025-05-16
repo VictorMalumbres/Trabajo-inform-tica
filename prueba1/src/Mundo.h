@@ -1,14 +1,15 @@
 #pragma once
-#include "tablero.h"
-#include <freeglut.h>
+#include "Tablero.h"
 
 class Mundo {
 private:
-    Tablero tablero;  // Tablero 
-	Tablero tablero2; // Tablero 2
+    Tablero tablero;
+    Tablero tablero2;
+    int modoJuego; // 1 para 4x5, 2 para 4x8
 
 public:
     Mundo();
-    void inicializa();  // Inicializar el mundo (tablero, piezas, etc.)
-    void dibuja();  // Dibuja el tablero y las piezas
+    void setModoJuego(int modo) { modoJuego = modo; }
+    void inicializa();
+    void dibuja();
 };
