@@ -149,7 +149,7 @@
     <ClCompile Include="src\Reina.cpp" />
     <ClCompile Include="src\Rey.cpp" />
     <ClCompile Include="src\Source.cpp" />
-    <ClCompile Include="src\tablero.cpp" />
+    <ClCompile Include="src\Tablero.cpp" />
     <ClCompile Include="src\Torre.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -160,7 +160,7 @@
     <ClInclude Include="src\Pieza.h" />
     <ClInclude Include="src\Reina.h" />
     <ClInclude Include="src\Rey.h" />
-    <ClInclude Include="src\tablero.h" />
+    <ClInclude Include="src\Tablero.h" />
     <ClInclude Include="src\Torre.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

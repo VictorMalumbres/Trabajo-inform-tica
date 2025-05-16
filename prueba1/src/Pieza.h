@@ -3,14 +3,16 @@
 
 class Pieza {
 protected:
-    float x, y;  // Coordenadas de la pieza
-    unsigned char color[3];  // Color de la pieza (RGB)
+    float x, y;
+    int bando;  // 0 para blanco, 1 para negro
 
 public:
-    Pieza(float x, float y, unsigned char r, unsigned char g, unsigned char b);  
-    virtual void dibuja() = 0;  // Método virtual para dibujar la pieza
+    Pieza(float x, float y, int bando);
+    virtual ~Pieza() {}
 
+    int getBando();
     float getX();
     float getY();
-};
 
+    virtual void dibuja() = 0;
+};

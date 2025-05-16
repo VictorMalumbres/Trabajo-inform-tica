@@ -1,10 +1,7 @@
 #include "Pieza.h"
 
-Pieza::Pieza(float x, float y, unsigned char r, unsigned char g, unsigned char b)
-    : x(x), y(y) {
-    color[0] = r;  // Componente rojo
-    color[1] = g;  // Componente verde
-    color[2] = b;  // Componente azul
+Pieza::Pieza(float x, float y, int bando)
+    : x(x), y(y), bando(bando) {
 }
 
 float Pieza::getX() {
@@ -13,5 +10,8 @@ float Pieza::getX() {
 
 float Pieza::getY() {
     return y;
+}
+int Pieza::getBando() {
+	return bando;
 }
 

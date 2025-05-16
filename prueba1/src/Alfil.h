@@ -3,10 +3,11 @@
 
 class Alfil : public Pieza {
 public:
-    Alfil(float x, float y, unsigned char r, unsigned char g, unsigned char b)
-        : Pieza(x, y, r, g, b) {
+    Alfil(float x, float y, int bando)
+        : Pieza(x, y, bando) {
     }
 
-    void dibuja();
+    void dibuja() override;  // marca override para mayor claridad
+    void mueve();            // añade método mueve para que el peón se mueva
 };
 
