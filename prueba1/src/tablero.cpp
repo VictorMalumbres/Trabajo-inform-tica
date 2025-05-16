@@ -5,8 +5,9 @@
 #include "Mundo.h"
 #pragma warning(disable : 4996) //deshabilita el error por unsafe 
 
-
 Mundo mundo;
+
+bool juegoEnPausa = false;
 
 Tablero::Tablero() {
     // Constructor de Tablero, inicializa el vector de piezas
@@ -33,17 +34,72 @@ void Tablero::renderizarTexto(const std::string& texto, float x, float y, void* 
         glutBitmapCharacter(fuente, c); // Dibujar cada carácter
     }
 }
+void Tablero::mostrarPausa() {
+    glClear(GL_COLOR_BUFFER_BIT);
+    renderizarTexto("JUEGO EN PAUSA", -0.2f, 0.0f, GLUT_BITMAP_HELVETICA_18);
+    renderizarTexto("Presiona 'P' para continuar...", -0.3f, -0.2f, GLUT_BITMAP_HELVETICA_12);
+    glutSwapBuffers();
+}
+
+void manejarTeclado(unsigned char key, int x, int y) {
+    if (key == 27) { // Código ASCII de la tecla ESC
+        juegoEnPausa = !juegoEnPausa;  // Cambiar el estado de pausa
+        if (juegoEnPausa) {
+            std::cout << "Juego pausado" << std::endl;
+        }
+        else {
+            std::cout << "Juego reanudado" << std::endl;
+        }
+        glutPostRedisplay(); // Forzar redibujado
+    }
+}
 
 void Tablero::iniciarJuego() {
     mundo.inicializaModo1();
-    glutDisplayFunc([]() { mundo.dibuja(); });
-    glutPostRedisplay();
+    glutDisplayFunc([]() {
+        if (!juegoEnPausa) {
+            mundo.dibuja();
+        }
+        else {
+            glClear(GL_COLOR_BUFFER_BIT);
+            // Mostrar texto de "PAUSA"
+            glColor3f(1.0f, 1.0f, 0.0f); // Color amarillo
+            glRasterPos2f(-0.2f, 0.0f);
+            std::string texto = "Juego en pausa (ESC para continuar)";
+            for (char c : texto) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+            }
+            glutSwapBuffers();
+        }
+        });
+    glutKeyboardFunc(manejarTeclado);
+    glutIdleFunc([]() {
+        glutPostRedisplay();
+        });
 }
 
 void Tablero::iniciar2dojuego() {
     mundo.inicializaModo2();
-    glutDisplayFunc([]() { mundo.dibuja(); });
-    glutPostRedisplay();
+    glutDisplayFunc([]() {
+        if (!juegoEnPausa) {
+            mundo.dibuja();
+        }
+        else {
+            glClear(GL_COLOR_BUFFER_BIT);
+            // Mostrar texto de "PAUSA"
+            glColor3f(1.0f, 1.0f, 0.0f); // Color amarillo
+            glRasterPos2f(-0.2f, 0.0f);
+            std::string texto = "Juego en pausa (ESC para continuar)";
+            for (char c : texto) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+            }
+            glutSwapBuffers();
+        }
+        });
+    glutKeyboardFunc(manejarTeclado);
+    glutIdleFunc([]() {
+        glutPostRedisplay();
+        });
 }
 
 void Tablero::cerrarAplicacion() {
@@ -97,9 +153,6 @@ void Tablero::iniciarPartida(int modoJuego) {
     glutDisplayFunc([]() { mundo.dibuja(); });
     glutPostRedisplay();
 }
-
-
-
 
 void Tablero::dibuja() {
     float casillaSizeX = 1.0f;

@@ -22,14 +22,15 @@ private:
 
 public:
     Tablero();
-    void mostrarMenuEnVentana();
-    void manejarEntradaMenu(unsigned char key, int x, int y);
-    void mostrarInstruccionesEnVentana();
-    void iniciarPartida(int modoJuego);
+    void mostrarMenuEnVentana(); //menú texto
+    void manejarEntradaMenu(unsigned char key, int x, int y); //menú switch
+    void mostrarInstruccionesEnVentana(); //instrucciones juego
+    void iniciarPartida(int modoJuego); //correr el juego
 
-    void iniciarJuego();
-    void iniciar2dojuego();
+    void iniciarJuego(); //silverman
+    void iniciar2dojuego(); //demi
     void cerrarAplicacion();
+    void mostrarPausa();
    
     void dibuja();
     void dibuja2();

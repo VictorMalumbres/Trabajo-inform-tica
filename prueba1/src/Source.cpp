@@ -1,6 +1,6 @@
 #include "Tablero.h"
 #include <freeglut.h>
-
+#include "Mundo.h"
 
 Tablero tablero;
 
