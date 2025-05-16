@@ -24,9 +24,11 @@ public:
     void mostrarInstruccionesEnVentana();
     void iniciarPartida();
     void iniciarJuego();
+    void iniciar2dojuego();
     void cerrarAplicacion();
     void inicializa();
     void dibuja();
+    void dibuja2();
 };
 
 #endif // TABLERO_H
