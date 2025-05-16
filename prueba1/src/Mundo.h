@@ -10,6 +10,9 @@ private:
 public:
     Mundo();
     void setModoJuego(int modo) { modoJuego = modo; }
-    void inicializa();
+    
     void dibuja();
+    void inicializaModo1();  // Para Silverman 4x5
+    void inicializaModo2();  // Para Demi 4x8
+
 };

@@ -4,6 +4,9 @@
 #include <vector>
 #include <string>
 #include "Pieza.h"
+#include "Alfil.h"
+#include "Caballo.h"
+
 #include "Torre.h"
 #include "Reina.h"
 #include "Rey.h"
@@ -22,13 +25,17 @@ public:
     void mostrarMenuEnVentana();
     void manejarEntradaMenu(unsigned char key, int x, int y);
     void mostrarInstruccionesEnVentana();
-    void iniciarPartida();
+    void iniciarPartida(int modoJuego);
+
     void iniciarJuego();
     void iniciar2dojuego();
     void cerrarAplicacion();
-    void inicializa();
+   
     void dibuja();
     void dibuja2();
+    void inicializaSilverman();
+    void inicializaDemi();
+
 };
 
 #endif // TABLERO_H
