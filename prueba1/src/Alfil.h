@@ -3,7 +3,7 @@
 
 class Alfil : public Pieza {
 public:
-    Alfil(float x, float y, int bando)
+    Alfil(int x, int y, int bando)
         : Pieza(x, y, bando) {
     }
 

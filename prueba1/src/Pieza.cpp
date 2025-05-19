@@ -1,14 +1,14 @@
 #include "Pieza.h"
 
-Pieza::Pieza(float x, float y, int bando)
+Pieza::Pieza(int x, int y, int bando)
     : x(x), y(y), bando(bando) {
 }
 
-float Pieza::getX() {
+int Pieza::getX() {
     return x;
 }
 
-float Pieza::getY() {
+int Pieza::getY() {
     return y;
 }
 int Pieza::getBando() {

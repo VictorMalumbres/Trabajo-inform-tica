@@ -7,7 +7,7 @@ void Peon::dibuja() {
     else
         glColor3f(1.0f, 0.0f, 0.0f);  // negro
     glPushMatrix();
-    glTranslated(getX(), getY(), 0);
+    glTranslated(getX() + 0.5f, getY() + 0.5f, 0);
     glutSolidCube(0.6);  // Dibujar un cubo para la torre
     glPopMatrix();
 }

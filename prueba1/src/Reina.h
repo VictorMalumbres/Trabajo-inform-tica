@@ -3,7 +3,7 @@
 
 class Reina : public Pieza {
 public:
-    Reina(float x, float y, int bando)
+    Reina(int x, int y, int bando)
         : Pieza(x, y, bando) {
     }
 

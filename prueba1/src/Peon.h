@@ -3,7 +3,7 @@
 
 class Peon : public Pieza {
 public:
-    Peon(float x, float y, int bando)
+    Peon(int x, int y, int bando)
         : Pieza(x, y, bando) {
     }
 

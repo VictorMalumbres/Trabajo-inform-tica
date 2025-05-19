@@ -4,7 +4,7 @@
 
 class Torre : public Pieza {
 public:
-    Torre(float x, float y, int bando)
+    Torre(int x, int y, int bando)
         : Pieza(x, y, bando) {
     }
 

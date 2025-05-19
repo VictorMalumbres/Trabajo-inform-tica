@@ -3,16 +3,17 @@
 
 class Pieza {
 protected:
-    float x, y;
+    int x, y;
     int bando;  // 0 para blanco, 1 para negro
 
 public:
-    Pieza(float x, float y, int bando);
+    Pieza(int x, int y, int bando);
     virtual ~Pieza() {}
 
     int getBando();
-    float getX();
-    float getY();
+    int getX();
+    int getY();
+    void setPosicion(int f, int c) { x = c; y = f; };  //x -> columna e y -> fila
 
     virtual void dibuja() = 0;
 };

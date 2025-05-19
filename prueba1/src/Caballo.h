@@ -3,7 +3,7 @@
 
 class Caballo : public Pieza {
 public:
-    Caballo(float x, float y, int bando)
+    Caballo(int x, int y, int bando)
         : Pieza(x, y, bando) {
     }
 

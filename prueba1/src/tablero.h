@@ -1,4 +1,4 @@
-#ifndef TABLERO_H
+ï»¿#ifndef TABLERO_H
 #define TABLERO_H
 
 #include <vector>
@@ -15,28 +15,31 @@
 class Tablero {
 private:
     std::vector<Pieza*> piezas;
-    int filas;
-    int columnas;
+    //int filas;
+    //int columnas;
 
-    void renderizarTexto(const std::string& texto, float x, float y, void* fuente);
+    //void renderizarTexto(const std::string& texto, float x, float y, void* fuente);
 
 public:
     Tablero();
-    void mostrarMenuEnVentana(); //menú texto
-    void manejarEntradaMenu(unsigned char key, int x, int y); //menú switch
-    void mostrarInstruccionesEnVentana(); //instrucciones juego
+    //void mostrarMenuEnVentana(); //menÃº texto
+    //void manejarEntradaMenu(unsigned char key, int x, int y); //menÃº switch
+    //void mostrarInstruccionesEnVentana(); //instrucciones juego
     void iniciarPartida(int modoJuego); //correr el juego
 
-    void iniciarJuego(); //silverman
-    void iniciar2dojuego(); //demi
-    void cerrarAplicacion();
-    void mostrarPausa();
+    //void iniciarJuego(); //silverman
+    //void iniciar2dojuego(); //demi
+    //void cerrarAplicacion();
+    //void mostrarPausa();
    
     void dibuja();
     void dibuja2();
     void inicializaSilverman();
     void inicializaDemi();
 
+    Pieza* obtenerPieza(int columna, int fila) const;
+    void colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila);
+    void anadirPieza(Pieza* pieza);  // Para inicializar el tablero
 };
 
 #endif // TABLERO_H
