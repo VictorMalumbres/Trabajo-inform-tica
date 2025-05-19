@@ -1,11 +1,8 @@
 #pragma once
 #include "Pieza.h"
 
-class Peon : public Pieza {
-protected:
-    float colorR = 1.0f;
-    float colorG = 1.0f;
-    float colorB = 1.0f;
+class Peon : public Pieza 
+{
 public:
     Peon(int x, int y, int bando)
         : Pieza(x, y, bando) {

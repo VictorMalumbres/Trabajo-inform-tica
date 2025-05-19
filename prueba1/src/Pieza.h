@@ -7,6 +7,9 @@ protected:
     int bando;  // 0 para blanco, 1 para negro
     int columna, fila;
     bool resaltado = false;
+    float colorR = 1.0f;
+    float colorG = 1.0f;
+    float colorB = 1.0f;
 
 public:
     Pieza(int x, int y, int bando);
