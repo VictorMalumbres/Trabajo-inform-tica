@@ -40,6 +40,9 @@ public:
     Pieza* obtenerPieza(int columna, int fila) const;
     void colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila);
     void anadirPieza(Pieza* pieza);  // Para inicializar el tablero
+
+    std::vector<Pieza*>& getPiezas() { return piezas; }
+    
 };
 
 #endif // TABLERO_H

@@ -3,7 +3,9 @@
 
 
 void Alfil::dibuja() {
-    if (getBando() == 0)
+    if (resaltado)
+        glColor3f(1.0f, 1.0f, 0.0f); // Amarillo para resaltado
+    else if (getBando() == 0)
         glColor3f(0.0f, 1.0f, 0.0f);  // blanco
     else
         glColor3f(1.0f, 0.0f, 0.0f);  // negro

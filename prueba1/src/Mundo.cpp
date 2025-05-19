@@ -193,12 +193,18 @@ void Mundo::procesarClick(int x, int y) {
         int columna = x / (800 / 4);            // Tablero 5x4
         int fila = 4 - (y / (600 / 5));         // Convertimos coordenada Y
 
+        // Desactiva el resaltado de todas las piezas
+        for (Pieza* pieza : tablero.getPiezas()) {
+            pieza->setResaltado(false);
+        }
+
         if (seleccionX == -1 && seleccionY == -1) {
             Pieza* p = tablero.obtenerPieza(columna, fila);
             if (p != nullptr) {
                 //std::cout << "Pieza seleccionada!" << std::endl;
                 seleccionX = columna;
                 seleccionY = fila;
+				p->setResaltado(true); // Resaltar la pieza seleccionada
             }
         }
         else {
@@ -215,12 +221,18 @@ void Mundo::procesarClick(int x, int y) {
         int columna = x / (800 / 4);            // Tablero 8x4
         int fila = 7 - (y / (600 / 8));         // Convertimos coordenada Y
 
+        // Desactiva el resaltado de todas las piezas
+        for (Pieza* pieza : tablero.getPiezas()) {
+            pieza->setResaltado(false);
+        }
+
         if (seleccionX == -1 && seleccionY == -1) {
             Pieza* p = tablero2.obtenerPieza(columna, fila);
             if (p != nullptr) {
                 //std::cout << "Pieza seleccionada!" << std::endl;
                 seleccionX = columna;
                 seleccionY = fila;
+				p->setResaltado(true); // Resaltar la pieza seleccionada
             }
         }
         else {
