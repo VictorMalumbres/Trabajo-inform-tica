@@ -82,8 +82,8 @@ void Tablero::inicializaSilverman() {
 
     // Primer jugador (blanco)
     piezas.push_back(new Torre(0, 0, 0));
-    piezas.push_back(new Reina(2, 0,0));
-    piezas.push_back(new Rey(1, 0, 0));
+    piezas.push_back(new Reina(1, 0,0));
+    piezas.push_back(new Rey(2, 0, 0));
     piezas.push_back(new Torre(3, 0, 0));
 
     piezas.push_back(new Peon(0, 1, 0));
@@ -93,8 +93,8 @@ void Tablero::inicializaSilverman() {
 
     // Segundo jugador (negro)
     piezas.push_back(new Torre(0, 4, 1));
-    piezas.push_back(new Reina(2, 4, 1));
-    piezas.push_back(new Rey(1, 4, 1));
+    piezas.push_back(new Reina(1, 4, 1));
+    piezas.push_back(new Rey(2, 4, 1));
     piezas.push_back(new Torre(3, 4, 1));
 
     piezas.push_back(new Peon(0, 3, 1));

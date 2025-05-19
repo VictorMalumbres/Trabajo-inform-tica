@@ -14,7 +14,7 @@ void Reina::dibuja() {
         glTranslated(getX() + 0.5f, getY() + 0.5f, 0);  // Centrado en la celda
 
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/reyna_blanco.png").id);
+        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/reina_blanco.png").id);
         // Dibujamos un cuadrado centrado con tamaño 0.6x0.6 (como el cubo anterior)
         float size = 0.3f;  // Mitad del tamaño total (0.6 / 2)
         glBegin(GL_QUADS);
@@ -39,7 +39,7 @@ void Reina::dibuja() {
         glTranslated(getX() + 0.5f, getY() + 0.5f, 0);  // Centrado en la celda
 
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/reyna_negro.png").id);
+        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/reina_negro.png").id);
         // Dibujamos un cuadrado centrado con tamaño 0.6x0.6 (como el cubo anterior)
         float size = 0.3f;  // Mitad del tamaño total (0.6 / 2)
         glBegin(GL_QUADS);
