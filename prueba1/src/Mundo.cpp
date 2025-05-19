@@ -1,6 +1,7 @@
 #include "Mundo.h"
 #include <freeglut.h>
 #include <iostream>
+#include <ETSIDI.h>
 
 extern Mundo mundo;
 
@@ -57,6 +58,22 @@ void Mundo::dibuja() {
 
 void Mundo::mostrarMenuEnVentana() {
     glClear(GL_COLOR_BUFFER_BIT); // Limpiar la ventana
+
+    // Al principio de mostrarMenuEnVentana()
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/fondo_menu.png").id);
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0); glVertex2f(-1.0f, -1.0f);
+    glTexCoord2f(1, 0); glVertex2f(1.0f, -1.0f);
+    glTexCoord2f(1, 1); glVertex2f(1.0f, 1.0f);
+    glTexCoord2f(0, 1); glVertex2f(-1.0f, 1.0f);
+    glEnd();
+
+    glDisable(GL_TEXTURE_2D);
+
+    // Después dibuja los textos del menú como siempre
+
 
     // Dibujar el título del menú
     renderizarTexto("MENU DEL JUEGO", -0.2f, 0.8f, GLUT_BITMAP_HELVETICA_18);
