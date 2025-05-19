@@ -205,61 +205,52 @@ void Mundo::mostrarInstruccionesEnVentana() {
 }
 
 void Mundo::procesarClick(int x, int y) {
-    if (modoJuego == 1)
-    {
-        int columna = x / (800 / 4);            // Tablero 5x4
-        int fila = 4 - (y / (600 / 5));         // Convertimos coordenada Y
+    if (modoJuego == 1) {
+        int columna = x / (800 / 4);
+        int fila = 4 - (y / (600 / 5));
 
         // Desactiva el resaltado de todas las piezas
         for (Pieza* pieza : tablero.getPiezas()) {
             pieza->setResaltado(false);
         }
 
-        if (seleccionX == -1 && seleccionY == -1) {
+        // Usa la selección del tablero
+        if (tablero.getSeleccionX() == -1 && tablero.getSeleccionY() == -1) {
             Pieza* p = tablero.obtenerPieza(columna, fila);
             if (p != nullptr) {
-                //std::cout << "Pieza seleccionada!" << std::endl;
-                seleccionX = columna;
-                seleccionY = fila;
-				p->setResaltado(true); // Resaltar la pieza seleccionada
+                tablero.setSeleccion(columna, fila);
             }
         }
         else {
-            Pieza* p = tablero.obtenerPieza(seleccionX, seleccionY);
+            Pieza* p = tablero.obtenerPieza(tablero.getSeleccionX(), tablero.getSeleccionY());
             if (p != nullptr) {
                 tablero.colocarPieza(p, columna, fila);
             }
-            seleccionX = -1;
-            seleccionY = -1;
+            tablero.limpiarSeleccion();
         }
-    }
-    else if (modoJuego == 2)
-    {
-        int columna = x / (800 / 4);            // Tablero 8x4
-        int fila = 7 - (y / (600 / 8));         // Convertimos coordenada Y
-
-        // Desactiva el resaltado de todas las piezas
-        for (Pieza* pieza : tablero.getPiezas()) {
-            pieza->setResaltado(false);
-        }
-
-        if (seleccionX == -1 && seleccionY == -1) {
-            Pieza* p = tablero2.obtenerPieza(columna, fila);
-            if (p != nullptr) {
-                //std::cout << "Pieza seleccionada!" << std::endl;
-                seleccionX = columna;
-                seleccionY = fila;
-				p->setResaltado(true); // Resaltar la pieza seleccionada
-            }
-        }
-        else {
-            Pieza* p = tablero2.obtenerPieza(seleccionX, seleccionY);
-            if (p != nullptr) {
-                tablero2.colocarPieza(p, columna, fila);
-            }
-            seleccionX = -1;
-            seleccionY = -1;
-        }
+	}
+	else if (modoJuego == 2)
+	{
+		int columna = x / (800 / 4);            // Tablero 8x4
+		int fila = 7 - (y / (600 / 8));         // Convertimos coordenada Y
+		// Desactiva el resaltado de todas las piezas
+		for (Pieza* pieza : tablero2.getPiezas()) {
+			pieza->setResaltado(false);
+		}
+		// Usa la selección del tablero
+		if (tablero2.getSeleccionX() == -1 && tablero2.getSeleccionY() == -1) {
+			Pieza* p = tablero2.obtenerPieza(columna, fila);
+			if (p != nullptr) {
+				tablero2.setSeleccion(columna, fila);
+			}
+		}
+		else {
+			Pieza* p = tablero2.obtenerPieza(tablero2.getSeleccionX(), tablero2.getSeleccionY());
+			if (p != nullptr) {
+				tablero2.colocarPieza(p, columna, fila);
+			}
+			tablero2.limpiarSeleccion();
+		}
     }
 }
 

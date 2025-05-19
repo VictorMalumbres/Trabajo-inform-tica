@@ -15,6 +15,8 @@
 class Tablero {
 private:
     std::vector<Pieza*> piezas;
+    int seleccionX = -1; // Columna seleccionada, -1 si ninguna
+    int seleccionY = -1; // Fila seleccionada, -1 si ninguna
     //int filas;
     //int columnas;
 
@@ -40,6 +42,13 @@ public:
     Pieza* obtenerPieza(int columna, int fila) const;
     void colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila);
     void anadirPieza(Pieza* pieza);  // Para inicializar el tablero
+
+    void setSeleccion(int x, int y) { seleccionX = x; seleccionY = y; }
+    void limpiarSeleccion() { seleccionX = -1; seleccionY = -1; }
+
+    int getSeleccionX() const { return seleccionX; }
+    int getSeleccionY() const { return seleccionY; }
+
 
     std::vector<Pieza*>& getPiezas() { return piezas; }
     

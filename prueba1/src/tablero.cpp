@@ -30,7 +30,12 @@ void Tablero::dibuja() {
 
     for (int i = 0; i < 5; ++i) {  // 5 filas
         for (int j = 0; j < 4; ++j) {  // 4 columnas
-            if ((i + j) % 2 == 0) {
+
+            // Si la casilla es la seleccionada, la resaltamos
+            if (i == seleccionY && j == seleccionX) {
+                glColor3f(1.0f, 1.0f, 0.0f); // Amarillo
+            }
+            else if ((i + j) % 2 == 0) {
                 glColor3f(1.0f, 1.0f, 1.0f);  // Blanco
             }
             else {
@@ -58,7 +63,11 @@ void Tablero::dibuja2() {
 
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 4; ++j) {
-            if ((i + j) % 2 == 0)
+            // Si la casilla es la seleccionada, la resaltamos
+            if (i == seleccionY && j == seleccionX) {
+                glColor3f(1.0f, 1.0f, 0.0f); // Amarillo
+            }
+            else if ((i + j) % 2 == 0)
                 glColor3f(1.0f, 1.0f, 1.0f);
             else
                 glColor3f(0.0f, 0.0f, 0.0f);
@@ -75,6 +84,7 @@ void Tablero::dibuja2() {
     for (Pieza* pieza : piezas) {
         pieza->dibuja();
     }
+
 }
 
 void Tablero::inicializaSilverman() {
