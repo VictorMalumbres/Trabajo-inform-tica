@@ -80,10 +80,10 @@ void Tablero::dibuja2() {
 void Tablero::inicializaSilverman() {
     piezas.clear();
 
-    // Primer jugador (verde)
+    // Primer jugador (blanco)
     piezas.push_back(new Torre(0, 0, 0));
-    piezas.push_back(new Reina(1, 0,0));
-    piezas.push_back(new Rey(2, 0, 0));
+    piezas.push_back(new Reina(2, 0,0));
+    piezas.push_back(new Rey(1, 0, 0));
     piezas.push_back(new Torre(3, 0, 0));
 
     piezas.push_back(new Peon(0, 1, 0));
@@ -91,10 +91,10 @@ void Tablero::inicializaSilverman() {
     piezas.push_back(new Peon(2, 1, 0));
     piezas.push_back(new Peon(3, 1, 0));
 
-    // Segundo jugador (rojo)
+    // Segundo jugador (negro)
     piezas.push_back(new Torre(0, 4, 1));
-    piezas.push_back(new Reina(1, 4, 1));
-    piezas.push_back(new Rey(2, 4, 1));
+    piezas.push_back(new Reina(2, 4, 1));
+    piezas.push_back(new Rey(1, 4, 1));
     piezas.push_back(new Torre(3, 4, 1));
 
     piezas.push_back(new Peon(0, 3, 1));
@@ -106,25 +106,25 @@ void Tablero::inicializaSilverman() {
 void Tablero::inicializaDemi() {
     piezas.clear();
 
-    // Primer jugador (verde)
-    piezas.push_back(new Torre(0, 0, 0));
-    piezas.push_back(new Rey(1, 0,  0));
+    // Primer jugador (blanco)
     piezas.push_back(new Torre(3, 0, 0));
+    piezas.push_back(new Rey(0, 0,  0));
+    piezas.push_back(new Caballo(2, 0, 0));
 
-    piezas.push_back(new Alfil(2, 0, 0));      // Alfil verde
-    piezas.push_back(new Caballo(0, 1, 0));    // Caballo verde
-    piezas.push_back(new Caballo(1, 1, 0));    // Caballo verde
+    piezas.push_back(new Alfil(1, 0, 0));      // Alfil blanco
+    piezas.push_back(new Peon(0, 1, 0));    
+    piezas.push_back(new Peon(1, 1, 0));    
     piezas.push_back(new Peon(2, 1, 0));
     piezas.push_back(new Peon(3, 1, 0));
 
-    // Segundo jugador (rojo)
-    piezas.push_back(new Torre(0, 7, 1));
-    piezas.push_back(new Rey(1, 7, 1));
+    // Segundo jugador (negro)
     piezas.push_back(new Torre(3, 7, 1));
+    piezas.push_back(new Rey(0, 7, 1));
+    piezas.push_back(new Caballo(2, 7, 1));
 
-    piezas.push_back(new Alfil(2, 7, 1));      // Alfil rojo
-    piezas.push_back(new Caballo(0, 6, 1));    // Caballo rojo
-    piezas.push_back(new Caballo(1, 6, 1));    // Caballo rojo
+    piezas.push_back(new Alfil(1, 7, 1));      // Alfil negro
+    piezas.push_back(new Peon(0, 6, 1));    
+    piezas.push_back(new Peon(1, 6, 1));    
     piezas.push_back(new Peon(2, 6, 1));
     piezas.push_back(new Peon(3, 6, 1));
 }
