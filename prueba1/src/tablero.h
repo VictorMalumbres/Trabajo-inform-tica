@@ -18,10 +18,10 @@ private:
     int filas;
     int columnas;
 
+    void renderizarTexto(const std::string& texto, float x, float y, void* fuente);
 
 public:
     Tablero();
-<<<<<<< Updated upstream
     void mostrarMenuEnVentana(); //menú texto
     void manejarEntradaMenu(unsigned char key, int x, int y); //menú switch
     void mostrarInstruccionesEnVentana(); //instrucciones juego
@@ -37,14 +37,6 @@ public:
     void inicializaSilverman();
     void inicializaDemi();
 
-=======
-    void iniciarPartida();
-    void inicializa();
-    void dibuja();
-    Pieza* obtenerPieza(int columna, int fila) const;
-    void colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila);
-    void añadirPieza(Pieza* pieza);  // Para inicializar el tablero
->>>>>>> Stashed changes
 };
 
 #endif // TABLERO_H

@@ -1,24 +1,16 @@
-#include "Mundo.h"
+#include "Tablero.h"
 #include <freeglut.h>
 #include "Mundo.h"
 
-Mundo mundo;
+Tablero tablero;
 
 void displayCallback() {
-    mundo.dibuja();
+    tablero.mostrarMenuEnVentana();
 }
 
 void keyboardCallback(unsigned char key, int x, int y) {
-    mundo.manejarEntradaMenu(key, x, y);
+    tablero.manejarEntradaMenu(key, x, y);
 }
-
-void manejarClicRaton(int boton, int estado, int x, int y) {
-    if (boton == GLUT_LEFT_BUTTON && estado == GLUT_DOWN) {
-        mundo.procesarClick(x, y);
-        glutPostRedisplay(); // Redibuja
-    }
-}
-
 
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
@@ -30,8 +22,6 @@ int main(int argc, char** argv) {
 
     glutDisplayFunc(displayCallback);
     glutKeyboardFunc(keyboardCallback);
-
-    glutMouseFunc(manejarClicRaton);
 
     glutMainLoop();
     return 0;

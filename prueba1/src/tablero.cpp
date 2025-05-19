@@ -2,12 +2,10 @@
 #include <freeglut.h>
 #include <iostream>
 #include <string>
-<<<<<<< Updated upstream
 #include "Mundo.h"
 #pragma warning(disable : 4996) //deshabilita el error por unsafe 
-=======
->>>>>>> Stashed changes
 
+Mundo mundo;
 
 bool juegoEnPausa = false;
 
@@ -15,7 +13,6 @@ Tablero::Tablero() {
     // Constructor de Tablero, inicializa el vector de piezas
 }
 
-<<<<<<< Updated upstream
 void Tablero::mostrarMenuEnVentana() {
     glClear(GL_COLOR_BUFFER_BIT); // Limpiar la ventana
 
@@ -155,36 +152,6 @@ void Tablero::iniciarPartida(int modoJuego) {
     }
     glutDisplayFunc([]() { mundo.dibuja(); });
     glutPostRedisplay();
-=======
-void Tablero::iniciarPartida() {
-    std::cout << "Iniciando partida..." << std::endl;
-    inicializa();
-    dibuja();
-}
-
-void Tablero::inicializa() {
-    // Primer jugador 
-    piezas.push_back(new Torre(0, 0, 0, 255, 0));  // Torre verde
-    piezas.push_back(new Reina(1, 0, 0, 255, 0));  // Reina verde
-    piezas.push_back(new Rey(2, 0, 0, 255, 0));    // Rey verde
-    piezas.push_back(new Torre(3, 0, 0, 255, 0));  // Torre verde
-
-    piezas.push_back(new Peon(0, 1, 0, 255, 0));   // Peón verde
-    piezas.push_back(new Peon(1, 1, 0, 255, 0));   // Peón verde
-    piezas.push_back(new Peon(2, 1, 0, 255, 0));   // Peón verde
-    piezas.push_back(new Peon(3, 1, 0, 255, 0));   // Peón verde
-
-    // Segundo jugador 
-    piezas.push_back(new Torre(0, 4, 255, 0, 0));  // Torre roja
-    piezas.push_back(new Reina(1, 4, 255, 0, 0));  // Reina roja
-    piezas.push_back(new Rey(2, 4, 255, 0, 0));    // Rey rojo
-    piezas.push_back(new Torre(3, 4, 255, 0, 0));  // Torre roja
-
-    piezas.push_back(new Peon(0, 3, 255, 0, 0));   // Peón rojo
-    piezas.push_back(new Peon(1, 3, 255, 0, 0));   // Peón rojo
-    piezas.push_back(new Peon(2, 3, 255, 0, 0));   // Peón rojo
-    piezas.push_back(new Peon(3, 3, 255, 0, 0));   // Peón rojo
->>>>>>> Stashed changes
 }
 
 void Tablero::dibuja() {
@@ -215,7 +182,6 @@ void Tablero::dibuja() {
     }
 }
 
-<<<<<<< Updated upstream
 void Tablero::dibuja2() {
     float casillaSizeX = 1.0f;
     float casillaSizeY = 1.0f;
@@ -292,34 +258,4 @@ void Tablero::inicializaDemi() {
     piezas.push_back(new Peon(2.5f, 6.5f, 1));
     piezas.push_back(new Peon(3.5f, 6.5f, 1));
 }
-=======
-Pieza* Tablero::obtenerPieza(int columna, int fila) const {
-    for (Pieza* p : piezas) {
-        if (p->getX() == columna && p->getY() == fila) {
-            return p;
-        }
-    }
-    //std::cout << "No pieza" << std::endl;
-    return nullptr; // No hay pieza ahí
-}
-
-void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
-    // Comprobar si hay otra pieza en destino y eliminarla
-    for (auto it = piezas.begin(); it != piezas.end(); ++it) {
-        if ((*it)->getX() == nuevaColumna && (*it)->getY() == nuevaFila) {
-            delete* it;
-            piezas.erase(it);
-            break;
-        }
-    }
-
-    // Mover la pieza
-    pieza->setPosicion(nuevaFila, nuevaColumna);
-}
-
-void Tablero::añadirPieza(Pieza* pieza) {
-    piezas.push_back(pieza);
-}
-
->>>>>>> Stashed changes
 
