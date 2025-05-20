@@ -181,6 +181,27 @@ void Mundo::mostrarInstruccionesEnVentana() {
     glutSwapBuffers(); // Mostrar contenido en pantalla
 }
 
+void manejarTeclado(unsigned char key, int x, int y) {
+    if (key == ' ') {
+        juegoEnPausa = !juegoEnPausa;
+        if (juegoEnPausa)
+            std::cout << "Juego pausado" << std::endl;
+        else
+            std::cout << "Juego reanudado" << std::endl;
+
+        glutPostRedisplay();
+    }
+
+    else if (key == 'q' || key == 'Q') {
+        mundo.cerrarAplicacion();
+    }
+
+    else if (key == 'm' || key == 'M') {
+        mundo.mostrarMenuEnVentana();
+        ExitProcess;
+    }
+}
+
 void Mundo::iniciarJuego() {
     ETSIDI::playMusica("sonidos/musica_juego1.mp3", true);
     estadoActual = JUEGO;
@@ -352,26 +373,5 @@ void Mundo::procesarClick(int x, int y) {
             std::cout << "Saliendo del juego por clic..." << std::endl;
             exit(0);
         }
-    }
-}
-
-void manejarTeclado(unsigned char key, int x, int y) {
-    if (key == ' ') {
-        juegoEnPausa = !juegoEnPausa;
-        if (juegoEnPausa)
-            std::cout << "Juego pausado" << std::endl;
-        else
-            std::cout << "Juego reanudado" << std::endl;
-
-        glutPostRedisplay();
-    }
-
-    if (key == 'q' || key == 'Q') {
-        mundo.cerrarAplicacion();
-    }
-
-    if (key == 'm' || key == 'M') {
-        mundo.mostrarMenuEnVentana();
-        ExitProcess;
     }
 }
