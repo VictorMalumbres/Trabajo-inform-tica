@@ -83,9 +83,21 @@ bool Peon::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
         }
         if (dy == 2 * direccion) { // Dos pasos desde fila inicial
             int filaInicial = (getBando() == 0) ? 1 : 6;
-            if (origenY == filaInicial &&
-                tablero.obtenerPieza(nuevaColumna, nuevaFila) == nullptr &&
-                tablero.obtenerPieza(nuevaColumna, origenY + direccion) == nullptr) {
+            if (origenY == filaInicial) {
+                // Comprobar que no haya pieza en la casilla destino
+                if (tablero.obtenerPieza(nuevaColumna, nuevaFila) != nullptr) {
+                    return false;
+                }
+                // Comprobar que no haya pieza del bando contrario en la casilla intermedia
+                Pieza* piezaIntermedia = tablero.obtenerPieza(nuevaColumna, origenY + direccion);
+                if (piezaIntermedia != nullptr && piezaIntermedia->getBando() != getBando()) {
+                    return false;
+                }
+                // Comprobar que no haya pieza del bando contrario en la casilla destino
+                Pieza* piezaDestino = tablero.obtenerPieza(nuevaColumna, nuevaFila);
+                if (piezaDestino != nullptr && piezaDestino->getBando() != getBando()) {
+                    return false;
+                }
                 return true;
             }
             return false;
@@ -103,4 +115,5 @@ bool Peon::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
     }
 
     return false; // Movimiento inválido
+
 }

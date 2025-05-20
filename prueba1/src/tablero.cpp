@@ -117,8 +117,8 @@ void Tablero::inicializaDemi() {
     piezas.push_back(new Torre(3, 0, 0));
     piezas.push_back(new Rey(0, 0,  0));
     piezas.push_back(new Caballo(2, 0, 0));
-
     piezas.push_back(new Alfil(1, 0, 0));      // Alfil blanco
+
     piezas.push_back(new Peon(0, 1, 0));    
     piezas.push_back(new Peon(1, 1, 0));    
     piezas.push_back(new Peon(2, 1, 0));
