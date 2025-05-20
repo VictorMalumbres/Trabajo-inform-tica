@@ -8,6 +8,7 @@
 
 Tablero::Tablero() {
     // Constructor de Tablero, inicializa el vector de piezas
+    turno = 0;
 }
 
 void Tablero::iniciarPartida(int modoJuego) {
@@ -147,10 +148,17 @@ Pieza* Tablero::obtenerPieza(int columna, int fila) const {
 }
 
 void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
+
+    // Comprobar que es el turno de la pieza
+    if (pieza->getBando() != turno) {
+        return; // No es turno de esta pieza
+    }
     // Validar movimiento usando la pieza
     if (!pieza->mueve(*this, nuevaColumna, nuevaFila)) {
         return; // Movimiento inválido
     }
+
+    bool capturado = false;
 
     // Buscar si hay una pieza en la casilla destino
     for (auto it = piezas.begin(); it != piezas.end(); ++it) {
@@ -163,6 +171,7 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
                 // Es del bando contrario, eliminarla (capturar)
                 delete* it;
                 piezas.erase(it);
+				capturado = true; // Marcamos que se ha capturado una pieza
                 break;
             }
         }
@@ -170,6 +179,11 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
 
     // Mover la pieza
     pieza->setPosicion(nuevaFila, nuevaColumna);
+
+	if (!capturado) {
+        turno = 1 - turno; // Cambiar turno
+	}
+	
 }
 
 void Tablero::anadirPieza(Pieza* pieza) {

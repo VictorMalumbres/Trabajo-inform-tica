@@ -19,6 +19,7 @@ private:
     int seleccionY = -1; // Fila seleccionada, -1 si ninguna
     //int filas;
     //int columnas;
+    int turno; // 0 = blanco, 1 = negro
 
     //void renderizarTexto(const std::string& texto, float x, float y, void* fuente);
 
@@ -48,6 +49,9 @@ public:
 
     int getSeleccionX() const { return seleccionX; }
     int getSeleccionY() const { return seleccionY; }
+
+    int getTurno() const { return turno; }
+    void reiniciarTurno() { turno = 0; }  // Comenzar con blanco
 
 
     std::vector<Pieza*>& getPiezas() { return piezas; }
