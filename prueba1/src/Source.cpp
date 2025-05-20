@@ -24,7 +24,8 @@ void manejarClicRaton(int boton, int estado, int x, int y) {  //para detectar el
 
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+
     glutInitWindowSize(800, 600);
     glutCreateWindow("MiniAjedrez");
 

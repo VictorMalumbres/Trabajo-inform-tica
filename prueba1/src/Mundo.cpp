@@ -119,48 +119,64 @@ void Mundo::renderizarTexto(const std::string& texto, float x, float y, void* fu
         glutBitmapCharacter(fuente, c); // Dibujar cada carácter
     }
 }
+void pausa (){
 
-void Mundo::mostrarPausa() {
-    glClear(GL_COLOR_BUFFER_BIT);
-    renderizarTexto("JUEGO EN PAUSA", -0.2f, 0.0f, GLUT_BITMAP_HELVETICA_18);
-    renderizarTexto("Presiona 'P' para continuar...", -0.3f, -0.2f, GLUT_BITMAP_HELVETICA_12);
-    glutSwapBuffers();
 }
-
 void manejarTeclado(unsigned char key, int x, int y) {
     if (key == ' ') {
-        juegoEnPausa = !juegoEnPausa;  // Cambiar el estado de pausa
-        if (juegoEnPausa) {
+        juegoEnPausa = !juegoEnPausa;
+        if (juegoEnPausa)
             std::cout << "Juego pausado" << std::endl;
-        }
-        else {
+        else
             std::cout << "Juego reanudado" << std::endl;
-        }
-        glutPostRedisplay(); // Forzar redibujado
+
+        glutPostRedisplay();
+    }
+
+    if (key == 'q' || key == 'Q') {
+        mundo.cerrarAplicacion();
     }
 }
+
 
 void Mundo::iniciarJuego() {
     ETSIDI::playMusica("sonidos/musica_juego1.mp3", true);
     estadoActual = JUEGO;
     inicializaModo1();
+    glutKeyboardFunc(manejarTeclado);
     glutDisplayFunc([]() {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         if (!juegoEnPausa) {
             mundo.dibuja();
         }
         else {
-            glClear(GL_COLOR_BUFFER_BIT);
-            // Mostrar texto de "PAUSA"
-            glColor3f(1.0f, 1.0f, 0.0f); // Color amarillo
-            glRasterPos2f(-0.2f, 0.0f);
-            std::string texto = "Juego en pausa (ESC para continuar)";
-            for (char c : texto) {
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
-            }
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+
+            glMatrixMode(GL_MODELVIEW);
+            glLoadIdentity();
+
+            glColor3f(1.0f, 1.0f, 0.0f);
+            std::string texto1 = "JUEGO EN PAUSA";
+            std::string texto2 = "Presiona ESPACIO para continuar";
+            std::string linea3 = "Presiona M para volver al menú";
+            std::string texto3 = "Pulsa Q para salir";
+
+            glRasterPos2f(-0.4f, 0.1f);
+            for (char c : texto1) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+
+            glRasterPos2f(-0.6f, -0.1f);
+            for (char c : texto2) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+
+            glRasterPos2f(-0.5f, -0.3f);
+            for (char c : texto3) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+
             glutSwapBuffers();
         }
         });
-    glutKeyboardFunc(manejarTeclado);
+
     glutIdleFunc([]() {
         glutPostRedisplay();
         });
@@ -169,26 +185,50 @@ void Mundo::iniciarJuego() {
 void Mundo::iniciar2dojuego() {
     estadoActual = JUEGO;
     inicializaModo2();
+    glutKeyboardFunc(manejarTeclado);
     glutDisplayFunc([]() {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(-1.0, 1.0, -1.0, 1.0);  // Proyección 2D para texto
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
         if (!juegoEnPausa) {
-            mundo.dibuja();
+            mundo.dibuja();  // Modo juego normal
         }
         else {
-            glClear(GL_COLOR_BUFFER_BIT);
-            // Mostrar texto de "PAUSA"
-            glColor3f(1.0f, 1.0f, 0.0f); // Color amarillo
-            glRasterPos2f(-0.2f, 0.0f);
-            std::string texto = "Juego en pausa (ESC para continuar)";
-            for (char c : texto) {
+            // Mostrar pantalla de pausa
+            glColor3f(1.0f, 1.0f, 0.0f);  // Texto amarillo
+
+            std::string linea1 = "JUEGO EN PAUSA";
+            std::string linea2 = "Presiona 'ESPACIO' para continuar";
+            std::string linea3 = "Presiona M para volver al menú";
+            std::string linea4 = "Pulsa Q para salir";
+
+            glRasterPos2f(-0.2f, 0.1f);
+            for (char c : linea1) {
                 glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
             }
-            glutSwapBuffers();
+
+            glRasterPos2f(-0.4f, -0.1f);
+            for (char c : linea2) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+
+            glRasterPos2f(-0.6f, -0.1f);
+            for (char c : linea3) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+            }
+
+            glRasterPos2f(-0.8f, -0.1f);
+            for (char c : linea4) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
         }
+        glutSwapBuffers();  // Mostrar resultado
         });
-    glutKeyboardFunc(manejarTeclado);
     glutIdleFunc([]() {
         glutPostRedisplay();
-        });
+    });
 }
 
 void Mundo::cerrarAplicacion() {
@@ -320,6 +360,18 @@ void Mundo::procesarClick(int x, int y) {
             tablero2.limpiarSeleccion();
         }
 
+    }
+    if (estadoActual == MENU) {
+        // Convertir coordenadas de ventana a OpenGL [-1, 1]
+        float x_gl = (float)x / 400.0f - 1.0f;
+        float y_gl = 1.0f - (float)y / 200.0f;
+
+        // Verifica si se hizo clic dentro del botón "Salir"
+        if (x_gl >= -0.55f && x_gl <= 0.2f &&
+            y_gl >= -0.35f && y_gl <= -0.25f) {
+            std::cout << "Saliendo del juego por clic..." << std::endl;
+            exit(0);
+        }
     }
 }
 
