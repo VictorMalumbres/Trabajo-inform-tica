@@ -11,9 +11,11 @@ void displayCallback() {
 }
 
 void keyboardCallback(unsigned char key, int x, int y) {
-    //tablero.manejarEntradaMenu(key, x, y);
-    mundo.manejarEntradaMenu(key, x, y);
+    if (mundo.estaEnMenu()) return; // Ignorar teclado si estás en menú
+    mundo.manejarEntradaMenu(key, x, y); // Solo responder en el juego o instrucciones
 }
+
+
 
 void manejarClicRaton(int boton, int estado, int x, int y) {  //para detectar el raton
     if (boton == GLUT_LEFT_BUTTON && estado == GLUT_DOWN) {

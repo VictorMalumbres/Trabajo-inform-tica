@@ -299,6 +299,10 @@ void Mundo::cerrarAplicacion() {
     //glutLeaveMainLoop(); // Cierra la ventana y termina el bucle principal de GLUT
     exit(0); // Termina el programa
 }
+bool Mundo::estaEnMenu() const {
+    return estadoActual == MENU;
+}
+
 
 void Mundo::procesarClick(int x, int y) {
     if (modoJuego == 1) {
@@ -364,14 +368,40 @@ void Mundo::procesarClick(int x, int y) {
     }
     if (estadoActual == MENU) {
         // Convertir coordenadas de ventana a OpenGL [-1, 1]
-        float x_gl = (float)x / 400.0f - 1.0f;
-        float y_gl = 1.0f - (float)y / 200.0f;
+        float x_gl = (float)x / 400.0f - 1.0f;      // Correcto para 800px de ancho
+        float y_gl = 1.0f - (float)y / 300.0f;      
 
-        // Verifica si se hizo clic dentro del botón "Salir"
-        if (x_gl >= -0.55f && x_gl <= 0.2f &&
-            y_gl >= -0.35f && y_gl <= -0.25f) {
-            std::cout << "Saliendo del juego por clic..." << std::endl;
-            exit(0);
+
+
+        // Comprobamos las opciones en el área de botones
+        if (x_gl >= -0.45f && x_gl <= 0.45f) {
+            if (y_gl >= 0.55f && y_gl <= 0.65f) {
+                // Opción 1: Ver instrucciones
+                estadoActual = INSTRUCCIONES;
+                std::cout << "Opción 1: Ver instrucciones" << std::endl;
+                glutPostRedisplay();
+                return;
+            }
+            else if (y_gl >= 0.35f && y_gl <= 0.45f) {
+                // Opción 2: Jugar partida SILVERMAN 4X5
+                setModoJuego(1);
+                iniciarJuego();
+                std::cout << "Opción 2: Jugar SILVERMAN 4X5" << std::endl;
+                return;
+            }
+            else if (y_gl >= 0.15f && y_gl <= 0.25f) {
+                // Opción 3: Jugar partida DEMI
+                setModoJuego(2);
+                iniciar2dojuego();
+                std::cout << "Opción 3: Jugar DEMI" << std::endl;
+                return;
+            }
+            else if (y_gl >= -0.05f && y_gl <= 0.05f) {
+                // Opción 4: Salir
+                std::cout << "Saliendo del juego por clic..." << std::endl;
+                exit(0);
+            }
         }
     }
+
 }

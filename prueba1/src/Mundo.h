@@ -38,5 +38,6 @@ public:
     void inicializaModo1();  // Para Silverman 4x5
     void inicializaModo2();  // Para Demi 4x8
     void procesarClick(int x, int y);  //Procesar el movimiento de raton
+    bool estaEnMenu() const;
 
 };
