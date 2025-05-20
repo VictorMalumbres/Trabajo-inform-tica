@@ -169,7 +169,7 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
     }
 
     // Mover la pieza
-    pieza->setPosicion(nuevaColumna, nuevaFila);
+    pieza->setPosicion(nuevaFila, nuevaColumna);
 }
 
 void Tablero::anadirPieza(Pieza* pieza) {
