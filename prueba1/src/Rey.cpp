@@ -59,6 +59,20 @@ void Rey::dibuja() {
 }
 
 bool Rey::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
-    // Implementación provisional: permite cualquier movimiento
+    int origenX = getX();
+    int origenY = getY();
+
+    int dx = nuevaColumna - origenX;
+    int dy = nuevaFila - origenY;
+
+    // El rey se mueve una casilla en cualquier dirección
+    if (std::abs(dx) > 1 || std::abs(dy) > 1) return false;
+
+    // Verificar que la casilla destino no tenga pieza del mismo bando
+    Pieza* destino = tablero.obtenerPieza(nuevaColumna, nuevaFila);
+    if (destino != nullptr && destino->getBando() == getBando()) {
+        return false;
+    }
+
     return true;
 }
