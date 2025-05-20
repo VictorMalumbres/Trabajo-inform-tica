@@ -147,6 +147,17 @@ Pieza* Tablero::obtenerPieza(int columna, int fila) const {
 }
 
 void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
+    // Validación para la torre (movimiento solo en línea recta)
+    if (dynamic_cast<Torre*>(pieza)) {
+        int origenX = pieza->getX();
+        int origenY = pieza->getY();
+        // Solo permite movimiento en línea recta
+        if (origenX != nuevaColumna && origenY != nuevaFila) {
+            // Movimiento no válido, no hacer nada
+            return;
+        }
+    }
+
     // Comprobar si hay otra pieza en destino y eliminarla
     for (auto it = piezas.begin(); it != piezas.end(); ++it) {
         if ((*it)->getX() == nuevaColumna && (*it)->getY() == nuevaFila) {
@@ -159,6 +170,8 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
     pieza->setPosicion(nuevaFila, nuevaColumna);
 }
 
+
 void Tablero::anadirPieza(Pieza* pieza) {
     piezas.push_back(pieza);
 }
+
