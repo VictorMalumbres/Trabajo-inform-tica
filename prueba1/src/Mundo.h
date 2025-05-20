@@ -26,10 +26,13 @@ private:
 
 public:
     Mundo();
-    void setModoJuego(int modo) { modoJuego = modo; } //modo de juego
-    void setEstadoActual(EstadoMundo estado) { estadoActual = estado; }
-    void mostrarConfirmacionSalir();
 
+    std::string musicaActual;
+
+    void setModoJuego(int modo) { modoJuego = modo; } //modo de juego
+    void setEstadoActual(EstadoMundo estado); // Declaración sin cuerpo
+
+    void mostrarConfirmacionSalir();
 
     void mostrarMenuEnVentana(); //menú texto
     void manejarEntradaMenu(unsigned char key, int x, int y); //menú switch
@@ -39,13 +42,12 @@ public:
     void iniciar2dojuego(); //demi
     void cerrarAplicacion(); //salir
     void mostrarPausa(); //pausa en el juego (menú)
-    
+
     void dibuja();
     void inicializaModo1();  // Para Silverman 4x5
     void inicializaModo2();  // Para Demi 4x8
     void procesarClick(int x, int y);  //Procesar el movimiento de raton
     bool estaEnMenu() const;
     void mostrarConfirmacionMenu();
-
-
 };
+

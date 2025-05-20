@@ -116,7 +116,9 @@ void Mundo::mostrarMenuEnVentana() {
 
     glDisable(GL_TEXTURE_2D);
 
-    ETSIDI::playMusica("sonidos/elevador.mp3", true);
+    musicaActual = "sonidos/elevador.mp3";
+    ETSIDI::playMusica(musicaActual.c_str(), true);
+
 
     // Colores para los botones
     glColor3f(0.2f, 0.2f, 0.6f); // RGB
@@ -190,13 +192,17 @@ void Mundo::mostrarInstruccionesEnVentana() {
 void manejarTeclado(unsigned char key, int x, int y) {
     if (key == ' ') {
         juegoEnPausa = !juegoEnPausa;
-        if (juegoEnPausa)
+        if (juegoEnPausa) {
+            ETSIDI::stopMusica();
             std::cout << "Juego pausado" << std::endl;
-        else
+        }
+        else {
+            ETSIDI::playMusica(mundo.musicaActual.c_str(), true); // <--- CORREGIDO
             std::cout << "Juego reanudado" << std::endl;
-
+        }
         glutPostRedisplay();
     }
+
 
     else if (key == 'q' || key == 'Q') {
         juegoEnPausa = false; // <-- Añade esta línea
@@ -206,10 +212,14 @@ void manejarTeclado(unsigned char key, int x, int y) {
 
 
     else if (key == 'm' || key == 'M') {
-        juegoEnPausa = false; // <-- Añade esta línea
+        juegoEnPausa = false;
         mundo.setEstadoActual(CONFIRMAR_MENU);
+        // Si quieres que la música del menú suene inmediatamente:
+        mundo.musicaActual = "sonidos/elevador.mp3";
+        ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
         glutPostRedisplay();
     }
+
 
 
 
@@ -218,7 +228,9 @@ void manejarTeclado(unsigned char key, int x, int y) {
 }
 
 void Mundo::iniciarJuego() {
-    ETSIDI::playMusica("sonidos/musica_juego1.mp3", true);
+    musicaActual = "sonidos/musica_juego1.mp3";
+    ETSIDI::playMusica(musicaActual.c_str(), true);
+
     estadoActual = JUEGO;
     inicializaModo1();
     glutKeyboardFunc(manejarTeclado);
@@ -265,6 +277,8 @@ void Mundo::iniciarJuego() {
 }
 
 void Mundo::iniciar2dojuego() {
+    musicaActual = "sonidos/musica_juego1.mp3";
+    ETSIDI::playMusica(musicaActual.c_str(), true);
     estadoActual = JUEGO;
     inicializaModo2();
     glutKeyboardFunc(manejarTeclado);
@@ -338,14 +352,16 @@ void Mundo::procesarClick(int x, int y) {
             return;
         }
     }
-
+ 
 
 
     if (estadoActual == CONFIRMAR_MENU) {
         // Botón SI: x entre -0.4 y -0.1, y entre -0.3 y -0.1
         if (x_gl >= -0.4f && x_gl <= -0.1f && y_gl >= -0.3f && y_gl <= -0.1f) {
-            // Volver al menú principal
+            // Aquí debes ponerlo:
             setEstadoActual(MENU);
+            musicaActual = "sonidos/elevador.mp3";
+            ETSIDI::playMusica(musicaActual.c_str(), true);
             glutPostRedisplay();
             return;
         }
@@ -524,6 +540,22 @@ void Mundo::mostrarConfirmacionSalir() {
     glEnd();
     glColor3f(1.0f, 1.0f, 1.0f);
     renderizarTexto("NO", 0.18f, -0.22f, GLUT_BITMAP_HELVETICA_18);
+    
 
     glutSwapBuffers();
 }
+void Mundo::setEstadoActual(EstadoMundo estado) {
+    estadoActual = estado;
+    if (estado == MENU) {
+        musicaActual = "sonidos/elevador.mp3";
+        ETSIDI::playMusica(musicaActual.c_str(), true);
+    }
+    else if (estado == JUEGO) {
+        musicaActual = "sonidos/musica_juego1.mp3";
+        ETSIDI::playMusica(musicaActual.c_str(), true);
+    }
+    // No pongas música para CONFIRMAR_MENU ni CONFIRMAR_SALIR
+}
+
+
+
