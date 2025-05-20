@@ -4,10 +4,7 @@
 #include <string>
 //#include "Mundo.h"
 //#pragma warning(disable : 4996) //deshabilita el error por unsafe 
-
 //Mundo mundo;
-
-//bool juegoEnPausa = false;
 
 Tablero::Tablero() {
     // Constructor de Tablero, inicializa el vector de piezas
@@ -158,7 +155,6 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
             break;
         }
     }
-
     // Mover la pieza
     pieza->setPosicion(nuevaFila, nuevaColumna);
 }

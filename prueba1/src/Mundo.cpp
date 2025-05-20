@@ -8,13 +8,7 @@ extern Mundo mundo;
 bool juegoEnPausa = false;
 
 
-Mundo::Mundo() : estadoActual(MENU),  // forzamos el estado inicial
-modoJuego(1),
-seleccionX(-1),
-seleccionY(-1) 
-{
-
-}
+Mundo::Mundo() : estadoActual(MENU),modoJuego(1), seleccionX(-1), seleccionY(-1) {} // forzamos el estado inicial
 
 void Mundo::inicializaModo1() {
     tablero.inicializaSilverman();
@@ -23,7 +17,6 @@ void Mundo::inicializaModo1() {
 void Mundo::inicializaModo2() {
     tablero2.inicializaDemi();
 }
-
 
 void Mundo::dibuja() {
     switch (estadoActual) {
@@ -56,10 +49,23 @@ void Mundo::dibuja() {
     }
 }
 
+void Mundo::renderizarTextoGrande(const char* texto, float x, float y, float escala) {
+    glPushMatrix();
+    glTranslatef(x, y, 0.0f);      // Mover el texto a la posición (x, y)
+    glScalef(escala, escala, 1.0f); // Escalar el texto
+    glLineWidth(2.0f);             // Grosor de las líneas del texto
+
+    for (const char* c = texto; *c != '\0'; ++c) {
+        glutStrokeCharacter(GLUT_STROKE_ROMAN, *c);
+    }
+
+    glPopMatrix();
+}
+
 void Mundo::mostrarMenuEnVentana() {
     glClear(GL_COLOR_BUFFER_BIT); // Limpiar la ventana
 
-    // Al principio de mostrarMenuEnVentana()
+    // Fondo con textura
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/fondo_menu.png").id);
 
@@ -74,16 +80,36 @@ void Mundo::mostrarMenuEnVentana() {
 
     ETSIDI::playMusica("sonidos/elevador.mp3", true);
 
-    // Después dibuja los textos del menú como siempre
+    // Colores para los botones
+    glColor3f(0.2f, 0.2f, 0.6f); // RGB
+
+    // Dibujar rectángulos de fondo para cada opción
+    glBegin(GL_QUADS);
+    glVertex2f(-0.45f, 0.65f); glVertex2f(0.45f, 0.65f);
+    glVertex2f(0.45f, 0.55f); glVertex2f(-0.45f, 0.55f);
+
+    glVertex2f(-0.45f, 0.45f); glVertex2f(0.45f, 0.45f);
+    glVertex2f(0.45f, 0.35f); glVertex2f(-0.45f, 0.35f);
+
+    glVertex2f(-0.45f, 0.25f); glVertex2f(0.45f, 0.25f);
+    glVertex2f(0.45f, 0.15f); glVertex2f(-0.45f, 0.15f);
+
+    glVertex2f(-0.45f, 0.05f); glVertex2f(0.45f, 0.05f);
+    glVertex2f(0.45f, -0.05f); glVertex2f(-0.45f, -0.05f);
+    glEnd();
+
+    // Cambiar color del texto a blanco
+    glColor3f(10.0f, 10.0f, 10.0f);
+
     // Dibujar el título del menú
-    renderizarTexto("MENU DEL JUEGO", -0.2f, 0.8f, GLUT_BITMAP_HELVETICA_18);
-    renderizarTexto("1. Ver instrucciones del juego", -0.4f, 0.6f, GLUT_BITMAP_HELVETICA_12);
-    renderizarTexto("2. Jugar partida SILVERMAN 4X5", -0.4f, 0.4f, GLUT_BITMAP_HELVETICA_12);
-    renderizarTexto("3. Jugar partida DEMI", -0.4f, 0.2f, GLUT_BITMAP_HELVETICA_12);
-    renderizarTexto("4. Salir", -0.4f, 0.0f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTextoGrande("MENU DEL JUEGO", -0.45f, 0.8f, 0.0008f);
+    renderizarTexto("1. Ver instrucciones del juego", -0.4f, 0.58f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("2. Jugar partida SILVERMAN 4X5", -0.4f, 0.38f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("3. Jugar partida DEMI", -0.4f, 0.18f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("4. Salir", -0.4f, -0.02f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("Seleccione una opcion con el teclado...", -0.4f, -0.2f, GLUT_BITMAP_HELVETICA_12);
 
-    glutSwapBuffers(); // Intercambiar buffers para mostrar el contenido
+    glutSwapBuffers(); // Mostrar el contenido
 }
 
 void Mundo::renderizarTexto(const std::string& texto, float x, float y, void* fuente) {
@@ -93,6 +119,7 @@ void Mundo::renderizarTexto(const std::string& texto, float x, float y, void* fu
         glutBitmapCharacter(fuente, c); // Dibujar cada carácter
     }
 }
+
 void Mundo::mostrarPausa() {
     glClear(GL_COLOR_BUFFER_BIT);
     renderizarTexto("JUEGO EN PAUSA", -0.2f, 0.0f, GLUT_BITMAP_HELVETICA_18);
@@ -114,6 +141,7 @@ void manejarTeclado(unsigned char key, int x, int y) {
 }
 
 void Mundo::iniciarJuego() {
+    ETSIDI::playMusica("sonidos/musica_juego1.mp3", true);
     estadoActual = JUEGO;
     inicializaModo1();
     glutDisplayFunc([]() {
@@ -173,18 +201,18 @@ void Mundo::manejarEntradaMenu(unsigned char key, int x, int y) {
     switch (key) {
     case '1':
         mostrarInstruccionesEnVentana();
-        ETSIDI::stopMusica();
         break;
+        ETSIDI::stopMusica();
     case '2':
         setModoJuego(1);
         iniciarJuego();
-        ETSIDI::stopMusica();
         break;
+        ETSIDI::stopMusica();
     case '3':
         setModoJuego(2);
         iniciar2dojuego();
-        ETSIDI::stopMusica();
         break;
+        ETSIDI::stopMusica();
     case '4':
         cerrarAplicacion(); // Salir del programa
         ETSIDI::stopMusica();
@@ -197,15 +225,38 @@ void Mundo::manejarEntradaMenu(unsigned char key, int x, int y) {
 void Mundo::mostrarInstruccionesEnVentana() {
     glClear(GL_COLOR_BUFFER_BIT); // Limpiar la ventana
 
-    // Dibujar las instrucciones
+    // Dibujar fondo general (opcional)
+    glColor3f(0.1f, 0.1f, 0.1f); // Gris oscuro
+    glBegin(GL_QUADS);
+    glVertex2f(-0.95f, 0.75f);
+    glVertex2f(0.95f, 0.75f);
+    glVertex2f(0.95f, -0.4f);
+    glVertex2f(-0.95f, -0.4f);
+    glEnd();
+
+    // Dibujar rectángulos de fondo más grandes para cada instrucción
+    glColor3f(0.2f, 0.2f, 0.6f); // Azul oscuro
+    glBegin(GL_QUADS);
+    // Instrucción 1
+    glVertex2f(-0.85f, 0.46f); glVertex2f(0.85f, 0.46f);
+    glVertex2f(0.85f, 0.34f); glVertex2f(-0.85f, 0.34f);
+    // Instrucción 2
+    glVertex2f(-0.85f, 0.26f); glVertex2f(0.85f, 0.26f);
+    glVertex2f(0.85f, 0.14f); glVertex2f(-0.85f, 0.14f);
+    // Instrucción 3
+    glVertex2f(-0.85f, 0.06f); glVertex2f(0.85f, 0.06f);
+    glVertex2f(0.85f, -0.06f); glVertex2f(-0.85f, -0.06f);
+    glEnd();
+
+    // Dibujar texto encima de los rectángulos
+    glColor3f(1.0f, 1.0f, 1.0f); // Blanco
     renderizarTexto("INSTRUCCIONES DEL JUEGO", -0.3f, 0.6f, GLUT_BITMAP_HELVETICA_18);
     renderizarTexto("1. El objetivo del juego es capturar las piezas del oponente.", -0.8f, 0.4f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("2. Cada pieza tiene movimientos especificos.", -0.8f, 0.2f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("3. El juego termina cuando el Rey de un jugador es capturado.", -0.8f, 0.0f, GLUT_BITMAP_HELVETICA_12);
-    renderizarTexto("Presione doble click para volver al menu...", -0.8f, -0.2f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("Presione doble click para volver al menu...", -0.8f, -0.3f, GLUT_BITMAP_HELVETICA_12);
 
-    glutSwapBuffers(); // Intercambiar buffers para mostrar el contenido
-    //glutKeyboardFunc([](unsigned char, int, int) { glutPostRedisplay(); }); // Volver al menú
+    glutSwapBuffers(); // Mostrar contenido en pantalla
 }
 
 void Mundo::procesarClick(int x, int y) {
