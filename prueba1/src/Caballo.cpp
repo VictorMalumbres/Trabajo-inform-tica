@@ -1,6 +1,7 @@
 #include "Caballo.h"
 #include <freeglut.h>
 #include "ETSIDI.h"
+#include "Tablero.h"
 
 void Caballo::dibuja() {
     if (resaltado)glColor3f(1.0f, 1.0f, 0.0f); // Amarillo para resaltado
@@ -55,4 +56,9 @@ void Caballo::dibuja() {
         glDisable(GL_TEXTURE_2D);
         glPopMatrix();  // Restauramos la matriz original
     }
+}
+
+bool Caballo::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
+    // Implementación provisional: permite cualquier movimiento
+    return true;
 }

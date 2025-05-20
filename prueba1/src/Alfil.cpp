@@ -1,6 +1,8 @@
 #include "Alfil.h"
 #include <freeglut.h>
 #include "ETSIDI.h"
+#include "Tablero.h"
+#include <cmath>
 
 void Alfil::dibuja() {
     if (resaltado)glColor3f(1.0f, 1.0f, 0.0f); // Amarillo para resaltado
@@ -55,4 +57,26 @@ void Alfil::dibuja() {
         glDisable(GL_TEXTURE_2D);
         glPopMatrix();  // Restauramos la matriz original
     }
+}
+
+
+bool Alfil::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
+    int origenX = getX();
+    int origenY = getY();
+    int dx = nuevaColumna - origenX;
+    int dy = nuevaFila - origenY;
+
+    // Movimiento diagonal: |dx| == |dy|
+    if (std::abs(dx) != std::abs(dy) || dx == 0) return false;
+
+    int stepX = dx / std::abs(dx);
+    int stepY = dy / std::abs(dy);
+    int x = origenX + stepX;
+    int y = origenY + stepY;
+    while (x != nuevaColumna && y != nuevaFila) {
+        if (tablero.obtenerPieza(x, y) != nullptr) return false; // Hay pieza en el camino
+        x += stepX;
+        y += stepY;
+    }
+    return true;
 }

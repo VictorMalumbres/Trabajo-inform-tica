@@ -1,6 +1,7 @@
 #include "Rey.h"
 #include <freeglut.h>
 #include "ETSIDI.h"
+#include "Tablero.h"
 
 void Rey::dibuja() {
     if (resaltado)glColor3f(1.0f, 1.0f, 0.0f); // Amarillo para resaltado
@@ -55,4 +56,9 @@ void Rey::dibuja() {
         glDisable(GL_TEXTURE_2D);
         glPopMatrix();  // Restauramos la matriz original
     }
+}
+
+bool Rey::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
+    // Implementación provisional: permite cualquier movimiento
+    return true;
 }

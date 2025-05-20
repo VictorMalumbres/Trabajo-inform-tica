@@ -1,5 +1,9 @@
 #pragma once
 #include <freeglut.h>
+//#include "Tablero.h"
+
+class Tablero; //Declaración adelantada
+
 
 class Pieza {
 protected:
@@ -24,4 +28,7 @@ public:
     bool estaResaltado() const { return resaltado; }
 
     virtual void dibuja() = 0;
+
+    virtual bool mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) = 0;
+
 };

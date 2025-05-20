@@ -1,6 +1,8 @@
 #include "Torre.h"
 #include <freeglut.h>
 #include "ETSIDI.h"
+#include "Tablero.h"
+#include <cmath>
 
 void Torre::dibuja() {
     if (resaltado)glColor3f(1.0f, 1.0f, 0.0f); // Amarillo para resaltado
@@ -56,3 +58,29 @@ void Torre::dibuja() {
         glPopMatrix();  // Restauramos la matriz original
     }
 }
+
+
+bool Torre::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
+    int origenX = getX();
+    int origenY = getY();
+
+    // Solo permite movimiento en línea recta
+    if (origenX != nuevaColumna && origenY != nuevaFila) {
+        return false;
+    }
+
+    int dx = (nuevaColumna - origenX) == 0 ? 0 : (nuevaColumna - origenX) / abs(nuevaColumna - origenX);
+    int dy = (nuevaFila - origenY) == 0 ? 0 : (nuevaFila - origenY) / abs(nuevaFila - origenY);
+
+    int x = origenX + dx;
+    int y = origenY + dy;
+    while (x != nuevaColumna || y != nuevaFila) {
+        if (tablero.obtenerPieza(x, y) != nullptr) {
+            return false; // Hay una pieza en el camino
+        }
+        x += dx;
+        y += dy;
+    }
+    return true; // Movimiento válido
+}
+

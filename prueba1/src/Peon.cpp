@@ -1,6 +1,7 @@
 #include "Peon.h"
 #include <freeglut.h>
 #include "ETSIDI.h"
+#include "Tablero.h"
 
 void Peon::dibuja() {
     if (resaltado)glColor3f(1.0f, 1.0f, 0.0f); // Amarillo para resaltado
@@ -60,3 +61,8 @@ void Peon::dibuja() {
 //void Peon::mueve() {
     
 //}
+
+bool Peon::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
+    // Implementación provisional: permite cualquier movimiento
+    return true;
+}

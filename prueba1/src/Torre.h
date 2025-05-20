@@ -9,5 +9,8 @@ public:
     }
 
     void dibuja() override;  // marca override para mayor claridad
-    void mueve();            // añade método mueve para que el peón se mueva
+    //void mueve();            // añade método mueve para que el peón se mueva
+
+    bool mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) override;
+	// Implementación del método mueve para la Torre
 };
