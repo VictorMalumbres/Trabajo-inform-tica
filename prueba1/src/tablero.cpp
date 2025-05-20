@@ -149,19 +149,27 @@ Pieza* Tablero::obtenerPieza(int columna, int fila) const {
 void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
     // Validar movimiento usando la pieza
     if (!pieza->mueve(*this, nuevaColumna, nuevaFila)) {
-        return;
+        return; // Movimiento inválido
     }
 
-    // Comprobar si hay otra pieza en destino y eliminarla
+    // Buscar si hay una pieza en la casilla destino
     for (auto it = piezas.begin(); it != piezas.end(); ++it) {
         if ((*it)->getX() == nuevaColumna && (*it)->getY() == nuevaFila) {
-            delete* it;
-            piezas.erase(it);
-            break;
+            // Si la pieza en destino es del mismo bando, no mover
+            if ((*it)->getBando() == pieza->getBando()) {
+                return; // No se mueve ni elimina nada
+            }
+            else {
+                // Es del bando contrario, eliminarla (capturar)
+                delete* it;
+                piezas.erase(it);
+                break;
+            }
         }
     }
+
     // Mover la pieza
-    pieza->setPosicion(nuevaFila, nuevaColumna);
+    pieza->setPosicion(nuevaColumna, nuevaFila);
 }
 
 void Tablero::anadirPieza(Pieza* pieza) {
