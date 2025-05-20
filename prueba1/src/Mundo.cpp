@@ -128,7 +128,7 @@ void Mundo::mostrarPausa() {
 }
 
 void manejarTeclado(unsigned char key, int x, int y) {
-    if (key == 27) { // Código ASCII de la tecla ESC
+    if (key == ' ') {
         juegoEnPausa = !juegoEnPausa;  // Cambiar el estado de pausa
         if (juegoEnPausa) {
             std::cout << "Juego pausado" << std::endl;
