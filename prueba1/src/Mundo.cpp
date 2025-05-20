@@ -184,9 +184,10 @@ void Mundo::mostrarInstruccionesEnVentana() {
     renderizarTexto("1. El objetivo del juego es capturar las piezas del oponente.", -0.8f, 0.4f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("2. Cada pieza tiene movimientos especificos.", -0.8f, 0.2f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("3. El juego termina cuando el Rey de un jugador es capturado.", -0.8f, 0.0f, GLUT_BITMAP_HELVETICA_12);
-    renderizarTexto("Presione doble click para volver al menu...", -0.8f, -0.3f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("Presione la tecla esc para volver al menu...", -0.8f, -0.3f, GLUT_BITMAP_HELVETICA_12);
 
     glutSwapBuffers(); // Mostrar contenido en pantalla
+    glutKeyboardFunc(manejarTeclado);
 }
 
 void manejarTeclado(unsigned char key, int x, int y) {
@@ -201,6 +202,12 @@ void manejarTeclado(unsigned char key, int x, int y) {
             std::cout << "Juego reanudado" << std::endl;
         }
         glutPostRedisplay();
+    }
+
+    else if (mundo.getEstadoActual() == INSTRUCCIONES && key == 27) { // 27 = ESC
+        mundo.setEstadoActual(MENU);
+        glutPostRedisplay();
+        return;
     }
 
 
@@ -226,6 +233,12 @@ void manejarTeclado(unsigned char key, int x, int y) {
 
 
 }
+
+
+void Mundo::manejarTeclado(unsigned char key, int x, int y) {
+    ::manejarTeclado(key, x, y);
+}
+
 
 void Mundo::iniciarJuego() {
     musicaActual = "sonidos/musica_juego1.mp3";

@@ -6,10 +6,8 @@ enum EstadoMundo {
     JUEGO,
     INSTRUCCIONES,
     CONFIRMAR_MENU,
-    CONFIRMAR_SALIR 
+    CONFIRMAR_SALIR
 };
-
-
 
 class Mundo {
 private:
@@ -49,5 +47,8 @@ public:
     void procesarClick(int x, int y);  //Procesar el movimiento de raton
     bool estaEnMenu() const;
     void mostrarConfirmacionMenu();
-};
+    EstadoMundo getEstadoActual() const { return estadoActual; }
 
+    // ** Declaración de la función manejarTeclado **
+    static void manejarTeclado(unsigned char key, int x, int y);
+};
