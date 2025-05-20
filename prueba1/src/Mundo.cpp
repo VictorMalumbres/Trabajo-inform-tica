@@ -1,7 +1,7 @@
 #include "Mundo.h"
 #include <freeglut.h>
 #include <iostream>
-#include <ETSIDI.h>
+#include "ETSIDI.h"
 
 extern Mundo mundo;
 
@@ -72,9 +72,11 @@ void Mundo::mostrarMenuEnVentana() {
 
     glDisable(GL_TEXTURE_2D);
 
+    ETSIDI::playMusica(“sonidos / elevador.mp3”, true);
+    ETSIDI::stopMusica();
+    glutMainLoop();
+
     // Después dibuja los textos del menú como siempre
-
-
     // Dibujar el título del menú
     renderizarTexto("MENU DEL JUEGO", -0.2f, 0.8f, GLUT_BITMAP_HELVETICA_18);
     renderizarTexto("1. Ver instrucciones del juego", -0.4f, 0.6f, GLUT_BITMAP_HELVETICA_12);
