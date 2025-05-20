@@ -523,14 +523,19 @@ void Mundo::mostrarConfirmacionMenu() {
     glutSwapBuffers();
 }
 void Mundo::mostrarConfirmacionSalir() {
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    // Fondo
-    glColor3f(0.1f, 0.1f, 0.1f);
+    // Fondo con imagen de la librería
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/miniontriste.png").id);
+    glColor3f(1.0f, 1.0f, 1.0f);
     glBegin(GL_QUADS);
-    glVertex2f(-1.0f, 1.0f); glVertex2f(1.0f, 1.0f);
-    glVertex2f(1.0f, -1.0f); glVertex2f(-1.0f, -1.0f);
+    // Invertir X y Y de las coordenadas de textura para girar 180 grados
+    glTexCoord2f(1, 0); glVertex2f(-1.0f, 1.0f);
+    glTexCoord2f(0, 0); glVertex2f(1.0f, 1.0f);
+    glTexCoord2f(0, 1); glVertex2f(1.0f, -1.0f);
+    glTexCoord2f(1, 1); glVertex2f(-1.0f, -1.0f);
     glEnd();
+    glDisable(GL_TEXTURE_2D);
+
 
     // Mensaje
     glColor3f(1.0f, 1.0f, 1.0f);
