@@ -57,6 +57,6 @@ void Peon::dibuja() {
     }
 }
 
-void Peon::mueve() {
+//void Peon::mueve() {
     
-}
+//}
