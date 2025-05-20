@@ -72,9 +72,7 @@ void Mundo::mostrarMenuEnVentana() {
 
     glDisable(GL_TEXTURE_2D);
 
-    ETSIDI::playMusica(“sonidos / elevador.mp3”, true);
-    ETSIDI::stopMusica();
-    glutMainLoop();
+    ETSIDI::playMusica("sonidos/elevador.mp3", true);
 
     // Después dibuja los textos del menú como siempre
     // Dibujar el título del menú
@@ -175,17 +173,21 @@ void Mundo::manejarEntradaMenu(unsigned char key, int x, int y) {
     switch (key) {
     case '1':
         mostrarInstruccionesEnVentana();
+        ETSIDI::stopMusica();
         break;
     case '2':
         setModoJuego(1);
         iniciarJuego();
+        ETSIDI::stopMusica();
         break;
     case '3':
         setModoJuego(2);
         iniciar2dojuego();
+        ETSIDI::stopMusica();
         break;
     case '4':
         cerrarAplicacion(); // Salir del programa
+        ETSIDI::stopMusica();
         break;
     default:
         break;
