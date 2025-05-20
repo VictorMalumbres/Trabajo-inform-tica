@@ -58,11 +58,49 @@ void Peon::dibuja() {
     }
 }
 
-//void Peon::mueve() {
-    
-//}
-
 bool Peon::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
-    // Implementación provisional: permite cualquier movimiento
-    return true;
+    int origenX = getX();
+    int origenY = getY();
+
+    int dx = nuevaColumna - origenX;
+    int dy = nuevaFila - origenY;
+
+    int direccion;
+    if (getBando() == 0) {
+        direccion = 1;  // Peón blanco avanza hacia arriba (incremento en fila)
+    }
+    else {
+        direccion = -1; // Peón negro avanza hacia abajo (decremento en fila)
+    }
+
+    // Movimiento hacia adelante sin captura
+    if (dx == 0) {
+        if (dy == direccion) { // Un paso
+            if (tablero.obtenerPieza(nuevaColumna, nuevaFila) == nullptr) {
+                return true;
+            }
+            return false;
+        }
+        if (dy == 2 * direccion) { // Dos pasos desde fila inicial
+            int filaInicial = (getBando() == 0) ? 1 : 6;
+            if (origenY == filaInicial &&
+                tablero.obtenerPieza(nuevaColumna, nuevaFila) == nullptr &&
+                tablero.obtenerPieza(nuevaColumna, origenY + direccion) == nullptr) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    // Movimiento diagonal para captura
+    if (std::abs(dx) == 1 && dy == direccion) {
+        Pieza* destino = tablero.obtenerPieza(nuevaColumna, nuevaFila);
+        if (destino != nullptr && destino->getBando() != getBando()) {
+            return true;
+        }
+        return false;
+    }
+
+    return false; // Movimiento inválido
 }

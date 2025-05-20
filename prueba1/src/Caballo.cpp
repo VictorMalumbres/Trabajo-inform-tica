@@ -59,6 +59,25 @@ void Caballo::dibuja() {
 }
 
 bool Caballo::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
-    // Implementación provisional: permite cualquier movimiento
-    return true;
+ 
+        int origenX = getX();
+        int origenY = getY();
+
+        int dx = std::abs(nuevaColumna - origenX);
+        int dy = std::abs(nuevaFila - origenY);
+
+        // Movimiento típico de caballo: 2 en una dirección y 1 en la otra
+        if (!((dx == 2 && dy == 1) || (dx == 1 && dy == 2))) {
+            return false;
+        }
+
+        // El caballo puede saltar piezas, así que no verificamos el camino
+        // Solo verificar si la casilla destino tiene una pieza del mismo bando
+        Pieza* destino = tablero.obtenerPieza(nuevaColumna, nuevaFila);
+        if (destino != nullptr && destino->getBando() == getBando()) {
+            return false; // No puede capturar pieza propia
+        }
+
+        return true; // Movimiento válido
+   
 }
