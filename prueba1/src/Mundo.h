@@ -4,8 +4,11 @@
 enum EstadoMundo {
     MENU,
     JUEGO,
-    INSTRUCCIONES
+    INSTRUCCIONES,
+    CONFIRMAR_MENU,
+    CONFIRMAR_SALIR 
 };
+
 
 
 class Mundo {
@@ -24,6 +27,9 @@ private:
 public:
     Mundo();
     void setModoJuego(int modo) { modoJuego = modo; } //modo de juego
+    void setEstadoActual(EstadoMundo estado) { estadoActual = estado; }
+    void mostrarConfirmacionSalir();
+
 
     void mostrarMenuEnVentana(); //menú texto
     void manejarEntradaMenu(unsigned char key, int x, int y); //menú switch
@@ -39,5 +45,7 @@ public:
     void inicializaModo2();  // Para Demi 4x8
     void procesarClick(int x, int y);  //Procesar el movimiento de raton
     bool estaEnMenu() const;
+    void mostrarConfirmacionMenu();
+
 
 };

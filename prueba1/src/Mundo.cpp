@@ -44,9 +44,18 @@ void Mundo::dibuja() {
         break;
     case INSTRUCCIONES:
         mostrarInstruccionesEnVentana();
+        break; // Se agregó este break para evitar que el siguiente case quede fuera del switch
+    case CONFIRMAR_MENU:
+        mostrarConfirmacionMenu();
+        break;
+   
+    case CONFIRMAR_SALIR:
+        mostrarConfirmacionSalir();
         break;
     }
+
 }
+
 
 void Mundo::renderizarTexto(const std::string& texto, float x, float y, void* fuente) {
     glColor3f(1.0f, 1.0f, 1.0f); // Color del texto (blanco)
@@ -85,10 +94,7 @@ void Mundo::manejarEntradaMenu(unsigned char key, int x, int y) {
         iniciar2dojuego();
         break;
         ETSIDI::stopMusica();
-    case '4':
-        cerrarAplicacion(); // Salir del programa
-        ETSIDI::stopMusica();
-        break;
+   
     default:
         break;
     }
@@ -139,7 +145,7 @@ void Mundo::mostrarMenuEnVentana() {
     renderizarTexto("2. Jugar partida SILVERMAN 4X5", -0.4f, 0.38f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("3. Jugar partida DEMI", -0.4f, 0.18f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("4. Salir", -0.4f, -0.02f, GLUT_BITMAP_HELVETICA_12);
-    renderizarTexto("Seleccione una opcion con el teclado...", -0.4f, -0.2f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("Seleccione una opcion con el raton...", -0.4f, -0.2f, GLUT_BITMAP_HELVETICA_12);
 
     glutSwapBuffers(); // Mostrar el contenido
 }
@@ -193,13 +199,22 @@ void manejarTeclado(unsigned char key, int x, int y) {
     }
 
     else if (key == 'q' || key == 'Q') {
-        mundo.cerrarAplicacion();
+        juegoEnPausa = false; // <-- Añade esta línea
+        mundo.setEstadoActual(CONFIRMAR_SALIR);
+        glutPostRedisplay();
     }
 
+
     else if (key == 'm' || key == 'M') {
-        mundo.mostrarMenuEnVentana();
-        ExitProcess;
+        juegoEnPausa = false; // <-- Añade esta línea
+        mundo.setEstadoActual(CONFIRMAR_MENU);
+        glutPostRedisplay();
     }
+
+
+
+
+
 }
 
 void Mundo::iniciarJuego() {
@@ -305,6 +320,43 @@ bool Mundo::estaEnMenu() const {
 
 
 void Mundo::procesarClick(int x, int y) {
+
+
+    // Convertir coordenadas de ventana a OpenGL [-1, 1]
+    float x_gl = (float)x / 400.0f - 1.0f; // 800px de ancho
+    float y_gl = 1.0f - (float)y / 300.0f; // 600px de alto
+    if (estadoActual == CONFIRMAR_SALIR) {
+        // Botón SI: x entre -0.4 y -0.1, y entre -0.3 y -0.1
+        if (x_gl >= -0.4f && x_gl <= -0.1f && y_gl >= -0.3f && y_gl <= -0.1f) {
+            cerrarAplicacion(); // Salir del juego
+            return;
+        }
+        // Botón NO: x entre 0.1 y 0.4, y entre -0.3 y -0.1
+        if (x_gl >= 0.1f && x_gl <= 0.4f && y_gl >= -0.3f && y_gl <= -0.1f) {
+            setEstadoActual(JUEGO); // <-- Vuelve al juego
+            glutPostRedisplay();
+            return;
+        }
+    }
+
+
+
+    if (estadoActual == CONFIRMAR_MENU) {
+        // Botón SI: x entre -0.4 y -0.1, y entre -0.3 y -0.1
+        if (x_gl >= -0.4f && x_gl <= -0.1f && y_gl >= -0.3f && y_gl <= -0.1f) {
+            // Volver al menú principal
+            setEstadoActual(MENU);
+            glutPostRedisplay();
+            return;
+        }
+        // Botón NO: x entre 0.1 y 0.4, y entre -0.3 y -0.1
+        if (x_gl >= 0.1f && x_gl <= 0.4f && y_gl >= -0.3f && y_gl <= -0.1f) {
+            // Cancelar y volver al juego
+            setEstadoActual(JUEGO);
+            glutPostRedisplay();
+            return;
+        }
+    }
     if (modoJuego == 1) {
         int columna = x / (800 / 4);
         int fila = 4 - (y / (600 / 5));
@@ -398,10 +450,80 @@ void Mundo::procesarClick(int x, int y) {
             }
             else if (y_gl >= -0.05f && y_gl <= 0.05f) {
                 // Opción 4: Salir
-                std::cout << "Saliendo del juego por clic..." << std::endl;
-                exit(0);
+                setEstadoActual(CONFIRMAR_SALIR); // <-- Cambia esto
+                glutPostRedisplay();
+                return;
             }
+
         }
     }
 
+}
+void Mundo::mostrarConfirmacionMenu() {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Fondo
+    glColor3f(0.1f, 0.1f, 0.1f);
+    glBegin(GL_QUADS);
+    glVertex2f(-1.0f, 1.0f); glVertex2f(1.0f, 1.0f);
+    glVertex2f(1.0f, -1.0f); glVertex2f(-1.0f, -1.0f);
+    glEnd();
+
+    // Mensaje
+    glColor3f(1.0f, 1.0f, 1.0f);
+    renderizarTexto("¿Estas seguro de que quieres volver al menu?", -0.7f, 0.2f, GLUT_BITMAP_HELVETICA_18);
+
+    // Botón Sí
+    glColor3f(0.2f, 0.6f, 0.2f);
+    glBegin(GL_QUADS);
+    glVertex2f(-0.4f, -0.1f); glVertex2f(-0.1f, -0.1f);
+    glVertex2f(-0.1f, -0.3f); glVertex2f(-0.4f, -0.3f);
+    glEnd();
+    glColor3f(1.0f, 1.0f, 1.0f);
+    renderizarTexto("SI", -0.32f, -0.22f, GLUT_BITMAP_HELVETICA_18);
+
+    // Botón No
+    glColor3f(0.6f, 0.2f, 0.2f);
+    glBegin(GL_QUADS);
+    glVertex2f(0.1f, -0.1f); glVertex2f(0.4f, -0.1f);
+    glVertex2f(0.4f, -0.3f); glVertex2f(0.1f, -0.3f);
+    glEnd();
+    glColor3f(1.0f, 1.0f, 1.0f);
+    renderizarTexto("NO", 0.18f, -0.22f, GLUT_BITMAP_HELVETICA_18);
+
+    glutSwapBuffers();
+}
+void Mundo::mostrarConfirmacionSalir() {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Fondo
+    glColor3f(0.1f, 0.1f, 0.1f);
+    glBegin(GL_QUADS);
+    glVertex2f(-1.0f, 1.0f); glVertex2f(1.0f, 1.0f);
+    glVertex2f(1.0f, -1.0f); glVertex2f(-1.0f, -1.0f);
+    glEnd();
+
+    // Mensaje
+    glColor3f(1.0f, 1.0f, 1.0f);
+    renderizarTexto("¿Estas seguro de que quieres salir del juego?", -0.7f, 0.2f, GLUT_BITMAP_HELVETICA_18);
+
+    // Botón Sí
+    glColor3f(0.2f, 0.6f, 0.2f);
+    glBegin(GL_QUADS);
+    glVertex2f(-0.4f, -0.1f); glVertex2f(-0.1f, -0.1f);
+    glVertex2f(-0.1f, -0.3f); glVertex2f(-0.4f, -0.3f);
+    glEnd();
+    glColor3f(1.0f, 1.0f, 1.0f);
+    renderizarTexto("SI", -0.32f, -0.22f, GLUT_BITMAP_HELVETICA_18);
+
+    // Botón No
+    glColor3f(0.6f, 0.2f, 0.2f);
+    glBegin(GL_QUADS);
+    glVertex2f(0.1f, -0.1f); glVertex2f(0.4f, -0.1f);
+    glVertex2f(0.4f, -0.3f); glVertex2f(0.1f, -0.3f);
+    glEnd();
+    glColor3f(1.0f, 1.0f, 1.0f);
+    renderizarTexto("NO", 0.18f, -0.22f, GLUT_BITMAP_HELVETICA_18);
+
+    glutSwapBuffers();
 }
