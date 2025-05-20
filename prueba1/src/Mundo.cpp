@@ -277,12 +277,19 @@ void Mundo::procesarClick(int x, int y) {
             }
         }
         else {
-            Pieza* p = tablero.obtenerPieza(tablero.getSeleccionX(), tablero.getSeleccionY());
-            if (p != nullptr) {
-                tablero.colocarPieza(p, columna, fila);
+            int origenX = tablero.getSeleccionX();
+            int origenY = tablero.getSeleccionY();
+            // Solo mover si el destino es diferente al origen
+            if (columna != origenX || fila != origenY) {
+                Pieza* p = tablero.obtenerPieza(origenX, origenY);
+                if (p != nullptr) {
+                    tablero.colocarPieza(p, columna, fila);
+                }
             }
+            // Limpia la selección siempre
             tablero.limpiarSeleccion();
         }
+
 	}
 	else if (modoJuego == 2)
 	{
@@ -299,13 +306,20 @@ void Mundo::procesarClick(int x, int y) {
 				tablero2.setSeleccion(columna, fila);
 			}
 		}
-		else {
-			Pieza* p = tablero2.obtenerPieza(tablero2.getSeleccionX(), tablero2.getSeleccionY());
-			if (p != nullptr) {
-				tablero2.colocarPieza(p, columna, fila);
-			}
-			tablero2.limpiarSeleccion();
-		}
+        else {
+            int origenX = tablero2.getSeleccionX();
+            int origenY = tablero2.getSeleccionY();
+            // Solo mover si el destino es diferente al origen
+            if (columna != origenX || fila != origenY) {
+                Pieza* p = tablero2.obtenerPieza(origenX, origenY);
+                if (p != nullptr) {
+                    tablero2.colocarPieza(p, columna, fila);
+                }
+            }
+            // Limpia la selección siempre
+            tablero2.limpiarSeleccion();
+        }
+
     }
 }
 
