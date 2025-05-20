@@ -164,9 +164,6 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
     pieza->setPosicion(nuevaFila, nuevaColumna);
 }
 
-
-
-
 void Tablero::anadirPieza(Pieza* pieza) {
     piezas.push_back(pieza);
 }

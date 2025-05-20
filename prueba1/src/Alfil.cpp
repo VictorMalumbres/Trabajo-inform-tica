@@ -59,7 +59,6 @@ void Alfil::dibuja() {
     }
 }
 
-
 bool Alfil::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
     int origenX = getX();
     int origenY = getY();

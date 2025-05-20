@@ -7,7 +7,6 @@ extern Mundo mundo;
 
 bool juegoEnPausa = false;
 
-
 Mundo::Mundo() : estadoActual(MENU),modoJuego(1), seleccionX(-1), seleccionY(-1) {} // forzamos el estado inicial
 
 void Mundo::inicializaModo1() {
@@ -49,6 +48,14 @@ void Mundo::dibuja() {
     }
 }
 
+void Mundo::renderizarTexto(const std::string& texto, float x, float y, void* fuente) {
+    glColor3f(1.0f, 1.0f, 1.0f); // Color del texto (blanco)
+    glRasterPos2f(x, y);         // Posición del texto
+    for (char c : texto) {
+        glutBitmapCharacter(fuente, c); // Dibujar cada carácter
+    }
+}
+
 void Mundo::renderizarTextoGrande(const char* texto, float x, float y, float escala) {
     glPushMatrix();
     glTranslatef(x, y, 0.0f);      // Mover el texto a la posición (x, y)
@@ -60,6 +67,31 @@ void Mundo::renderizarTextoGrande(const char* texto, float x, float y, float esc
     }
 
     glPopMatrix();
+}
+
+void Mundo::manejarEntradaMenu(unsigned char key, int x, int y) {
+    switch (key) {
+    case '1':
+        mostrarInstruccionesEnVentana();
+        break;
+        ETSIDI::stopMusica();
+    case '2':
+        setModoJuego(1);
+        iniciarJuego();
+        break;
+        ETSIDI::stopMusica();
+    case '3':
+        setModoJuego(2);
+        iniciar2dojuego();
+        break;
+        ETSIDI::stopMusica();
+    case '4':
+        cerrarAplicacion(); // Salir del programa
+        ETSIDI::stopMusica();
+        break;
+    default:
+        break;
+    }
 }
 
 void Mundo::mostrarMenuEnVentana() {
@@ -112,156 +144,6 @@ void Mundo::mostrarMenuEnVentana() {
     glutSwapBuffers(); // Mostrar el contenido
 }
 
-void Mundo::renderizarTexto(const std::string& texto, float x, float y, void* fuente) {
-    glColor3f(1.0f, 1.0f, 1.0f); // Color del texto (blanco)
-    glRasterPos2f(x, y);         // Posición del texto
-    for (char c : texto) {
-        glutBitmapCharacter(fuente, c); // Dibujar cada carácter
-    }
-}
-void pausa (){
-
-}
-void manejarTeclado(unsigned char key, int x, int y) {
-    if (key == ' ') {
-        juegoEnPausa = !juegoEnPausa;
-        if (juegoEnPausa)
-            std::cout << "Juego pausado" << std::endl;
-        else
-            std::cout << "Juego reanudado" << std::endl;
-
-        glutPostRedisplay();
-    }
-
-    if (key == 'q' || key == 'Q') {
-        mundo.cerrarAplicacion();
-    }
-}
-
-
-void Mundo::iniciarJuego() {
-    ETSIDI::playMusica("sonidos/musica_juego1.mp3", true);
-    estadoActual = JUEGO;
-    inicializaModo1();
-    glutKeyboardFunc(manejarTeclado);
-    glutDisplayFunc([]() {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        if (!juegoEnPausa) {
-            mundo.dibuja();
-        }
-        else {
-            glMatrixMode(GL_PROJECTION);
-            glLoadIdentity();
-            gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
-
-            glMatrixMode(GL_MODELVIEW);
-            glLoadIdentity();
-
-            glColor3f(1.0f, 1.0f, 0.0f);
-            std::string texto1 = "JUEGO EN PAUSA";
-            std::string texto2 = "Presiona ESPACIO para continuar";
-            std::string linea3 = "Presiona M para volver al menú";
-            std::string texto3 = "Pulsa Q para salir";
-
-            glRasterPos2f(-0.4f, 0.1f);
-            for (char c : texto1) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
-
-            glRasterPos2f(-0.6f, -0.1f);
-            for (char c : texto2) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
-
-            glRasterPos2f(-0.5f, -0.3f);
-            for (char c : texto3) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
-
-            glutSwapBuffers();
-        }
-        });
-
-    glutIdleFunc([]() {
-        glutPostRedisplay();
-        });
-}
-
-void Mundo::iniciar2dojuego() {
-    estadoActual = JUEGO;
-    inicializaModo2();
-    glutKeyboardFunc(manejarTeclado);
-    glutDisplayFunc([]() {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        gluOrtho2D(-1.0, 1.0, -1.0, 1.0);  // Proyección 2D para texto
-
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-
-        if (!juegoEnPausa) {
-            mundo.dibuja();  // Modo juego normal
-        }
-        else {
-            // Mostrar pantalla de pausa
-            glColor3f(1.0f, 1.0f, 0.0f);  // Texto amarillo
-
-            std::string linea1 = "JUEGO EN PAUSA";
-            std::string linea2 = "Presiona 'ESPACIO' para continuar";
-            std::string linea3 = "Presiona M para volver al menú";
-            std::string linea4 = "Pulsa Q para salir";
-
-            glRasterPos2f(-0.2f, 0.1f);
-            for (char c : linea1) {
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
-            }
-
-            glRasterPos2f(-0.4f, -0.1f);
-            for (char c : linea2) {
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
-
-            glRasterPos2f(-0.6f, -0.1f);
-            for (char c : linea3) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
-            }
-
-            glRasterPos2f(-0.8f, -0.1f);
-            for (char c : linea4) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
-        }
-        glutSwapBuffers();  // Mostrar resultado
-        });
-    glutIdleFunc([]() {
-        glutPostRedisplay();
-    });
-}
-
-void Mundo::cerrarAplicacion() {
-    std::cout << "Saliendo del juego..." << std::endl;
-    //glutLeaveMainLoop(); // Cierra la ventana y termina el bucle principal de GLUT
-    exit(0); // Termina el programa
-}
-
-void Mundo::manejarEntradaMenu(unsigned char key, int x, int y) {
-    switch (key) {
-    case '1':
-        mostrarInstruccionesEnVentana();
-        break;
-        ETSIDI::stopMusica();
-    case '2':
-        setModoJuego(1);
-        iniciarJuego();
-        break;
-        ETSIDI::stopMusica();
-    case '3':
-        setModoJuego(2);
-        iniciar2dojuego();
-        break;
-        ETSIDI::stopMusica();
-    case '4':
-        cerrarAplicacion(); // Salir del programa
-        ETSIDI::stopMusica();
-        break;
-    default:
-        break;
-    }
-}
-
 void Mundo::mostrarInstruccionesEnVentana() {
     glClear(GL_COLOR_BUFFER_BIT); // Limpiar la ventana
 
@@ -297,6 +179,104 @@ void Mundo::mostrarInstruccionesEnVentana() {
     renderizarTexto("Presione doble click para volver al menu...", -0.8f, -0.3f, GLUT_BITMAP_HELVETICA_12);
 
     glutSwapBuffers(); // Mostrar contenido en pantalla
+}
+
+void Mundo::iniciarJuego() {
+    ETSIDI::playMusica("sonidos/musica_juego1.mp3", true);
+    estadoActual = JUEGO;
+    inicializaModo1();
+    glutKeyboardFunc(manejarTeclado);
+    glutDisplayFunc([]() {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        if (!juegoEnPausa) {
+            mundo.dibuja();
+        }
+        else {
+            ETSIDI::stopMusica();
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+
+            glMatrixMode(GL_MODELVIEW);
+            glLoadIdentity();
+
+            glColor3f(1.0f, 1.0f, 0.0f);
+            std::string texto1 = "JUEGO EN PAUSA";
+            std::string texto2 = "Presiona ESPACIO para continuar";
+            std::string texto3 = "Presiona M para volver al menu";
+            std::string texto4 = "Pulsa Q para salir";
+
+            glRasterPos2f(-0.8, 0.3f);
+            for (char c : texto1) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+
+            glRasterPos2f(-0.6f, 0.2f);
+            for (char c : texto2) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+
+            glRasterPos2f(-0.4f, 0.1f);
+            for (char c : texto3) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+
+            glRasterPos2f(-0.2f, -0.1f);
+            for (char c : texto4) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+
+            glutSwapBuffers();
+        }
+        });
+
+    glutIdleFunc([]() {
+        glutPostRedisplay();
+        });
+}
+
+void Mundo::iniciar2dojuego() {
+    estadoActual = JUEGO;
+    inicializaModo2();
+    glutKeyboardFunc(manejarTeclado);
+    glutDisplayFunc([]() {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        if (!juegoEnPausa) {
+            mundo.dibuja();
+        }
+        else {
+            ETSIDI::stopMusica();
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+
+            glMatrixMode(GL_MODELVIEW);
+            glLoadIdentity();
+
+            glColor3f(1.0f, 1.0f, 0.0f);
+            std::string texto1 = "JUEGO EN PAUSA";
+            std::string texto2 = "Presiona ESPACIO para continuar";
+            std::string texto3 = "Presiona M para volver al menu";
+            std::string texto4 = "Pulsa Q para salir";
+
+            glRasterPos2f(-0.8f, 0.3f);
+            for (char c : texto1) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+
+            glRasterPos2f(-0.6f, 0.2f);
+            for (char c : texto2) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+
+            glRasterPos2f(-0.4f, 0.1f);
+            for (char c : texto3) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+
+            glRasterPos2f(-0.2f, -0.1f);
+            for (char c : texto4) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+
+            glutSwapBuffers();
+        }
+        });
+    glutIdleFunc([]() {
+        glutPostRedisplay();
+    });
+}
+
+void Mundo::cerrarAplicacion() {
+    std::cout << "Saliendo del juego..." << std::endl;
+    //glutLeaveMainLoop(); // Cierra la ventana y termina el bucle principal de GLUT
+    exit(0); // Termina el programa
 }
 
 void Mundo::procesarClick(int x, int y) {
@@ -375,3 +355,23 @@ void Mundo::procesarClick(int x, int y) {
     }
 }
 
+void manejarTeclado(unsigned char key, int x, int y) {
+    if (key == ' ') {
+        juegoEnPausa = !juegoEnPausa;
+        if (juegoEnPausa)
+            std::cout << "Juego pausado" << std::endl;
+        else
+            std::cout << "Juego reanudado" << std::endl;
+
+        glutPostRedisplay();
+    }
+
+    if (key == 'q' || key == 'Q') {
+        mundo.cerrarAplicacion();
+    }
+
+    if (key == 'm' || key == 'M') {
+        mundo.mostrarMenuEnVentana();
+        ExitProcess;
+    }
+}
