@@ -6,7 +6,7 @@
 #include "Pieza.h"
 #include "Alfil.h"
 #include "Caballo.h"
-
+#include "Mundo.h"
 #include "Torre.h"
 #include "Reina.h"
 #include "Rey.h"
@@ -22,7 +22,7 @@ private:
     int turno; // 0 = blanco, 1 = negro
     Rey* reyBlanco;
     Rey* reyNegro;
-
+    Mundo* mundo;  // Puntero a la clase Mundo (que controla el flujo del juego)
     //void renderizarTexto(const std::string& texto, float x, float y, void* fuente);
 
 public:
@@ -31,6 +31,9 @@ public:
     //void manejarEntradaMenu(unsigned char key, int x, int y); //menú switch
     //void mostrarInstruccionesEnVentana(); //instrucciones juego
     void iniciarPartida(int modoJuego); //correr el juego
+
+    Tablero(Mundo* m);  // Constructor para asignar el puntero a Mundo
+    Mundo* getMundo() const { return mundo; }  // Método para obtener el objeto Mundo
 
     //void iniciarJuego(); //silverman
     //void iniciar2dojuego(); //demi

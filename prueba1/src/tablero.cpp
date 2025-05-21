@@ -11,6 +11,11 @@ Tablero::Tablero() {
     turno = 0;
 }
 
+Tablero::Tablero(Mundo* m) : mundo(m) {
+    // Inicializa las demás variables de Tablero
+    turno = 0;
+}
+
 void Tablero::iniciarPartida(int modoJuego) {
     if (modoJuego == 1) {
         inicializaSilverman();
@@ -189,7 +194,13 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
                     else {
                         std::cout << "El rey blanco ha sido capturado. ¡El jugador negro gana!" << std::endl;
                     }
-                    glutDestroyWindow(glutGetWindow());
+
+                    // Cambiar al menú después de la captura del rey
+                    Mundo* mundo = getMundo(); // Obtener el objeto Mundo
+                    mundo->setEstadoActual(MENU); // Cambiar al estado MENU
+
+                    // Puedes añadir un mensaje o cualquier otra acción al cambiar al menú
+                    std::cout << "Volviendo al menú..." << std::endl;
                 
                 }
 
