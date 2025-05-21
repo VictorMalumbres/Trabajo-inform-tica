@@ -20,6 +20,8 @@ private:
     //int filas;
     //int columnas;
     int turno; // 0 = blanco, 1 = negro
+    Rey* reyBlanco;
+    Rey* reyNegro;
 
     //void renderizarTexto(const std::string& texto, float x, float y, void* fuente);
 

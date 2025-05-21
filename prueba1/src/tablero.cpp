@@ -89,6 +89,9 @@ void Tablero::inicializaSilverman() {
     piezas.clear();
 
     // Primer jugador (blanco)
+    reyBlanco = new Rey(2, 0, 0); // Asignar el rey blanco
+    piezas.push_back(reyBlanco);
+
     piezas.push_back(new Torre(0, 0, 0));
     piezas.push_back(new Reina(1, 0,0));
     piezas.push_back(new Rey(2, 0, 0));
@@ -100,6 +103,9 @@ void Tablero::inicializaSilverman() {
     piezas.push_back(new Peon(3, 1, 0));
 
     // Segundo jugador (negro)
+    reyNegro = new Rey(2, 4, 1); // Asignar el rey negro
+    piezas.push_back(reyNegro);
+
     piezas.push_back(new Torre(0, 4, 1));
     piezas.push_back(new Reina(1, 4, 1));
     piezas.push_back(new Rey(2, 4, 1));
@@ -115,6 +121,9 @@ void Tablero::inicializaDemi() {
     piezas.clear();
 
     // Primer jugador (blanco)
+    reyBlanco = new Rey(0, 0, 0); // Asignar el rey blanco
+    piezas.push_back(reyBlanco);
+
     piezas.push_back(new Torre(3, 0, 0));
     piezas.push_back(new Rey(0, 0,  0));
     piezas.push_back(new Caballo(2, 0, 0));
@@ -126,6 +135,9 @@ void Tablero::inicializaDemi() {
     piezas.push_back(new Peon(3, 1, 0));
 
     // Segundo jugador (negro)
+    reyNegro = new Rey(0, 7, 1); // Asignar el rey negro
+    piezas.push_back(reyNegro);
+
     piezas.push_back(new Torre(3, 7, 1));
     piezas.push_back(new Rey(0, 7, 1));
     piezas.push_back(new Caballo(2, 7, 1));
@@ -168,10 +180,23 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
                 return; // No se mueve ni elimina nada
             }
             else {
+                               
+				// Comprobar si es un rey
+                if (dynamic_cast<Rey*>(*it)) { // Si es un rey
+                    if (pieza->getBando() == 0) {
+                        std::cout << "El rey negro ha sido capturado. ¡El jugador blanco gana!" << std::endl;
+                    }
+                    else {
+                        std::cout << "El rey blanco ha sido capturado. ¡El jugador negro gana!" << std::endl;
+                    }
+                    glutDestroyWindow(glutGetWindow());
+                
+                }
+
                 // Es del bando contrario, eliminarla (capturar)
                 delete* it;
                 piezas.erase(it);
-				capturado = true; // Marcamos que se ha capturado una pieza
+                capturado = true; // Marcamos que se ha capturado una pieza
                 break;
             }
         }
