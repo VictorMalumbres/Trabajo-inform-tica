@@ -204,9 +204,8 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
     // Mover la pieza
     pieza->setPosicion(nuevaFila, nuevaColumna);
 
-	if (!capturado) {
-        turno = 1 - turno; // Cambiar turno
-	}
+    turno = 1 - turno; // Cambiar turno
+	
 	
 }
 
