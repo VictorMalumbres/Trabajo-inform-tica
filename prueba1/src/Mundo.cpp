@@ -56,7 +56,6 @@ void Mundo::dibuja() {
 
 }
 
-
 void Mundo::renderizarTexto(const std::string& texto, float x, float y, void* fuente) {
     glColor3f(1.0f, 1.0f, 1.0f); // Color del texto (blanco)
     glRasterPos2f(x, y);         // Posición del texto
@@ -210,13 +209,11 @@ void manejarTeclado(unsigned char key, int x, int y) {
         return;
     }
 
-
     else if (key == 'q' || key == 'Q') {
         juegoEnPausa = false; // <-- Añade esta línea
         mundo.setEstadoActual(CONFIRMAR_SALIR);
         glutPostRedisplay();
     }
-
 
     else if (key == 'm' || key == 'M') {
         juegoEnPausa = false;
@@ -234,11 +231,9 @@ void manejarTeclado(unsigned char key, int x, int y) {
 
 }
 
-
 void Mundo::manejarTeclado(unsigned char key, int x, int y) {
     ::manejarTeclado(key, x, y);
 }
-
 
 void Mundo::iniciarJuego() {
     musicaActual = "sonidos/musica_juego1.mp3";
@@ -282,11 +277,8 @@ void Mundo::iniciarJuego() {
 
             glutSwapBuffers();
         }
-        });
-
-    glutIdleFunc([]() {
-        glutPostRedisplay();
-        });
+    });
+    glutIdleFunc([]() {glutPostRedisplay();});
 }
 
 void Mundo::iniciar2dojuego() {
@@ -330,10 +322,8 @@ void Mundo::iniciar2dojuego() {
 
             glutSwapBuffers();
         }
-        });
-    glutIdleFunc([]() {
-        glutPostRedisplay();
     });
+    glutIdleFunc([]() {glutPostRedisplay();});
 }
 
 void Mundo::cerrarAplicacion() {
@@ -341,14 +331,12 @@ void Mundo::cerrarAplicacion() {
     //glutLeaveMainLoop(); // Cierra la ventana y termina el bucle principal de GLUT
     exit(0); // Termina el programa
 }
+
 bool Mundo::estaEnMenu() const {
     return estadoActual == MENU;
 }
 
-
 void Mundo::procesarClick(int x, int y) {
-
-
     // Convertir coordenadas de ventana a OpenGL [-1, 1]
     float x_gl = (float)x / 400.0f - 1.0f; // 800px de ancho
     float y_gl = 1.0f - (float)y / 300.0f; // 600px de alto
@@ -365,8 +353,6 @@ void Mundo::procesarClick(int x, int y) {
             return;
         }
     }
- 
-
 
     if (estadoActual == CONFIRMAR_MENU) {
         // Botón SI: x entre -0.4 y -0.1, y entre -0.3 y -0.1
@@ -415,7 +401,6 @@ void Mundo::procesarClick(int x, int y) {
             // Limpia la selección siempre
             tablero.limpiarSeleccion();
         }
-
 	}
 	else if (modoJuego == 2)
 	{
@@ -445,7 +430,6 @@ void Mundo::procesarClick(int x, int y) {
             // Limpia la selección siempre
             tablero2.limpiarSeleccion();
         }
-
     }
     if (estadoActual == MENU) {
         // Convertir coordenadas de ventana a OpenGL [-1, 1]
@@ -486,8 +470,8 @@ void Mundo::procesarClick(int x, int y) {
 
         }
     }
-
 }
+
 void Mundo::mostrarConfirmacionMenu() {
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -574,6 +558,3 @@ void Mundo::setEstadoActual(EstadoMundo estado) {
     }
     // No pongas música para CONFIRMAR_MENU ni CONFIRMAR_SALIR
 }
-
-
-
