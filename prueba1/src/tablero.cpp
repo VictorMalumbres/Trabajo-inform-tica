@@ -94,7 +94,7 @@ void Tablero::inicializaSilverman() {
 
     piezas.push_back(new Torre(0, 0, 0));
     piezas.push_back(new Reina(1, 0,0));
-    piezas.push_back(new Rey(2, 0, 0));
+    //piezas.push_back(new Rey(2, 0, 0));
     piezas.push_back(new Torre(3, 0, 0));
 
     piezas.push_back(new Peon(0, 1, 0));
@@ -108,7 +108,7 @@ void Tablero::inicializaSilverman() {
 
     piezas.push_back(new Torre(0, 4, 1));
     piezas.push_back(new Reina(1, 4, 1));
-    piezas.push_back(new Rey(2, 4, 1));
+    //piezas.push_back(new Rey(2, 4, 1));
     piezas.push_back(new Torre(3, 4, 1));
 
     piezas.push_back(new Peon(0, 3, 1));
@@ -125,7 +125,7 @@ void Tablero::inicializaDemi() {
     piezas.push_back(reyBlanco);
 
     piezas.push_back(new Torre(3, 0, 0));
-    piezas.push_back(new Rey(0, 0,  0));
+    //piezas.push_back(new Rey(0, 0,  0));
     piezas.push_back(new Caballo(2, 0, 0));
     piezas.push_back(new Alfil(1, 0, 0));      // Alfil blanco
 
@@ -139,7 +139,7 @@ void Tablero::inicializaDemi() {
     piezas.push_back(reyNegro);
 
     piezas.push_back(new Torre(3, 7, 1));
-    piezas.push_back(new Rey(0, 7, 1));
+    //piezas.push_back(new Rey(0, 7, 1));
     piezas.push_back(new Caballo(2, 7, 1));
 
     piezas.push_back(new Alfil(1, 7, 1));      // Alfil negro
@@ -175,36 +175,31 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
     // Buscar si hay una pieza en la casilla destino
     for (auto it = piezas.begin(); it != piezas.end(); ++it) {
         if ((*it)->getX() == nuevaColumna && (*it)->getY() == nuevaFila) {
-            // Si la pieza en destino es del mismo bando, no mover
-            if ((*it)->getBando() == pieza->getBando()) {
+            // Si la pieza en destino es del mismo bando y es un rey, no mover
+            if ((*it)->getBando() == pieza->getBando() && dynamic_cast<Rey*>(*it)) {
                 return; // No se mueve ni elimina nada
             }
+            // Permitir capturar cualquier otra pieza, incluso del mismo bando
             else {
-                               
-				// Comprobar si es un rey
-                if (dynamic_cast<Rey*>(*it)) { // Si es un rey
+                // Comprobar si es un rey (del otro bando)
+                if (dynamic_cast<Rey*>(*it)) {
                     if (pieza->getBando() == 0) {
                         std::cout << "El rey negro ha sido capturado. ¡El jugador blanco gana!" << std::endl;
                     }
                     else {
                         std::cout << "El rey blanco ha sido capturado. ¡El jugador negro gana!" << std::endl;
                     }
-
-                  
-
-                    // Puedes añadir un mensaje o cualquier otra acción al cambiar al menú
                     std::cout << "Volviendo al menú..." << std::endl;
-                
                 }
-
-                // Es del bando contrario, eliminarla (capturar)
+                // Captura
                 delete* it;
                 piezas.erase(it);
-                capturado = true; // Marcamos que se ha capturado una pieza
+                capturado = true;
                 break;
             }
         }
     }
+
 
     // Mover la pieza
     pieza->setPosicion(nuevaFila, nuevaColumna);
