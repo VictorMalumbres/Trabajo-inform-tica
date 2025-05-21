@@ -100,7 +100,10 @@ void Mundo::manejarEntradaMenu(unsigned char key, int x, int y) {
 }
 
 void Mundo::mostrarMenuEnVentana() {
+    tablero.reiniciarTablero();
+    tablero2.reiniciarTablero();
     glClear(GL_COLOR_BUFFER_BIT); // Limpiar la ventana
+   
 
     // Fondo con textura
     glEnable(GL_TEXTURE_2D);

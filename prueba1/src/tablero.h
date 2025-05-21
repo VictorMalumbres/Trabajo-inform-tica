@@ -57,6 +57,8 @@ public:
     int getTurno() const { return turno; }
     void reiniciarTurno() { turno = 0; }  // Comenzar con blanco
 
+    void reiniciarTablero();
+
 
     std::vector<Pieza*>& getPiezas() { return piezas; }
     

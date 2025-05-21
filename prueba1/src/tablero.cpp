@@ -206,10 +206,20 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
 
     turno = 1 - turno; // Cambiar turno
 	
-	
 }
 
 void Tablero::anadirPieza(Pieza* pieza) {
     piezas.push_back(pieza);
 }
 
+void Tablero::reiniciarTablero() {
+    for (Pieza* p : piezas) {
+        delete p;
+    }
+    piezas.clear();
+    seleccionX = -1;
+    seleccionY = -1;
+    turno = 0;
+    reyBlanco = nullptr;
+    reyNegro = nullptr;
+}
