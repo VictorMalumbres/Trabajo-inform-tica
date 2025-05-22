@@ -108,7 +108,7 @@ bool Peon::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
     // Movimiento diagonal para captura
     if (std::abs(dx) == 1 && dy == direccion) {
         Pieza* destino = tablero.obtenerPieza(nuevaColumna, nuevaFila);
-        if (destino != nullptr && destino->getBando() != getBando()) {
+        if (destino != nullptr){
             return true;
         }
         return false;
