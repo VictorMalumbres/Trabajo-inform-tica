@@ -6,6 +6,7 @@
 //#pragma warning(disable : 4996) //deshabilita el error por unsafe 
 //Mundo mundo;
 
+
 Tablero::Tablero() {
     // Constructor de Tablero, inicializa el vector de piezas
     turno = 0;
@@ -99,7 +100,7 @@ void Tablero::dibuja2() {
         int fil = pos.second;
         glColor3f(1.0f, 0.0f, 0.0f); // Rojo
         glBegin(GL_QUADS);
-        glVertex3f(col * casillaSizeX, fil * casillaSizeY, 0.1f);
+        glVertex3f(col * casillaSizeX, fil * casillaSizeY, 0.1f); // 0.1f para que quede encima
         glVertex3f((col + 1) * casillaSizeX, fil * casillaSizeY, 0.1f);
         glVertex3f((col + 1) * casillaSizeX, (fil + 1) * casillaSizeY, 0.1f);
         glVertex3f(col * casillaSizeX, (fil + 1) * casillaSizeY, 0.1f);
@@ -115,6 +116,8 @@ void Tablero::dibuja2() {
 
 void Tablero::inicializaSilverman() {
     piezas.clear();
+    numFilas = 5;
+    numColumnas = 4;
 
     // Primer jugador (blanco)
     reyBlanco = new Rey(2, 0, 0); // Asignar el rey blanco
@@ -147,6 +150,9 @@ void Tablero::inicializaSilverman() {
 
 void Tablero::inicializaDemi() {
     piezas.clear();
+
+    numFilas = 8;
+    numColumnas = 4;
 
     // Primer jugador (blanco)
     reyBlanco = new Rey(0, 0, 0); // Asignar el rey blanco
@@ -268,4 +274,12 @@ void Tablero::limpiarSeleccion() {
     seleccionX = -1;
     seleccionY = -1;
     casillasResaltadas.clear();
+}
+
+int Tablero::getNumFilas() const {
+    return numFilas;
+}
+
+int Tablero::getNumColumnas() const {
+    return numColumnas;
 }

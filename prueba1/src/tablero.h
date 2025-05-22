@@ -17,6 +17,8 @@ private:
     std::vector<Pieza*> piezas;
     int seleccionX = -1; // Columna seleccionada, -1 si ninguna
     int seleccionY = -1; // Fila seleccionada, -1 si ninguna
+    int numFilas;
+    int numColumnas;
     //int filas;
     //int columnas;
     int turno; // 0 = blanco, 1 = negro
@@ -31,6 +33,9 @@ public:
     //void manejarEntradaMenu(unsigned char key, int x, int y); //menú switch
     //void mostrarInstruccionesEnVentana(); //instrucciones juego
     void iniciarPartida(int modoJuego); //correr el juego
+
+    int getNumFilas() const;
+    int getNumColumnas() const;
 
  
 

@@ -92,7 +92,7 @@ std::vector<std::pair<int, int>> Caballo::movimientosPosibles(Tablero& tablero) 
     for (int i = 0; i < 8; ++i) {
         int nx = x + dx[i];
         int ny = y + dy[i];
-        if (nx >= 0 && nx < 4 && ny >= 0 && ny < 5) {
+        if (nx >= 0 && nx < tablero.getNumColumnas() && ny >= 0 && ny < tablero.getNumFilas()) {
             movimientos.push_back({ nx, ny });
         }
     }
