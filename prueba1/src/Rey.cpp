@@ -68,12 +68,8 @@ bool Rey::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
     // El rey se mueve una casilla en cualquier dirección
     if (std::abs(dx) > 1 || std::abs(dy) > 1) return false;
 
-    // Verificar que la casilla destino no tenga pieza del mismo bando
-    Pieza* destino = tablero.obtenerPieza(nuevaColumna, nuevaFila);
-    if (destino != nullptr && destino->getBando() == getBando()) {
-        return false;
-    }
-
+    // Ya no se comprueba el bando de la pieza destino
+    // Puede capturar cualquier pieza (aliada o enemiga)
     return true;
 }
 
@@ -85,12 +81,13 @@ std::vector<std::pair<int, int>> Rey::movimientosPosibles(Tablero& tablero) {
             if (dx == 0 && dy == 0) continue;
             int nx = getX() + dx;
             int ny = getY() + dy;
-            // Verifica que esté dentro del tablero y que la casilla esté vacía o tenga pieza enemiga
+            // Verifica que esté dentro del tablero y que la casilla esté vacía o tenga pieza
             if (nx >= 0 && nx < 4 && ny >= 0 && ny < 5) {
                 Pieza* p = tablero.obtenerPieza(nx, ny);
-                if (!p || p->getBando() != this->getBando())
+                if (!p || p)
                     movimientos.push_back({ nx, ny });
             }
+
         }
     }
     return movimientos;

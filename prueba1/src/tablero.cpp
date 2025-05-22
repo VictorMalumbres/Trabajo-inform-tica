@@ -93,11 +93,25 @@ void Tablero::dibuja2() {
         }
     }
 
+    // --- BLOQUE NUEVO PARA RESALTAR CASILLAS ---
+    for (const auto& pos : casillasResaltadas) {
+        int col = pos.first;
+        int fil = pos.second;
+        glColor3f(1.0f, 0.0f, 0.0f); // Rojo
+        glBegin(GL_QUADS);
+        glVertex3f(col * casillaSizeX, fil * casillaSizeY, 0.1f);
+        glVertex3f((col + 1) * casillaSizeX, fil * casillaSizeY, 0.1f);
+        glVertex3f((col + 1) * casillaSizeX, (fil + 1) * casillaSizeY, 0.1f);
+        glVertex3f(col * casillaSizeX, (fil + 1) * casillaSizeY, 0.1f);
+        glEnd();
+    }
+    // -------------------------------------------
+
     for (Pieza* pieza : piezas) {
         pieza->dibuja();
     }
-
 }
+// --- FIN DEL BLOQUE NUEVO PARA RESALTAR CASILLAS ---
 
 void Tablero::inicializaSilverman() {
     piezas.clear();
