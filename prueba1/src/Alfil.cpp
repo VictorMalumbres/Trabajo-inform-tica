@@ -91,7 +91,7 @@ std::vector<std::pair<int, int>> Alfil::movimientosPosibles(Tablero& tablero) {
         if (!p)
             movimientos.push_back({ nx, ny });
         else {
-            if (p->getBando() != getBando())
+            if (p)
                 movimientos.push_back({ nx, ny });
             break;
         }
@@ -102,7 +102,7 @@ std::vector<std::pair<int, int>> Alfil::movimientosPosibles(Tablero& tablero) {
         if (!p)
             movimientos.push_back({ nx, ny });
         else {
-            if (p->getBando() != getBando())
+            if (p)
                 movimientos.push_back({ nx, ny });
             break;
         }
@@ -113,7 +113,7 @@ std::vector<std::pair<int, int>> Alfil::movimientosPosibles(Tablero& tablero) {
         if (!p)
             movimientos.push_back({ nx, ny });
         else {
-            if (p->getBando() != getBando())
+            if (p)
                 movimientos.push_back({ nx, ny });
             break;
         }
@@ -124,7 +124,7 @@ std::vector<std::pair<int, int>> Alfil::movimientosPosibles(Tablero& tablero) {
         if (!p)
             movimientos.push_back({ nx, ny });
         else {
-            if (p->getBando() != getBando())
+            if (p)
                 movimientos.push_back({ nx, ny });
             break;
         }

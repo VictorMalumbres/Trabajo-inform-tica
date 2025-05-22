@@ -94,7 +94,7 @@ std::vector<std::pair<int, int>> Caballo::movimientosPosibles(Tablero& tablero) 
         int ny = y + dy[i];
         if (nx >= 0 && nx < 4 && ny >= 0 && ny < 5) {
             Pieza* p = tablero.obtenerPieza(nx, ny);
-            if (!p || p->getBando() != getBando())
+            if (!p || p)
                 movimientos.push_back({ nx, ny });
         }
     }

@@ -96,7 +96,7 @@ std::vector<std::pair<int, int>> Torre::movimientosPosibles(Tablero& tablero) {
         if (!p)
             movimientos.push_back({ nx, y });
         else {
-            if (p->getBando() != getBando())
+            if (p)
                 movimientos.push_back({ nx, y });
             break;
         }
@@ -107,7 +107,7 @@ std::vector<std::pair<int, int>> Torre::movimientosPosibles(Tablero& tablero) {
         if (!p)
             movimientos.push_back({ nx, y });
         else {
-            if (p->getBando() != getBando())
+            if (p)
                 movimientos.push_back({ nx, y });
             break;
         }
@@ -118,7 +118,7 @@ std::vector<std::pair<int, int>> Torre::movimientosPosibles(Tablero& tablero) {
         if (!p)
             movimientos.push_back({ x, ny });
         else {
-            if (p->getBando() != getBando())
+            if (p)
                 movimientos.push_back({ x, ny });
             break;
         }
@@ -129,7 +129,7 @@ std::vector<std::pair<int, int>> Torre::movimientosPosibles(Tablero& tablero) {
         if (!p)
             movimientos.push_back({ x, ny });
         else {
-            if (p->getBando() != getBando())
+            if (p)
                 movimientos.push_back({ x, ny });
             break;
         }

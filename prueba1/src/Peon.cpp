@@ -132,13 +132,13 @@ std::vector<std::pair<int, int>> Peon::movimientosPosibles(Tablero& tablero) {
     // Captura diagonal izquierda
     if (x - 1 >= 0 && ny >= 0 && ny < 5) {
         Pieza* p = tablero.obtenerPieza(x - 1, ny);
-        if (p && p->getBando() != getBando())
+        if (p)
             movimientos.push_back({ x - 1, ny });
     }
     // Captura diagonal derecha
     if (x + 1 < 4 && ny >= 0 && ny < 5) {
         Pieza* p = tablero.obtenerPieza(x + 1, ny);
-        if (p && p->getBando() != getBando())
+        if (p)
             movimientos.push_back({ x + 1, ny });
     }
     return movimientos;
