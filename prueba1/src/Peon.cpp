@@ -117,3 +117,29 @@ bool Peon::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
     return false; // Movimiento inválido
 
 }
+
+std::vector<std::pair<int, int>> Peon::movimientosPosibles(Tablero& tablero) {
+    std::vector<std::pair<int, int>> movimientos;
+    int x = getX();
+    int y = getY();
+    int dir = (getBando() == 0) ? 1 : -1; // 0: blanco sube, 1: negro baja
+
+    // Movimiento hacia adelante
+    int ny = y + dir;
+    if (ny >= 0 && ny < 5 && !tablero.obtenerPieza(x, ny)) {
+        movimientos.push_back({ x, ny });
+    }
+    // Captura diagonal izquierda
+    if (x - 1 >= 0 && ny >= 0 && ny < 5) {
+        Pieza* p = tablero.obtenerPieza(x - 1, ny);
+        if (p && p->getBando() != getBando())
+            movimientos.push_back({ x - 1, ny });
+    }
+    // Captura diagonal derecha
+    if (x + 1 < 4 && ny >= 0 && ny < 5) {
+        Pieza* p = tablero.obtenerPieza(x + 1, ny);
+        if (p && p->getBando() != getBando())
+            movimientos.push_back({ x + 1, ny });
+    }
+    return movimientos;
+}

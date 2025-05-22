@@ -12,5 +12,7 @@ public:
 
     bool mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) override;
 
+    std::vector<std::pair<int, int>> movimientosPosibles(Tablero& tablero) override;
+
 };
 

@@ -48,8 +48,8 @@ public:
     void colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila);
     void anadirPieza(Pieza* pieza);  // Para inicializar el tablero
 
-    void setSeleccion(int x, int y) { seleccionX = x; seleccionY = y; }
-    void limpiarSeleccion() { seleccionX = -1; seleccionY = -1; }
+    //void setSeleccion(int x, int y) { seleccionX = x; seleccionY = y; }
+    //void limpiarSeleccion() { seleccionX = -1; seleccionY = -1; }
 
     int getSeleccionX() const { return seleccionX; }
     int getSeleccionY() const { return seleccionY; }
@@ -61,7 +61,14 @@ public:
 
 
     std::vector<Pieza*>& getPiezas() { return piezas; }
+
+    void setSeleccion(int x, int y);
+
+    void limpiarSeleccion();
     
+    std::vector<std::pair<int, int>> casillasResaltadas;
+
+
 };
 
 #endif // TABLERO_H

@@ -1,5 +1,7 @@
 #pragma once
 #include <freeglut.h>
+#include <vector>
+#include <utility>
 //#include "Tablero.h"
 
 class Tablero; //Declaración adelantada
@@ -30,5 +32,7 @@ public:
     virtual void dibuja() = 0;
 
     virtual bool mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) = 0;
+
+    virtual std::vector<std::pair<int, int>> movimientosPosibles(Tablero& tablero) = 0;
 
 };

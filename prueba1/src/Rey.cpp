@@ -76,3 +76,22 @@ bool Rey::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
 
     return true;
 }
+
+
+std::vector<std::pair<int, int>> Rey::movimientosPosibles(Tablero& tablero) {
+    std::vector<std::pair<int, int>> movimientos;
+    for (int dx = -1; dx <= 1; ++dx) {
+        for (int dy = -1; dy <= 1; ++dy) {
+            if (dx == 0 && dy == 0) continue;
+            int nx = getX() + dx;
+            int ny = getY() + dy;
+            // Verifica que esté dentro del tablero y que la casilla esté vacía o tenga pieza enemiga
+            if (nx >= 0 && nx < 4 && ny >= 0 && ny < 5) {
+                Pieza* p = tablero.obtenerPieza(nx, ny);
+                if (!p || p->getBando() != this->getBando())
+                    movimientos.push_back({ nx, ny });
+            }
+        }
+    }
+    return movimientos;
+}

@@ -13,4 +13,6 @@ public:
 
     bool mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) override;
 	// Implementación del método mueve para la Torre
+
+    std::vector<std::pair<int, int>> movimientosPosibles(Tablero& tablero) override;
 };

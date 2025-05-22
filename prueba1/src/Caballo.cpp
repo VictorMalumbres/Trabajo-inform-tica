@@ -81,3 +81,22 @@ bool Caballo::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
         return true; // Movimiento válido
    
 }
+
+std::vector<std::pair<int, int>> Caballo::movimientosPosibles(Tablero& tablero) {
+    std::vector<std::pair<int, int>> movimientos;
+    int x = getX();
+    int y = getY();
+    int dx[] = { 1, 2, 2, 1, -1, -2, -2, -1 };
+    int dy[] = { 2, 1, -1, -2, -2, -1, 1, 2 };
+
+    for (int i = 0; i < 8; ++i) {
+        int nx = x + dx[i];
+        int ny = y + dy[i];
+        if (nx >= 0 && nx < 4 && ny >= 0 && ny < 5) {
+            Pieza* p = tablero.obtenerPieza(nx, ny);
+            if (!p || p->getBando() != getBando())
+                movimientos.push_back({ nx, ny });
+        }
+    }
+    return movimientos;
+}

@@ -21,11 +21,11 @@ void Tablero::iniciarPartida(int modoJuego) {
     //glutDisplayFunc([]() { mundo.dibuja(); });
     glutPostRedisplay();
 }
-
 void Tablero::dibuja() {
     float casillaSizeX = 1.0f;
     float casillaSizeY = 1.0f;
 
+    // 1. Dibuja el fondo del tablero (casillas normales)
     for (int i = 0; i < 5; ++i) {  // 5 filas
         for (int j = 0; j < 4; ++j) {  // 4 columnas
 
@@ -49,11 +49,25 @@ void Tablero::dibuja() {
         }
     }
 
-    // Dibujar las piezas
+    // 2. Dibuja las casillas resaltadas en rojo (AQUÍ VA EL CÓDIGO NUEVO)
+    for (const auto& pos : casillasResaltadas) {
+        int col = pos.first;
+        int fil = pos.second;
+        glColor3f(1.0f, 0.0f, 0.0f); // Rojo
+        glBegin(GL_QUADS);
+        glVertex3f(col * casillaSizeX, fil * casillaSizeY, 0.1f); // 0.1f para que quede encima
+        glVertex3f((col + 1) * casillaSizeX, fil * casillaSizeY, 0.1f);
+        glVertex3f((col + 1) * casillaSizeX, (fil + 1) * casillaSizeY, 0.1f);
+        glVertex3f(col * casillaSizeX, (fil + 1) * casillaSizeY, 0.1f);
+        glEnd();
+    }
+
+    // 3. Dibuja las piezas
     for (Pieza* pieza : piezas) {
         pieza->dibuja();
     }
 }
+
 
 void Tablero::dibuja2() {
     float casillaSizeX = 1.0f;
@@ -222,4 +236,22 @@ void Tablero::reiniciarTablero() {
     turno = 0;
     reyBlanco = nullptr;
     reyNegro = nullptr;
+}
+
+void Tablero::setSeleccion(int x, int y) {
+    seleccionX = x;
+    seleccionY = y;
+    Pieza* pieza = obtenerPieza(x, y);
+    if (pieza && pieza->getBando() == turno) {
+        casillasResaltadas = pieza->movimientosPosibles(*this);
+    }
+    else {
+        casillasResaltadas.clear();
+    }
+}
+
+void Tablero::limpiarSeleccion() {
+    seleccionX = -1;
+    seleccionY = -1;
+    casillasResaltadas.clear();
 }

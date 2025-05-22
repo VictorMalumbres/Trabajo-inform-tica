@@ -79,3 +79,55 @@ bool Alfil::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
     }
     return true;
 }
+
+std::vector<std::pair<int, int>> Alfil::movimientosPosibles(Tablero& tablero) {
+    std::vector<std::pair<int, int>> movimientos;
+    int x = getX();
+    int y = getY();
+
+    // Diagonal arriba-derecha
+    for (int nx = x + 1, ny = y + 1; nx < 4 && ny < 5; ++nx, ++ny) {
+        Pieza* p = tablero.obtenerPieza(nx, ny);
+        if (!p)
+            movimientos.push_back({ nx, ny });
+        else {
+            if (p->getBando() != getBando())
+                movimientos.push_back({ nx, ny });
+            break;
+        }
+    }
+    // Diagonal arriba-izquierda
+    for (int nx = x - 1, ny = y + 1; nx >= 0 && ny < 5; --nx, ++ny) {
+        Pieza* p = tablero.obtenerPieza(nx, ny);
+        if (!p)
+            movimientos.push_back({ nx, ny });
+        else {
+            if (p->getBando() != getBando())
+                movimientos.push_back({ nx, ny });
+            break;
+        }
+    }
+    // Diagonal abajo-derecha
+    for (int nx = x + 1, ny = y - 1; nx < 4 && ny >= 0; ++nx, --ny) {
+        Pieza* p = tablero.obtenerPieza(nx, ny);
+        if (!p)
+            movimientos.push_back({ nx, ny });
+        else {
+            if (p->getBando() != getBando())
+                movimientos.push_back({ nx, ny });
+            break;
+        }
+    }
+    // Diagonal abajo-izquierda
+    for (int nx = x - 1, ny = y - 1; nx >= 0 && ny >= 0; --nx, --ny) {
+        Pieza* p = tablero.obtenerPieza(nx, ny);
+        if (!p)
+            movimientos.push_back({ nx, ny });
+        else {
+            if (p->getBando() != getBando())
+                movimientos.push_back({ nx, ny });
+            break;
+        }
+    }
+    return movimientos;
+}

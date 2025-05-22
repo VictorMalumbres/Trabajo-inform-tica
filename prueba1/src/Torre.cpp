@@ -84,3 +84,55 @@ bool Torre::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
     return true; // Movimiento válido
 }
 
+std::vector<std::pair<int, int>> Torre::movimientosPosibles(Tablero& tablero) {
+    std::vector<std::pair<int, int>> movimientos;
+    int x = getX();
+    int y = getY();
+
+    // Movimiento horizontal y vertical
+    // Derecha
+    for (int nx = x + 1; nx < 4; ++nx) {
+        Pieza* p = tablero.obtenerPieza(nx, y);
+        if (!p)
+            movimientos.push_back({ nx, y });
+        else {
+            if (p->getBando() != getBando())
+                movimientos.push_back({ nx, y });
+            break;
+        }
+    }
+    // Izquierda
+    for (int nx = x - 1; nx >= 0; --nx) {
+        Pieza* p = tablero.obtenerPieza(nx, y);
+        if (!p)
+            movimientos.push_back({ nx, y });
+        else {
+            if (p->getBando() != getBando())
+                movimientos.push_back({ nx, y });
+            break;
+        }
+    }
+    // Arriba
+    for (int ny = y + 1; ny < 5; ++ny) {
+        Pieza* p = tablero.obtenerPieza(x, ny);
+        if (!p)
+            movimientos.push_back({ x, ny });
+        else {
+            if (p->getBando() != getBando())
+                movimientos.push_back({ x, ny });
+            break;
+        }
+    }
+    // Abajo
+    for (int ny = y - 1; ny >= 0; --ny) {
+        Pieza* p = tablero.obtenerPieza(x, ny);
+        if (!p)
+            movimientos.push_back({ x, ny });
+        else {
+            if (p->getBando() != getBando())
+                movimientos.push_back({ x, ny });
+            break;
+        }
+    }
+    return movimientos;
+}
