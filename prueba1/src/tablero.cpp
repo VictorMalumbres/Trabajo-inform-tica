@@ -194,7 +194,6 @@ Pieza* Tablero::obtenerPieza(int columna, int fila) const {
 }
 
 void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
-
     // Comprobar que es el turno de la pieza
     if (pieza->getBando() != turno) {
         return; // No es turno de esta pieza
@@ -209,13 +208,10 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
     // Buscar si hay una pieza en la casilla destino
     for (auto it = piezas.begin(); it != piezas.end(); ++it) {
         if ((*it)->getX() == nuevaColumna && (*it)->getY() == nuevaFila) {
-            // Si la pieza en destino es del mismo bando y es un rey, no mover
             if ((*it)->getBando() == pieza->getBando() && dynamic_cast<Rey*>(*it)) {
                 return; // No se mueve ni elimina nada
             }
-            // Permitir capturar cualquier otra pieza, incluso del mismo bando
             else {
-                // Comprobar si es un rey (del otro bando)
                 if (dynamic_cast<Rey*>(*it)) {
                     if (pieza->getBando() == 0) {
                         std::cout << "El rey negro ha sido capturado. ¡El jugador blanco gana!" << std::endl;
@@ -225,7 +221,6 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
                     }
                     std::cout << "Volviendo al menú..." << std::endl;
                 }
-                // Captura
                 delete* it;
                 piezas.erase(it);
                 capturado = true;
@@ -234,13 +229,49 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
         }
     }
 
-
     // Mover la pieza
     pieza->setPosicion(nuevaFila, nuevaColumna);
 
+    // ----------- CORONACIÓN DEL PEÓN -----------
+    Peon* peon = dynamic_cast<Peon*>(pieza); // Declaración única
+    if (peon) {
+        int filaCoronacion = (peon->getBando() == 0) ? (numFilas - 1) : 0;
+        if (nuevaFila == filaCoronacion) {
+            int bando = peon->getBando();
+            auto it = std::find(piezas.begin(), piezas.end(), peon);
+            if (it != piezas.end()) {
+                delete* it;
+                piezas.erase(it);
+            }
+
+            int opcion = 0;
+            if (numFilas == 5) { // Silverman
+                std::cout << "Coronación: Elige 1 para Torre, 2 para Dama: ";
+                std::cin >> opcion;
+                if (opcion == 1)
+                    piezas.push_back(new Torre(nuevaColumna, nuevaFila, bando));
+                else
+                    piezas.push_back(new Reina(nuevaColumna, nuevaFila, bando));
+            }
+            else { // Demi
+                std::cout << "Coronación: Elige 1 para Alfil, 2 para Caballo, 3 para Torre: ";
+                std::cin >> opcion;
+                if (opcion == 1)
+                    piezas.push_back(new Alfil(nuevaColumna, nuevaFila, bando));
+                else if (opcion == 2)
+                    piezas.push_back(new Caballo(nuevaColumna, nuevaFila, bando));
+                else
+                    piezas.push_back(new Torre(nuevaColumna, nuevaFila, bando));
+            }
+            return; // Termina la función tras coronar
+        }
+    }
+    // ----------- FIN CORONACIÓN DEL PEÓN -----------
+
     turno = 1 - turno; // Cambiar turno
-	
 }
+
+
 
 void Tablero::anadirPieza(Pieza* pieza) {
     piezas.push_back(pieza);
