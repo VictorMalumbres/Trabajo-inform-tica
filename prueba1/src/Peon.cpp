@@ -126,21 +126,29 @@ std::vector<std::pair<int, int>> Peon::movimientosPosibles(Tablero& tablero) {
     int filas = tablero.getNumFilas();
     int dir = (getBando() == 0) ? 1 : -1; // 0: blanco sube, 1: negro baja
 
-    // Movimiento hacia adelante
+    // Movimiento hacia adelante (1 casilla)
     int ny = y + dir;
     if (ny >= 0 && ny < filas && !tablero.obtenerPieza(x, ny)) {
         movimientos.push_back({ x, ny });
+
+        // Movimiento de 2 casillas desde la fila inicial
+        int filaInicial = (getBando() == 0) ? 1 : filas - 2;
+        int ny2 = y + 2 * dir;
+        if (y == filaInicial && ny2 >= 0 && ny2 < filas &&
+            !tablero.obtenerPieza(x, ny2) && !tablero.obtenerPieza(x, ny)) {
+            movimientos.push_back({ x, ny2 });
+        }
     }
-    // Captura diagonal izquierda (permite capturar aliadas y enemigas)
+
+    // Captura diagonal izquierda
     if (x - 1 >= 0 && ny >= 0 && ny < filas) {
         if (tablero.obtenerPieza(x - 1, ny))
             movimientos.push_back({ x - 1, ny });
     }
-    // Captura diagonal derecha (permite capturar aliadas y enemigas)
+    // Captura diagonal derecha
     if (x + 1 < cols && ny >= 0 && ny < filas) {
         if (tablero.obtenerPieza(x + 1, ny))
             movimientos.push_back({ x + 1, ny });
     }
     return movimientos;
 }
-

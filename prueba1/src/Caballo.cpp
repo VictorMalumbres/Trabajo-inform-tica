@@ -73,10 +73,7 @@ bool Caballo::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
 
         // El caballo puede saltar piezas, así que no verificamos el camino
         // Solo verificar si la casilla destino tiene una pieza del mismo bando
-        Pieza* destino = tablero.obtenerPieza(nuevaColumna, nuevaFila);
-        if (destino != nullptr && destino->getBando() == getBando()) {
-            return false; // No puede capturar pieza propia
-        }
+
 
         return true; // Movimiento válido
    
