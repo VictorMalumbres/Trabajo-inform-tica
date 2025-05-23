@@ -14,6 +14,7 @@ private:
     Tablero tablero;
     Tablero tablero2;
     int modoJuego; // 1 para 4x5, 2 para 4x8
+    //int volumen = 2;
 
     int seleccionX = -1;
     int seleccionY = -1;
@@ -25,6 +26,7 @@ private:
 public:
     Mundo();
 
+    int volumen = 2;  //Habria que ponerlo en private
     std::string musicaActual;
 
     void setModoJuego(int modo) { modoJuego = modo; } //modo de juego
@@ -33,7 +35,7 @@ public:
     void mostrarConfirmacionSalir();
 
     void mostrarMenuEnVentana(); //menú texto
-    void manejarEntradaMenu(unsigned char key, int x, int y); //menú switch
+    //void manejarEntradaMenu(unsigned char key, int x, int y); //menú switch
     void mostrarInstruccionesEnVentana(); //instrucciones juego
 
     void iniciarJuego(); //silverman

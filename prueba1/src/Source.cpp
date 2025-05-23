@@ -12,7 +12,7 @@ void displayCallback() {
 
 void keyboardCallback(unsigned char key, int x, int y) {
     if (mundo.estaEnMenu()) return; // Ignorar teclado si estás en menú
-    mundo.manejarEntradaMenu(key, x, y); // Solo responder en el juego o instrucciones
+    mundo.manejarTeclado(key, x, y); // Solo responder en el juego o instrucciones
 }
 
 

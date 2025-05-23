@@ -7,7 +7,9 @@ extern Mundo mundo;
 
 bool juegoEnPausa = false;
 
-Mundo::Mundo() : estadoActual(MENU),modoJuego(1), seleccionX(-1), seleccionY(-1) {} // forzamos el estado inicial
+bool musica = false;  //Para cargar la musica en mostrarMenuEnVentana una sola vez (luego se encarga setEstadoActual)
+
+Mundo::Mundo() : estadoActual(MENU), modoJuego(1), seleccionX(-1), seleccionY(-1) {} // forzamos el estado inicial
 
 void Mundo::inicializaModo1() {
     tablero.inicializaSilverman();
@@ -77,7 +79,9 @@ void Mundo::renderizarTextoGrande(const char* texto, float x, float y, float esc
     glPopMatrix();
 }
 
-void Mundo::manejarEntradaMenu(unsigned char key, int x, int y) {
+//No lo elimino por si alguien lo fuese a utilizar
+
+/*void Mundo::manejarEntradaMenu(unsigned char key, int x, int y) {
     switch (key) {
     case '1':
         mostrarInstruccionesEnVentana();
@@ -97,7 +101,7 @@ void Mundo::manejarEntradaMenu(unsigned char key, int x, int y) {
     default:
         break;
     }
-}
+}*/
 
 void Mundo::mostrarMenuEnVentana() {
     tablero.reiniciarTablero();
@@ -118,9 +122,10 @@ void Mundo::mostrarMenuEnVentana() {
 
     glDisable(GL_TEXTURE_2D);
 
-    musicaActual = "sonidos/elevador.mp3";
-    ETSIDI::playMusica(musicaActual.c_str(), true);
-
+    if (musica == false) {
+        musicaActual = "sonidos/elevador.mp3";
+        ETSIDI::playMusica(musicaActual.c_str(), true);
+    }
 
     // Colores para los botones
     glColor3f(0.2f, 0.2f, 0.6f); // RGB
@@ -205,29 +210,62 @@ void manejarTeclado(unsigned char key, int x, int y) {
         }
         glutPostRedisplay();
     }
-
+    
     else if (mundo.getEstadoActual() == INSTRUCCIONES && key == 27) { // 27 = ESC
         mundo.setEstadoActual(MENU);
         glutPostRedisplay();
         return;
     }
 
-    else if (key == 'q' || key == 'Q') {
-        juegoEnPausa = false; // <-- Añade esta línea
-        mundo.setEstadoActual(CONFIRMAR_SALIR);
-        glutPostRedisplay();
+    if (juegoEnPausa) {  //Sin esto se podia pulsar en cualquier momento
+        if (key == 'q' || key == 'Q') {
+            juegoEnPausa = false; // <-- Añade esta línea
+            mundo.setEstadoActual(CONFIRMAR_SALIR);
+            glutPostRedisplay();
+        }
+
+        else if (key == 'm' || key == 'M') {
+            juegoEnPausa = false;
+            mundo.setEstadoActual(CONFIRMAR_MENU);
+            // Si quieres que la música del menú suene inmediatamente:
+            mundo.musicaActual = "sonidos/elevador.mp3";
+            ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
+            glutPostRedisplay();
+        }
     }
 
-    else if (key == 'm' || key == 'M') {
-        juegoEnPausa = false;
-        mundo.setEstadoActual(CONFIRMAR_MENU);
-        // Si quieres que la música del menú suene inmediatamente:
-        mundo.musicaActual = "sonidos/elevador.mp3";
-        ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
-        glutPostRedisplay();
+    else if (key == '-') {  //Bajar la musica en el juego
+        if (mundo.volumen == 2) {
+            mundo.musicaActual = "sonidos/musica_juego1 (-50%).mp3";
+            ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
+            mundo.volumen--;
+        }
+        else if (mundo.volumen == 1) {
+            mundo.musicaActual = "sonidos/musica_juego1 (-85%).mp3";
+            ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
+            mundo.volumen--;
+        }
+        else if (mundo.volumen == 0) {
+            ETSIDI::stopMusica();
+        }
     }
 
-
+    else if (key == '+') {  //Subir la musica en el juego
+        if (mundo.volumen == 0) {
+            mundo.musicaActual = "sonidos/musica_juego1 (-85%).mp3";
+            ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
+            mundo.volumen++;
+        }
+        else if (mundo.volumen == 1) {
+            mundo.musicaActual = "sonidos/musica_juego1 (-50%).mp3";
+            ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
+            mundo.volumen++;
+        }
+        else if (mundo.volumen == 2) {
+            mundo.musicaActual = "sonidos/musica_juego1.mp3";
+            ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
+        }
+    }
 
 
 
@@ -343,6 +381,7 @@ void Mundo::procesarClick(int x, int y) {
     // Convertir coordenadas de ventana a OpenGL [-1, 1]
     float x_gl = (float)x / 400.0f - 1.0f; // 800px de ancho
     float y_gl = 1.0f - (float)y / 300.0f; // 600px de alto
+
     if (estadoActual == CONFIRMAR_SALIR) {
         // Botón SI: x entre -0.4 y -0.1, y entre -0.3 y -0.1
         if (x_gl >= -0.4f && x_gl <= -0.1f && y_gl >= -0.3f && y_gl <= -0.1f) {
@@ -554,6 +593,7 @@ void Mundo::setEstadoActual(EstadoMundo estado) {
     if (estado == MENU) {
         musicaActual = "sonidos/elevador.mp3";
         ETSIDI::playMusica(musicaActual.c_str(), true);
+        musica = true;
     }
     else if (estado == JUEGO) {
         musicaActual = "sonidos/musica_juego1.mp3";
