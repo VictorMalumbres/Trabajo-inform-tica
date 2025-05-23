@@ -12,6 +12,7 @@
 #include "Rey.h"
 #include "Peon.h"
 
+class Mundo;
 class Tablero {
 private:
     std::vector<Pieza*> piezas;
@@ -72,6 +73,9 @@ public:
     void limpiarSeleccion();
     
     std::vector<std::pair<int, int>> casillasResaltadas;
+
+    Mundo* mundo;
+    void setMundo(Mundo* m) { mundo = m; }
 
 
 };

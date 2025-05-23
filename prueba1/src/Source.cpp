@@ -31,13 +31,17 @@ int main(int argc, char** argv) {
     glutInitWindowSize(800, 600);
     glutCreateWindow("MiniAjedrez");
 
+    mundo.inicializarTableros();
+
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Fondo negro
 
     glutDisplayFunc(displayCallback);
     glutKeyboardFunc(keyboardCallback);
 
     glutMouseFunc(manejarClicRaton);
+    
 
     glutMainLoop();
+
     return 0;
 }

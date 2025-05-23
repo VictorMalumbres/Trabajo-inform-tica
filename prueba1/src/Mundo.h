@@ -51,6 +51,10 @@ public:
     void mostrarConfirmacionMenu();
     EstadoMundo getEstadoActual() const { return estadoActual; }
 
+    void volverAlMenu();
+    void inicializarTableros();
+
+
     // ** Declaración de la función manejarTeclado **
     static void manejarTeclado(unsigned char key, int x, int y);
 };

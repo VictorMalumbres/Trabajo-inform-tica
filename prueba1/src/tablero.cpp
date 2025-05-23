@@ -214,12 +214,14 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
             else {
                 if (dynamic_cast<Rey*>(*it)) {
                     if (pieza->getBando() == 0) {
-                        std::cout << "El rey negro ha sido capturado. ¡El jugador blanco gana!" << std::endl;
+                        std::cout << "El rey negro ha sido capturado. El jugador blanco gana" << std::endl;
                     }
                     else {
-                        std::cout << "El rey blanco ha sido capturado. ¡El jugador negro gana!" << std::endl;
+                        std::cout << "El rey blanco ha sido capturado. El jugador negro gana" << std::endl;
                     }
-                    std::cout << "Volviendo al menú..." << std::endl;
+                    std::cout << "Volviendo al menu..." << std::endl;
+                    mundo->volverAlMenu();  // Cambia al menú principal
+                    return;  // Salir para no seguir con el movimiento ni cambiar turno
                 }
                 delete* it;
                 piezas.erase(it);

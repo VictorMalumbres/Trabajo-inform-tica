@@ -601,3 +601,18 @@ void Mundo::setEstadoActual(EstadoMundo estado) {
     }
     // No pongas música para CONFIRMAR_MENU ni CONFIRMAR_SALIR
 }
+
+void Mundo::volverAlMenu() {
+    estadoActual = MENU;
+    tablero.reiniciarTablero();
+    tablero2.reiniciarTablero();
+    glutDisplayFunc([]() {
+        mundo.mostrarMenuEnVentana();
+        });
+    glutPostRedisplay();
+}
+
+void Mundo::inicializarTableros() {
+    tablero.setMundo(this);
+    tablero2.setMundo(this);
+}
