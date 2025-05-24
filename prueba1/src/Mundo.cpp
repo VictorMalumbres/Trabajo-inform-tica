@@ -169,6 +169,8 @@ void Mundo::mostrarMenuEnVentana() {
     renderizarTexto("3. Jugar partida DEMI", -0.4f, 0.18f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("4. Salir", -0.4f, -0.02f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("Seleccione una opcion con el raton...", -0.4f, -0.2f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("Usa + o - para cambiar el volumen en el juego", 0.45f, -0.38f, GLUT_BITMAP_HELVETICA_10);
+    renderizarTexto("Pulsa espacio para pausar el juego", 0.45f, -0.43f, GLUT_BITMAP_HELVETICA_10);
 
     glutSwapBuffers(); // Mostrar el contenido
 }
@@ -212,17 +214,19 @@ void Mundo::mostrarInstruccionesEnVentana() {
 }
 
 void manejarTeclado(unsigned char key, int x, int y) {
-    if (key == ' ') {
-        juegoEnPausa = !juegoEnPausa;
-        if (juegoEnPausa) {
-            ETSIDI::stopMusica();
-            std::cout << "Juego pausado" << std::endl;
+    if (mundo.getEstadoActual() == JUEGO) {
+        if (key == ' ') {
+            juegoEnPausa = !juegoEnPausa;
+            if (juegoEnPausa) {
+                ETSIDI::stopMusica();
+                std::cout << "Juego pausado" << std::endl;
+            }
+            else {
+                ETSIDI::playMusica(mundo.musicaActual.c_str(), true); // <--- CORREGIDO
+                std::cout << "Juego reanudado" << std::endl;
+            }
+            glutPostRedisplay();
         }
-        else {
-            ETSIDI::playMusica(mundo.musicaActual.c_str(), true); // <--- CORREGIDO
-            std::cout << "Juego reanudado" << std::endl;
-        }
-        glutPostRedisplay();
     }
     
     else if (mundo.getEstadoActual() == INSTRUCCIONES && key == 27) { // 27 = ESC
@@ -249,41 +253,40 @@ void manejarTeclado(unsigned char key, int x, int y) {
     }
 
     else if (key == '-') {  //Bajar la musica en el juego
-        if (mundo.volumen == 2) {
-            mundo.musicaActual = "sonidos/musica_juego1 (-50%).mp3";
-            ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
+        if (mundo.volumen > 0) {
             mundo.volumen--;
-        }
-        else if (mundo.volumen == 1) {
-            mundo.musicaActual = "sonidos/musica_juego1 (-85%).mp3";
-            ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
-            mundo.volumen--;
-        }
-        else if (mundo.volumen == 0) {
-            ETSIDI::stopMusica();
+            mundo.volumenMusica();
         }
     }
 
     else if (key == '+') {  //Subir la musica en el juego
-        if (mundo.volumen == 0) {
-            mundo.musicaActual = "sonidos/musica_juego1 (-85%).mp3";
-            ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
+        if (mundo.volumen < 3) {
             mundo.volumen++;
-        }
-        else if (mundo.volumen == 1) {
-            mundo.musicaActual = "sonidos/musica_juego1 (-50%).mp3";
-            ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
-            mundo.volumen++;
-        }
-        else if (mundo.volumen == 2) {
-            mundo.musicaActual = "sonidos/musica_juego1.mp3";
-            ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
+            mundo.volumenMusica();
         }
     }
 
 
 
 
+}
+
+void Mundo::volumenMusica() {
+    if (mundo.volumen == 3) {
+        mundo.musicaActual = "sonidos/musica_juego1.mp3";
+        ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
+    }
+    if (mundo.volumen == 2) {
+        mundo.musicaActual = "sonidos/musica_juego1 (-50%).mp3";
+        ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
+    }
+    else if (mundo.volumen == 1) {
+        mundo.musicaActual = "sonidos/musica_juego1 (-85%).mp3";
+        ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
+    }
+    else if (mundo.volumen == 0) {
+        ETSIDI::stopMusica();
+    }
 }
 
 void Mundo::manejarTeclado(unsigned char key, int x, int y) {
@@ -291,8 +294,9 @@ void Mundo::manejarTeclado(unsigned char key, int x, int y) {
 }
 
 void Mundo::iniciarJuego() {
-    musicaActual = "sonidos/musica_juego1.mp3";
-    ETSIDI::playMusica(musicaActual.c_str(), true);
+    //musicaActual = "sonidos/musica_juego1.mp3";
+    //ETSIDI::playMusica(musicaActual.c_str(), true);
+    mundo.volumenMusica();
 
     mundo.enJuego = true;
     estadoActual = JUEGO;
@@ -344,8 +348,9 @@ void Mundo::iniciarJuego() {
 }
 
 void Mundo::iniciar2dojuego() {
-    musicaActual = "sonidos/musica_juego1.mp3";
-    ETSIDI::playMusica(musicaActual.c_str(), true);
+    //musicaActual = "sonidos/musica_juego1.mp3";
+    //ETSIDI::playMusica(musicaActual.c_str(), true);
+    mundo.volumenMusica();
 
     mundo.enJuego = true;
     estadoActual = JUEGO;
@@ -721,8 +726,9 @@ void Mundo::setEstadoActual(EstadoMundo estado) {
         mundo.enJuego = false;
     }
     else if (estado == JUEGO) {
-        musicaActual = "sonidos/musica_juego1.mp3";
-        ETSIDI::playMusica(musicaActual.c_str(), true);
+        //musicaActual = "sonidos/musica_juego1.mp3";
+        //ETSIDI::playMusica(musicaActual.c_str(), true);
+        mundo.volumenMusica();
     }
     // No pongas música para CONFIRMAR_MENU ni CONFIRMAR_SALIR
 }

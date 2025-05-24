@@ -72,5 +72,5 @@ public:
     void mostrarMenuCoronacion();
     Pieza* peonACoronarse = nullptr;
 
-
+    void volumenMusica();
 };
