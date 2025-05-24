@@ -6,8 +6,10 @@ enum EstadoMundo {
     JUEGO,
     INSTRUCCIONES,
     CONFIRMAR_MENU,
-    CONFIRMAR_SALIR
+    CONFIRMAR_SALIR,
+    VICTORIA 
 };
+
 
 class Mundo {
 private:
@@ -59,4 +61,7 @@ public:
 
     // ** Declaración de la función manejarTeclado **
     static void manejarTeclado(unsigned char key, int x, int y);
+    int jugadorGanador = -1; // 0 = blancas, 1 = negras
+    void mostrarMenuVictoria();
+
 };
