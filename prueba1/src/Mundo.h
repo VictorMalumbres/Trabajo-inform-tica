@@ -16,6 +16,8 @@ private:
     int modoJuego; // 1 para 4x5, 2 para 4x8
     //int volumen = 2;
 
+    bool enJuego = false;
+
     int seleccionX = -1;
     int seleccionY = -1;
 

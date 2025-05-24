@@ -398,7 +398,12 @@ void Mundo::procesarClick(int x, int y) {
         }
         // Botón NO: x entre 0.1 y 0.4, y entre -0.3 y -0.1
         if (x_gl >= 0.1f && x_gl <= 0.4f && y_gl >= -0.3f && y_gl <= -0.1f) {
-            setEstadoActual(JUEGO); // <-- Vuelve al juego
+            if (mundo.enJuego) {
+                setEstadoActual(JUEGO); // <-- Vuelve al juego si estabamos jugando
+            }
+            else if (!mundo.enJuego) {
+                setEstadoActual(MENU); // <-- Vuelve al menu si no estabamos jugando
+            }
             glutPostRedisplay();
             return;
         }
@@ -602,10 +607,12 @@ void Mundo::setEstadoActual(EstadoMundo estado) {
         musicaActual = "sonidos/elevador.mp3";
         ETSIDI::playMusica(musicaActual.c_str(), true);
         musica = true;
+        mundo.enJuego = false;
     }
     else if (estado == JUEGO) {
         musicaActual = "sonidos/musica_juego1.mp3";
         ETSIDI::playMusica(musicaActual.c_str(), true);
+        mundo.enJuego = true;
     }
     // No pongas música para CONFIRMAR_MENU ni CONFIRMAR_SALIR
 }
