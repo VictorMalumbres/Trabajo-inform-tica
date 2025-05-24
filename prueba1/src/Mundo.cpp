@@ -309,24 +309,30 @@ void Mundo::iniciarJuego() {
 
             glColor3f(1.0f, 1.0f, 0.0f);
             std::string texto1 = "JUEGO EN PAUSA";
-            std::string texto2 = "Presiona ESPACIO para continuar";
-            std::string texto3 = "Presiona M para volver al menu";
-            std::string texto4 = "Pulsa Q para salir";
-
             glRasterPos2f(-0.8, 0.3f);
             for (char c : texto1) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
 
-            glRasterPos2f(-0.6f, 0.2f);
-            for (char c : texto2) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+            // Botón: Volver al menú
+            glColor3f(0.2f, 0.6f, 0.2f); // Verde
+            glBegin(GL_QUADS);
+            glVertex2f(-0.5f, 0.1f); glVertex2f(0.5f, 0.1f);
+            glVertex2f(0.5f, -0.05f); glVertex2f(-0.5f, -0.05f);
+            glEnd();
+            glColor3f(1.0f, 1.0f, 1.0f);
+            mundo.renderizarTexto("Volver al menu", -0.15f, 0.02f, GLUT_BITMAP_HELVETICA_18);
 
-            glRasterPos2f(-0.4f, 0.1f);
-            for (char c : texto3) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
-
-            glRasterPos2f(-0.2f, -0.1f);
-            for (char c : texto4) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+            // Botón: Salir del juego
+            glColor3f(0.6f, 0.2f, 0.2f); // Rojo
+            glBegin(GL_QUADS);
+            glVertex2f(-0.5f, -0.15f); glVertex2f(0.5f, -0.15f);
+            glVertex2f(0.5f, -0.3f); glVertex2f(-0.5f, -0.3f);
+            glEnd();
+            glColor3f(1.0f, 1.0f, 1.0f);
+            mundo.renderizarTexto("Salir del juego", -0.17f, -0.23f, GLUT_BITMAP_HELVETICA_18);
 
             glutSwapBuffers();
         }
+
     });
     glutIdleFunc([]() {glutPostRedisplay();});
 }
@@ -356,24 +362,30 @@ void Mundo::iniciar2dojuego() {
 
             glColor3f(1.0f, 1.0f, 0.0f);
             std::string texto1 = "JUEGO EN PAUSA";
-            std::string texto2 = "Presiona ESPACIO para continuar";
-            std::string texto3 = "Presiona M para volver al menu";
-            std::string texto4 = "Pulsa Q para salir";
-
-            glRasterPos2f(-0.8f, 0.3f);
+            glRasterPos2f(-0.8, 0.3f);
             for (char c : texto1) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
 
-            glRasterPos2f(-0.6f, 0.2f);
-            for (char c : texto2) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+            // Botón: Volver al menú
+            glColor3f(0.2f, 0.6f, 0.2f); // Verde
+            glBegin(GL_QUADS);
+            glVertex2f(-0.5f, 0.1f); glVertex2f(0.5f, 0.1f);
+            glVertex2f(0.5f, -0.05f); glVertex2f(-0.5f, -0.05f);
+            glEnd();
+            glColor3f(1.0f, 1.0f, 1.0f);
+            mundo.renderizarTexto("Volver al menu", -0.15f, 0.02f, GLUT_BITMAP_HELVETICA_18);
 
-            glRasterPos2f(-0.4f, 0.1f);
-            for (char c : texto3) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
-
-            glRasterPos2f(-0.2f, -0.1f);
-            for (char c : texto4) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+            // Botón: Salir del juego
+            glColor3f(0.6f, 0.2f, 0.2f); // Rojo
+            glBegin(GL_QUADS);
+            glVertex2f(-0.5f, -0.15f); glVertex2f(0.5f, -0.15f);
+            glVertex2f(0.5f, -0.3f); glVertex2f(-0.5f, -0.3f);
+            glEnd();
+            glColor3f(1.0f, 1.0f, 1.0f);
+            mundo.renderizarTexto("Salir del juego", -0.17f, -0.23f, GLUT_BITMAP_HELVETICA_18);
 
             glutSwapBuffers();
         }
+
     });
     glutIdleFunc([]() {glutPostRedisplay();});
 }
@@ -528,6 +540,29 @@ void Mundo::procesarClick(int x, int y) {
 
         }
     }
+    if (juegoEnPausa) {
+        // Convertir coordenadas de ventana a OpenGL [-1, 1]
+        float x_gl = (float)x / 400.0f - 1.0f; // 800px de ancho
+        float y_gl = 1.0f - (float)y / 300.0f; // 600px de alto
+
+        // Botón "Volver al menú"
+        if (x_gl >= -0.5f && x_gl <= 0.5f && y_gl >= -0.05f && y_gl <= 0.1f) {
+            juegoEnPausa = false;
+            setEstadoActual(CONFIRMAR_MENU);
+            glutPostRedisplay();
+            return;
+        }
+        // Botón "Salir del juego"
+        if (x_gl >= -0.5f && x_gl <= 0.5f && y_gl >= -0.3f && y_gl <= -0.15f) {
+            juegoEnPausa = false;
+            setEstadoActual(CONFIRMAR_SALIR);
+            glutPostRedisplay();
+            return;
+        }
+        // Si se hace clic fuera de los botones, no hacer nada
+        return;
+    }
+
 }
 
 void Mundo::mostrarConfirmacionMenu() {
