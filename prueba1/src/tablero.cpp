@@ -243,8 +243,9 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
     // Mover la pieza
     pieza->setPosicion(nuevaFila, nuevaColumna);
 
+
     // ----------- CORONACIÓN DEL PEÓN -----------
-    Peon* peon = dynamic_cast<Peon*>(pieza); // Declaración única
+    Peon* peon = dynamic_cast<Peon*>(pieza);
     if (peon) {
         int filaCoronacion = (peon->getBando() == 0) ? (numFilas - 1) : 0;
         if (nuevaFila == filaCoronacion) {
@@ -255,28 +256,20 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
                 piezas.erase(it);
             }
 
-            int opcion = 0;
-            if (numFilas == 5) { // Silverman
-                std::cout << "Coronación: Elige 1 para Torre, 2 para Dama: ";
-                std::cin >> opcion;
-                if (opcion == 1)
-                    piezas.push_back(new Torre(nuevaColumna, nuevaFila, bando));
-                else
-                    piezas.push_back(new Reina(nuevaColumna, nuevaFila, bando));
-            }
-            else { // Demi
-                std::cout << "Coronación: Elige 1 para Alfil, 2 para Caballo, 3 para Torre: ";
-                std::cin >> opcion;
-                if (opcion == 1)
-                    piezas.push_back(new Alfil(nuevaColumna, nuevaFila, bando));
-                else if (opcion == 2)
-                    piezas.push_back(new Caballo(nuevaColumna, nuevaFila, bando));
-                else
-                    piezas.push_back(new Torre(nuevaColumna, nuevaFila, bando));
+            // Guardar la posición y el bando para la coronación
+            if (mundo) {
+                mundo->coronacionX = nuevaColumna;
+                mundo->coronacionY = nuevaFila;
+                mundo->colorCoronacion = bando;
+                mundo->peonACoronarse = nullptr; // Ya lo eliminaste, pero puedes guardar nullptr o la info
+                mundo->setEstadoActual(CORONACION);
+                glutPostRedisplay();
             }
             return; // Termina la función tras coronar
         }
     }
+
+    
     // ----------- FIN CORONACIÓN DEL PEÓN -----------
 
     turno = 1 - turno; // Cambiar turno

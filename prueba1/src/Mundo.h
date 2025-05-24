@@ -7,8 +7,10 @@ enum EstadoMundo {
     INSTRUCCIONES,
     CONFIRMAR_MENU,
     CONFIRMAR_SALIR,
-    VICTORIA 
+    VICTORIA,
+    CORONACION 
 };
+
 
 
 class Mundo {
@@ -63,5 +65,12 @@ public:
     static void manejarTeclado(unsigned char key, int x, int y);
     int jugadorGanador = -1; // 0 = blancas, 1 = negras
     void mostrarMenuVictoria();
+
+    int coronacionX = -1;
+    int coronacionY = -1;
+    int colorCoronacion = 0; // 0 = blanco, 1 = negro
+    void mostrarMenuCoronacion();
+    Pieza* peonACoronarse = nullptr;
+
 
 };

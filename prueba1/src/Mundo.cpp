@@ -46,7 +46,7 @@ void Mundo::dibuja() {
         break;
     case INSTRUCCIONES:
         mostrarInstruccionesEnVentana();
-        break; // Se agregó este break para evitar que el siguiente case quede fuera del switch
+        break; 
     case CONFIRMAR_MENU:
         mostrarConfirmacionMenu();
         break;
@@ -55,7 +55,11 @@ void Mundo::dibuja() {
         break;
     case VICTORIA:
         mostrarMenuVictoria();
-        break; // Este break estaba fuera del switch y se movió aquí
+        break; 
+    case CORONACION:
+        mostrarMenuCoronacion();
+        break;
+
     }
 }
 
@@ -583,6 +587,53 @@ void Mundo::procesarClick(int x, int y) {
             return;
         }
     }
+    if (estadoActual == CORONACION) {
+        // Convierte las coordenadas del ratón a las del menú
+        float x_gl = (float)x / 400.0f - 1.0f;
+        float y_gl = 1.0f - (float)y / 300.0f;
+
+        if (modoJuego == 1) { // Silverman
+            // Torre
+            if (x_gl >= -0.3f && x_gl <= 0.3f && y_gl >= 0.05f && y_gl <= 0.15f) {
+                tablero.anadirPieza(new Torre(coronacionX, coronacionY, colorCoronacion));
+                setEstadoActual(JUEGO);
+                glutPostRedisplay();
+                return;
+            }
+            // Reina
+            if (x_gl >= -0.3f && x_gl <= 0.3f && y_gl >= -0.15f && y_gl <= -0.05f) {
+                tablero.anadirPieza(new Reina(coronacionX, coronacionY, colorCoronacion));
+                setEstadoActual(JUEGO);
+                glutPostRedisplay();
+                return;
+            }
+        }
+        else { // Demi
+            // Alfil
+            if (x_gl >= -0.3f && x_gl <= 0.3f && y_gl >= 0.10f && y_gl <= 0.20f) {
+                tablero2.anadirPieza(new Alfil(coronacionX, coronacionY, colorCoronacion));
+                setEstadoActual(JUEGO);
+                glutPostRedisplay();
+                return;
+            }
+            // Caballo
+            if (x_gl >= -0.3f && x_gl <= 0.3f && y_gl >= -0.05f && y_gl <= 0.05f) {
+                tablero2.anadirPieza(new Caballo(coronacionX, coronacionY, colorCoronacion));
+                setEstadoActual(JUEGO);
+                glutPostRedisplay();
+                return;
+            }
+            // Torre
+            if (x_gl >= -0.3f && x_gl <= 0.3f && y_gl >= -0.20f && y_gl <= -0.10f) {
+                tablero2.anadirPieza(new Torre(coronacionX, coronacionY, colorCoronacion));
+                setEstadoActual(JUEGO);
+                glutPostRedisplay();
+                return;
+            }
+        }
+        return;
+    }
+
 
 
 }
@@ -732,5 +783,38 @@ void Mundo::mostrarMenuVictoria() {
 
     glutSwapBuffers();
 }
+void Mundo::mostrarMenuCoronacion() {
+    // Configura la proyección y el modelo de vista
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glColor3f(0.1f, 0.1f, 0.1f);
+    glBegin(GL_QUADS);
+    glVertex2f(-0.5f, 0.5f); glVertex2f(0.5f, 0.5f);
+    glVertex2f(0.5f, -0.5f); glVertex2f(-0.5f, -0.5f);
+    glEnd();
+
+    // Opciones según el modo de juego
+    if (modoJuego == 1) { // Silverman
+        this->renderizarTexto("Elige pieza:", -0.1f, 0.3f, GLUT_BITMAP_HELVETICA_18);
+        this->renderizarTexto("1. Torre", -0.1f, 0.1f, GLUT_BITMAP_HELVETICA_18);
+        this->renderizarTexto("2. Reina", -0.1f, -0.1f, GLUT_BITMAP_HELVETICA_18);
+    }
+    else { // Demi
+        this->renderizarTexto("Elige pieza:", -0.1f, 0.3f, GLUT_BITMAP_HELVETICA_18);
+        this->renderizarTexto("1. Alfil", -0.1f, 0.15f, GLUT_BITMAP_HELVETICA_18);
+        this->renderizarTexto("2. Caballo", -0.1f, 0.0f, GLUT_BITMAP_HELVETICA_18);
+        this->renderizarTexto("3. Torre", -0.1f, -0.15f, GLUT_BITMAP_HELVETICA_18);
+    }
+
+    glutSwapBuffers();
+}
+
 
 
