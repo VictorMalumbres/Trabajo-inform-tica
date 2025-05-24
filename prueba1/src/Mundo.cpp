@@ -104,6 +104,14 @@ void Mundo::renderizarTextoGrande(const char* texto, float x, float y, float esc
 }*/
 
 void Mundo::mostrarMenuEnVentana() {
+    // Restablecer matrices de proyección y modelado
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
     tablero.reiniciarTablero();
     tablero2.reiniciarTablero();
     glClear(GL_COLOR_BUFFER_BIT); // Limpiar la ventana
