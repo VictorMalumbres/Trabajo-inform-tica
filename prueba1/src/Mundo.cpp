@@ -59,6 +59,8 @@ void Mundo::dibuja() {
     case CORONACION:
         mostrarMenuCoronacion();
         break;
+    case OPONENTE:
+        mostrarMenuOponente();
 
     }
 }
@@ -481,6 +483,15 @@ void Mundo::procesarClick(int x, int y) {
             }
             // Limpia la selección siempre
             tablero.limpiarSeleccion();
+
+            if (activarIA) {
+
+                if (tablero.getTurno() == 1) {
+                    iaNegras.jugar(tablero);
+                    tablero.limpiarSeleccion();
+                }
+                glutPostRedisplay();
+            }
         }
 	}
 	else if (modoJuego == 2)
@@ -510,6 +521,15 @@ void Mundo::procesarClick(int x, int y) {
             }
             // Limpia la selección siempre
             tablero2.limpiarSeleccion();
+
+            if (activarIA) {
+
+                if (tablero2.getTurno() == 1) {
+                    iaNegras.jugar(tablero2);
+                    tablero2.limpiarSeleccion();
+                }
+                glutPostRedisplay();
+            }
         }
     }
     if (estadoActual == MENU) {
@@ -531,20 +551,72 @@ void Mundo::procesarClick(int x, int y) {
             else if (y_gl >= 0.35f && y_gl <= 0.45f) {
                 // Opción 2: Jugar partida SILVERMAN 4X5
                 setModoJuego(1);
-                iniciarJuego();
+                estadoActual = OPONENTE;
                 std::cout << "Opción 2: Jugar SILVERMAN 4X5" << std::endl;
                 return;
             }
             else if (y_gl >= 0.15f && y_gl <= 0.25f) {
                 // Opción 3: Jugar partida DEMI
                 setModoJuego(2);
-                iniciar2dojuego();
+                estadoActual = OPONENTE;
                 std::cout << "Opción 3: Jugar DEMI" << std::endl;
                 return;
             }
             else if (y_gl >= -0.05f && y_gl <= 0.05f) {
                 // Opción 4: Salir
                 setEstadoActual(CONFIRMAR_SALIR); // <-- Cambia esto
+                glutPostRedisplay();
+                return;
+            }
+
+        }
+    }
+    if (estadoActual == OPONENTE) {
+        // Convertir coordenadas de ventana a OpenGL [-1, 1]
+        float x_gl = (float)x / 400.0f - 1.0f;      // Correcto para 800px de ancho
+        float y_gl = 1.0f - (float)y / 300.0f;
+
+
+
+        // Comprobamos las opciones en el área de botones
+        if (x_gl >= -0.45f && x_gl <= 0.45f) {
+            if (y_gl >= 0.55f && y_gl <= 0.65f) {
+                // Opción 1: VS Jugador
+                if (modoJuego == 1) {
+                    activarIA = false;
+                    iniciarJuego();
+                }
+                else if (modoJuego == 2) {
+                    activarIA = false;
+                    iniciar2dojuego();
+                }
+                std::cout << "Opción 1: Jugador VS Jugador" << std::endl;
+                glutPostRedisplay();
+                return;
+            }
+            else if (y_gl >= 0.35f && y_gl <= 0.45f) {
+                // Opción 2: VS IA
+                if (modoJuego == 1) {
+                    activarIA = true;
+                    iniciarJuego();
+                }
+                else if (modoJuego == 2) {
+                    activarIA = true;
+                    iniciar2dojuego();
+                }
+                std::cout << "Opción 2: Jugador VS IA" << std::endl;
+                return;
+            }
+            /*else if (y_gl >= 0.15f && y_gl <= 0.25f) {
+                // Opción 3: Jugar partida DEMI
+                setModoJuego(2);
+                iniciar2dojuego();
+                std::cout << "Opción 3: Jugar DEMI" << std::endl;
+                return;
+            }*/
+            else if (y_gl >= -0.05f && y_gl <= 0.05f) {
+                // Opción 4: Volver al menu
+                setEstadoActual(MENU); // <-- Cambia esto
                 glutPostRedisplay();
                 return;
             }
@@ -822,5 +894,59 @@ void Mundo::mostrarMenuCoronacion() {
     glutSwapBuffers();
 }
 
+void Mundo::mostrarMenuOponente() {
+    // Restablecer matrices de proyección y modelado
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
 
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glClear(GL_COLOR_BUFFER_BIT); // Limpiar la ventana
+
+
+    // Fondo con textura
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/fondo_menu.png").id);
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0); glVertex2f(-1.0f, -1.0f);
+    glTexCoord2f(1, 0); glVertex2f(1.0f, -1.0f);
+    glTexCoord2f(1, 1); glVertex2f(1.0f, 1.0f);
+    glTexCoord2f(0, 1); glVertex2f(-1.0f, 1.0f);
+    glEnd();
+
+    glDisable(GL_TEXTURE_2D);
+
+    // Colores para los botones
+    glColor3f(0.2f, 0.2f, 0.6f); // RGB
+
+    // Dibujar rectángulos de fondo para cada opción
+    glBegin(GL_QUADS);
+    glVertex2f(-0.45f, 0.65f); glVertex2f(0.45f, 0.65f);
+    glVertex2f(0.45f, 0.55f); glVertex2f(-0.45f, 0.55f);
+
+    glVertex2f(-0.45f, 0.45f); glVertex2f(0.45f, 0.45f);
+    glVertex2f(0.45f, 0.35f); glVertex2f(-0.45f, 0.35f);
+
+    glVertex2f(-0.45f, 0.25f); glVertex2f(0.45f, 0.25f);
+    glVertex2f(0.45f, 0.15f); glVertex2f(-0.45f, 0.15f);
+
+    glVertex2f(-0.45f, 0.05f); glVertex2f(0.45f, 0.05f);
+    glVertex2f(0.45f, -0.05f); glVertex2f(-0.45f, -0.05f);
+    glEnd();
+
+    // Cambiar color del texto a blanco
+    glColor3f(10.0f, 10.0f, 10.0f);
+
+    // Dibujar el título del menú
+    renderizarTextoGrande("MODO DE JUEGO", -0.45f, 0.8f, 0.0008f);
+    renderizarTexto("1. Jugador VS Jugador", -0.4f, 0.58f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("2. Jugador VS Maquina", -0.4f, 0.38f, GLUT_BITMAP_HELVETICA_12);
+    //renderizarTexto("3. Jugador VS Máquina (+Dificil)", -0.4f, 0.18f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("4. Volver", -0.4f, -0.02f, GLUT_BITMAP_HELVETICA_12);
+
+    glutSwapBuffers(); // Mostrar el contenido
+}
 

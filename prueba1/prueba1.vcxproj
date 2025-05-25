@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\IA.cpp" />
     <ClCompile Include="src\Alfil.cpp" />
     <ClCompile Include="src\Caballo.cpp" />
     <ClCompile Include="src\Mundo.cpp" />
@@ -153,6 +154,7 @@
     <ClCompile Include="src\Torre.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\IA.h" />
     <ClInclude Include="src\Alfil.h" />
     <ClInclude Include="src\Caballo.h" />
     <ClInclude Include="src\Mundo.h" />

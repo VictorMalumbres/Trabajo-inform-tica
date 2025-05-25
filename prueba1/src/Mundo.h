@@ -1,5 +1,6 @@
 #pragma once
 #include "Tablero.h"
+#include "IA.h"
 
 enum EstadoMundo {
     MENU,
@@ -8,7 +9,8 @@ enum EstadoMundo {
     CONFIRMAR_MENU,
     CONFIRMAR_SALIR,
     VICTORIA,
-    CORONACION 
+    CORONACION,
+    OPONENTE
 };
 
 
@@ -21,6 +23,7 @@ private:
     //int volumen = 2;
 
     bool enJuego = false;
+    bool activarIA = false;
 
     int seleccionX = -1;
     int seleccionY = -1;
@@ -28,6 +31,8 @@ private:
     void renderizarTexto(const std::string& texto, float x, float y, void* fuente); //texto
     void renderizarTextoGrande(const char* texto, float x, float y, float escala); //tamaño texto
     EstadoMundo estadoActual;
+
+    IA iaNegras{ 1 };
 
 public:
     Mundo();
@@ -73,4 +78,5 @@ public:
     Pieza* peonACoronarse = nullptr;
 
     void volumenMusica();
+    void mostrarMenuOponente();
 };
