@@ -105,13 +105,16 @@ bool Peon::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
         return false;
     }
 
-    // Movimiento diagonal para captura
+    // Movimiento diagonal para captura (normal o al paso)
     if (std::abs(dx) == 1 && dy == direccion) {
         Pieza* destino = tablero.obtenerPieza(nuevaColumna, nuevaFila);
-        if (destino != nullptr){
+        if (destino != nullptr && destino->getBando() != bando) {
+            return true;  // Captura normal
+        }
+        // Captura al paso: casilla vacía pero permitido
+        if (destino == nullptr && tablero.esCapturaAlPaso(nuevaColumna, nuevaFila, bando)) {
             return true;
         }
-        return false;
     }
 
     return false; // Movimiento inválido

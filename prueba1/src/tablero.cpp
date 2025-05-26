@@ -193,6 +193,14 @@ Pieza* Tablero::obtenerPieza(int columna, int fila) const {
     return nullptr; // No hay pieza ah�
 }
 
+bool Tablero::esCapturaAlPaso(int col, int fila, int bando) const {
+    return (turnoPeonDoble != -1 &&
+        turnoPeonDoble != bando &&
+        col == ultimoPeonDobleX &&
+        fila == ultimoPeonDobleY);
+}
+
+
 void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
     // Comprobar que es el turno de la pieza
     if (pieza->getBando() != turno) {
@@ -202,6 +210,53 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
     if (!pieza->mueve(*this, nuevaColumna, nuevaFila)) {
         return; // Movimiento inválido
     }
+
+    Peon* peonMovido = dynamic_cast<Peon*>(pieza);
+    bool esAvanceDoble = false;
+
+    // Detectar si es un avance doble de peón
+    if (peonMovido) {
+        int deltaFila = nuevaFila - pieza->getY();
+        if (abs(deltaFila) == 2) {
+            // Peón avanzó dos casillas
+            ultimoPeonDobleX = nuevaColumna;
+            ultimoPeonDobleY = nuevaFila - (deltaFila / 2);  // casilla intermedia
+            turnoPeonDoble = pieza->getBando();
+            esAvanceDoble = true;
+        }
+    }
+
+    // --- Captura al paso ---
+    if (peonMovido && abs(nuevaColumna - pieza->getX()) == 1 &&
+        nuevaFila - pieza->getY() == (pieza->getBando() == 0 ? 1 : -1)) {
+
+        if (!obtenerPieza(nuevaColumna, nuevaFila) &&
+            turnoPeonDoble != -1 &&
+            turnoPeonDoble != pieza->getBando() &&
+            nuevaColumna == ultimoPeonDobleX &&
+            pieza->getY() == ultimoPeonDobleY) {
+
+            // Aquí eliminamos el peón que saltó dos casillas (captura al paso)
+            int filaPeonCapturado = (pieza->getBando() == 0) ? nuevaFila - 1 : nuevaFila + 1;
+           
+
+
+            for (auto it = piezas.begin(); it != piezas.end(); ++it) {
+                if ((*it)->getX() == nuevaColumna && (*it)->getY() == filaPeonCapturado &&
+                    dynamic_cast<Peon*>(*it)) {
+
+                    delete* it;
+                    piezas.erase(it);
+                   
+                    glutPostRedisplay();
+
+                    break;
+                }
+            }
+        }
+    }
+
+
 
     bool capturado = false;
 
@@ -242,7 +297,7 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
 
     // Mover la pieza
     pieza->setPosicion(nuevaFila, nuevaColumna);
-
+    glutPostRedisplay();
 
     // ----------- CORONACIÓN DEL PEÓN -----------
     Peon* peon = dynamic_cast<Peon*>(pieza);
@@ -271,6 +326,14 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
 
     
     // ----------- FIN CORONACIÓN DEL PEÓN -----------
+    // 
+    // Si no hubo avance doble, resetea la oportunidad de captura al paso
+    if (!esAvanceDoble) {
+        ultimoPeonDobleX = -1;
+        ultimoPeonDobleY = -1;
+        turnoPeonDoble = -1;
+    }
+
 
     turno = 1 - turno; // Cambiar turno
 }

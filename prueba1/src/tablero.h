@@ -25,6 +25,11 @@ private:
     int turno; // 0 = blanco, 1 = negro
     Rey* reyBlanco;
     Rey* reyNegro;
+
+
+    int ultimoPeonDobleX = -1;  // columna del peón que avanzó dos casillas
+    int ultimoPeonDobleY = -1;  // fila intermedia (no la final)
+    int turnoPeonDoble = -1;    // qué bando movió ese peón (0 o 1)
    
     //void renderizarTexto(const std::string& texto, float x, float y, void* fuente);
 
@@ -78,6 +83,9 @@ public:
 
     Mundo* mundo;
     void setMundo(Mundo* m) { mundo = m; }
+
+    bool esCapturaAlPaso(int col, int fila, int bando) const;
+
 
 
 };
