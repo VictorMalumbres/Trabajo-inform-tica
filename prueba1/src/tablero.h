@@ -38,6 +38,8 @@ public:
     int getNumFilas() const;
     int getNumColumnas() const;
 
+    void cambiarTurno() { turno = 1 - turno; }
+
  
 
     //void iniciarJuego(); //silverman

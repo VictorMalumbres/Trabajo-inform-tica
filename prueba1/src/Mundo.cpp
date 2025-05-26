@@ -676,6 +676,7 @@ void Mundo::procesarClick(int x, int y) {
             // Torre
             if (x_gl >= -0.3f && x_gl <= 0.3f && y_gl >= 0.05f && y_gl <= 0.15f) {
                 tablero.anadirPieza(new Torre(coronacionX, coronacionY, colorCoronacion));
+                tablero.cambiarTurno(); // Cambia el turno de forma segura
                 setEstadoActual(JUEGO);
                 glutPostRedisplay();
                 return;
@@ -683,6 +684,7 @@ void Mundo::procesarClick(int x, int y) {
             // Reina
             if (x_gl >= -0.3f && x_gl <= 0.3f && y_gl >= -0.15f && y_gl <= -0.05f) {
                 tablero.anadirPieza(new Reina(coronacionX, coronacionY, colorCoronacion));
+                tablero.cambiarTurno();
                 setEstadoActual(JUEGO);
                 glutPostRedisplay();
                 return;
@@ -692,6 +694,7 @@ void Mundo::procesarClick(int x, int y) {
             // Alfil
             if (x_gl >= -0.3f && x_gl <= 0.3f && y_gl >= 0.10f && y_gl <= 0.20f) {
                 tablero2.anadirPieza(new Alfil(coronacionX, coronacionY, colorCoronacion));
+                tablero2.cambiarTurno();
                 setEstadoActual(JUEGO);
                 glutPostRedisplay();
                 return;
@@ -699,6 +702,7 @@ void Mundo::procesarClick(int x, int y) {
             // Caballo
             if (x_gl >= -0.3f && x_gl <= 0.3f && y_gl >= -0.05f && y_gl <= 0.05f) {
                 tablero2.anadirPieza(new Caballo(coronacionX, coronacionY, colorCoronacion));
+                tablero2.cambiarTurno();
                 setEstadoActual(JUEGO);
                 glutPostRedisplay();
                 return;
@@ -706,11 +710,14 @@ void Mundo::procesarClick(int x, int y) {
             // Torre
             if (x_gl >= -0.3f && x_gl <= 0.3f && y_gl >= -0.20f && y_gl <= -0.10f) {
                 tablero2.anadirPieza(new Torre(coronacionX, coronacionY, colorCoronacion));
+                tablero2.cambiarTurno();
                 setEstadoActual(JUEGO);
                 glutPostRedisplay();
                 return;
             }
         }
+
+
         return;
     }
 
