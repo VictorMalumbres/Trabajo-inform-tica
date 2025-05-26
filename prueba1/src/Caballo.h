@@ -14,4 +14,7 @@ public:
 
     std::vector<std::pair<int, int>> movimientosPosibles(Tablero& tablero) override;
 
+    int getValor() const override { return 3; } // Valor típico del caballo
+
+
 };

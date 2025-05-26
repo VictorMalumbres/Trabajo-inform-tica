@@ -35,4 +35,7 @@ public:
 
     virtual std::vector<std::pair<int, int>> movimientosPosibles(Tablero& tablero) = 0;
 
+    virtual int getValor() const = 0;
+
+
 };

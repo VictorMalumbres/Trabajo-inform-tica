@@ -15,4 +15,7 @@ public:
 	// Implementación del método mueve para la Torre
 
     std::vector<std::pair<int, int>> movimientosPosibles(Tablero& tablero) override;
+
+    int getValor() const override { return 5; } // Valor típico de la torre
+
 };

@@ -14,4 +14,6 @@ public:
 
     std::vector<std::pair<int, int>> movimientosPosibles(Tablero& tablero) override;
 
+    int getValor() const override { return 9; } // Valor típico de la reina
+
 };
