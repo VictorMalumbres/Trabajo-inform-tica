@@ -12,10 +12,12 @@ bool musica = false;  //Para cargar la musica en mostrarMenuEnVentana una sola v
 Mundo::Mundo() : estadoActual(MENU), modoJuego(1), seleccionX(-1), seleccionY(-1) {} // forzamos el estado inicial
 
 void Mundo::inicializaModo1() {
+    tablero.reiniciarTablero();
     tablero.inicializaSilverman();
 }
 
 void Mundo::inicializaModo2() {
+    tablero.reiniciarTablero();
     tablero2.inicializaDemi();
 }
 
