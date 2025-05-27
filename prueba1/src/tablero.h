@@ -73,7 +73,8 @@ public:
     void reiniciarTablero();
 
 
-    std::vector<Pieza*>& getPiezas() { return piezas; }
+	std::vector<Pieza*>& getPiezas() { return piezas; }
+    //const std::vector<Pieza*>& getPiezas() const;
 
     void setSeleccion(int x, int y);
 

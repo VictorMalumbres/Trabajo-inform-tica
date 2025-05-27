@@ -381,3 +381,7 @@ int Tablero::getNumFilas() const {
 int Tablero::getNumColumnas() const {
     return numColumnas;
 }
+
+/*const std::vector<Pieza*>& Tablero::getPiezas() const {
+    return piezas;
+}*/

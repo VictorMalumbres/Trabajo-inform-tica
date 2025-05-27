@@ -22,7 +22,12 @@ void IA::jugar(Tablero& tablero) {
             if (objetivo && objetivo->getBando() != bando_) {
                 score += objetivo->getValor() * 10; // Prioriza capturas valiosas
             }
-            // Penaliza si la pieza queda amenazada tras mover (opcional, requiere función extra)
+            // Penaliza si la pieza quedaría amenazada tras mover
+            if (IA::estaAmenazada(tablero, col, fil, bando_)) {
+                score -= p->getValor();
+            }
+
+            
             // score -= estaAmenazada(tablero, p, col, fil) ? p->getValor() : 0;
 
             // Bonus por mover piezas valiosas fuera de peligro (opcional)
@@ -44,4 +49,17 @@ void IA::jugar(Tablero& tablero) {
     int idx = mejores[std::rand() % mejores.size()];
     Movimiento m = jugadas[idx];
     tablero.colocarPieza(m.pieza, m.col, m.fil);
+}
+
+// Devuelve true si la casilla (col, fil) está amenazada por alguna pieza del oponente
+bool IA::estaAmenazada( Tablero& tablero, int col, int fil, int bandoPropio) {
+    for (Pieza* p : tablero.getPiezas()) {
+        if (p->getBando() == bandoPropio) continue; // Solo piezas del oponente
+        auto movs = p->movimientosPosibles(tablero);
+        for (const auto& mv : movs) {
+            if (mv.first == col && mv.second == fil)
+                return true;
+        }
+    }
+    return false;
 }

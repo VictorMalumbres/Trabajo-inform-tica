@@ -16,6 +16,8 @@ public:
     //Para movimientos aleatorio sobre el tablero
     void jugar(Tablero& tablero);
 
+    static bool estaAmenazada(Tablero& tablero, int col, int fil, int bandoPropio);
+
 private:
     int bando_;
 
