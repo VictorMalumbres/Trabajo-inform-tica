@@ -243,9 +243,7 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
               
                 if ((*it)->getX() == nuevaColumna && (*it)->getY() == filaPeonCapturado &&
                     dynamic_cast<Peon*>(*it)) {
-                    std::cout << "Peón capturado encontrado en (" << (*it)->getX() << "," << (*it)->getY() << ")" << std::endl;
-   
-
+                     // compruebo posicion peon capturado--->std::cout << "Peón capturado encontrado en (" << (*it)->getX() << "," << (*it)->getY() << ")" << std::endl;
                     delete* it;
                     piezas.erase(it);
                    
