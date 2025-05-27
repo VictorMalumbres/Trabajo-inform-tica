@@ -16,6 +16,9 @@ public:
 
     int getValor() const override { return 3; } // Valor típico del alfil
 
+    Pieza* clonar() const {
+        return new Alfil(*this);  // usa el constructor copia predeterminado
+    }
 
 };
 

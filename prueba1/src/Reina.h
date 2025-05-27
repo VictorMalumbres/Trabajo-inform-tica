@@ -16,4 +16,9 @@ public:
 
     int getValor() const override { return 9; } // Valor típico de la reina
 
+    Pieza* clonar() const {
+        return new Reina(*this);  // usa el constructor copia predeterminado
+    }
+
+
 };

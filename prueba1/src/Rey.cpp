@@ -63,6 +63,8 @@ void Rey::dibuja() {
     }
 }
 
+
+
 bool Rey::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
     int origenX = getX();
     int origenY = getY();

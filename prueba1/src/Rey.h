@@ -26,4 +26,11 @@ public:
     bool estaEnJaque() const { return enJaque; }
 
 
+    Pieza* clonar() const {
+        return new Rey(*this);  // usa el constructor copia predeterminado
+    }
+
+
+
+
 };

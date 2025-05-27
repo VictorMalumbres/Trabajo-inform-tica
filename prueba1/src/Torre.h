@@ -18,4 +18,9 @@ public:
 
     int getValor() const override { return 5; } // Valor típico de la torre
 
+    Pieza* clonar() const {
+        return new Torre(*this);  // usa el constructor copia predeterminado
+    }
+
+
 };

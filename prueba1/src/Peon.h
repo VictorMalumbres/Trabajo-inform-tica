@@ -17,5 +17,9 @@ public:
 
     int getValor() const override { return 1; } // Valor típico del peón
 
+    Pieza* clonar() const {
+        return new Peon(*this);  // usa el constructor copia predeterminado
+    }
+
 
 };

@@ -22,6 +22,7 @@ void Tablero::iniciarPartida(int modoJuego) {
     //glutDisplayFunc([]() { mundo.dibuja(); });
     glutPostRedisplay();
 }
+
 void Tablero::dibuja() {
     float casillaSizeX = 1.0f;
     float casillaSizeY = 1.0f;
@@ -68,6 +69,22 @@ void Tablero::dibuja() {
         }
     }
 
+    // Casillas en jaque (rosa claro)
+    for (const auto& pos : casillasEnJaque) {
+        int col = pos.first;
+        int fil = pos.second;
+        glColor3f(1.0f, 0.4f, 0.7f); // Rosa
+        glBegin(GL_QUADS);
+        glVertex3f(col * casillaSizeX, fil * casillaSizeY, 0.2f); // Z más alto para que quede encima
+        glVertex3f((col + 1) * casillaSizeX, fil * casillaSizeY, 0.2f);
+        glVertex3f((col + 1) * casillaSizeX, (fil + 1) * casillaSizeY, 0.2f);
+        glVertex3f(col * casillaSizeX, (fil + 1) * casillaSizeY, 0.2f);
+        glEnd();
+    }
+
+
+
+
     // 2. Dibuja las casillas resaltadas en rojo (AQUÍ VA EL CÓDIGO NUEVO)
     for (const auto& pos : casillasResaltadas) {
         int col = pos.first;
@@ -88,7 +105,8 @@ void Tablero::dibuja() {
 }
 
 
-void Tablero::dibuja2() {
+
+/*void Tablero::dibuja2() {
     float casillaSizeX = 1.0f;
     float casillaSizeY = 1.0f;
 
@@ -148,7 +166,83 @@ void Tablero::dibuja2() {
         pieza->dibuja();
     }
 }
-// --- FIN DEL BLOQUE NUEVO PARA RESALTAR CASILLAS ---
+// --- FIN DEL BLOQUE NUEVO PARA RESALTAR CASILLAS ---*/
+
+
+void Tablero::dibuja2() {
+    float casillaSizeX = 1.0f;
+    float casillaSizeY = 1.0f;
+
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            // Si la casilla es la seleccionada, la resaltamos
+            if (i == seleccionY && j == seleccionX) {
+                glColor3f(1.0f, 1.0f, 0.0f); // Amarillo
+            }
+            else if ((i + j) % 2 == 0)
+                glColor3f(1.0f, 1.0f, 1.0f);
+            else
+                glColor3f(0.0f, 0.0f, 0.0f);
+
+            //vamos a pintar de rosa si hay un rey en jaque
+
+            Pieza* p = obtenerPieza(j, i);
+            bool pintarRosa = false;
+
+            if (p != nullptr) {
+                Rey* rey = dynamic_cast<Rey*>(p);
+                if (rey && rey->estaEnJaque()) {
+                    pintarRosa = true;
+                }
+            }
+
+            // Si la casilla es la del rey en jaque, pintar rosa
+            if (pintarRosa) {
+                glColor3f(1.0f, 0.4f, 0.7f); // Rosa claro
+            }
+
+            glBegin(GL_QUADS);
+            glVertex3f(j * casillaSizeX, i * casillaSizeY, 0.0f);
+            glVertex3f((j + 1) * casillaSizeX, i * casillaSizeY, 0.0f);
+            glVertex3f((j + 1) * casillaSizeX, (i + 1) * casillaSizeY, 0.0f);
+            glVertex3f(j * casillaSizeX, (i + 1) * casillaSizeY, 0.0f);
+            glEnd();
+        }
+    }
+
+    // --- BLOQUE NUEVO PARA CASILLAS EN JAQUE (rosa) ---
+    for (const auto& pos : casillasEnJaque) {
+        int col = pos.first;
+        int fil = pos.second;
+        glColor3f(1.0f, 0.4f, 0.7f); // Rosa
+        glBegin(GL_QUADS);
+        glVertex3f(col * casillaSizeX, fil * casillaSizeY, 0.2f); // un poco más arriba para que se vea encima
+        glVertex3f((col + 1) * casillaSizeX, fil * casillaSizeY, 0.2f);
+        glVertex3f((col + 1) * casillaSizeX, (fil + 1) * casillaSizeY, 0.2f);
+        glVertex3f(col * casillaSizeX, (fil + 1) * casillaSizeY, 0.2f);
+        glEnd();
+    }
+    // -------------------------------------------
+
+    // Casillas resaltadas normales (rojo)
+    for (const auto& pos : casillasResaltadas) {
+        int col = pos.first;
+        int fil = pos.second;
+        glColor3f(1.0f, 0.0f, 0.0f); // Rojo
+        glBegin(GL_QUADS);
+        glVertex3f(col * casillaSizeX, fil * casillaSizeY, 0.1f); // 0.1f para que quede encima
+        glVertex3f((col + 1) * casillaSizeX, fil * casillaSizeY, 0.1f);
+        glVertex3f((col + 1) * casillaSizeX, (fil + 1) * casillaSizeY, 0.1f);
+        glVertex3f(col * casillaSizeX, (fil + 1) * casillaSizeY, 0.1f);
+        glEnd();
+    }
+
+    // Dibuja las piezas
+    for (Pieza* pieza : piezas) {
+        pieza->dibuja();
+    }
+}
+
 
 void Tablero::inicializaSilverman() {
     piezas.clear();
@@ -419,6 +513,12 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
     }
 
 
+    casillasResaltadas.clear();
+    casillasEnJaque.clear();
+    seleccionX = -1;
+    seleccionY = -1;
+
+
     turno = 1 - turno; // Cambiar turno
 }
 
@@ -443,19 +543,42 @@ void Tablero::reiniciarTablero() {
 void Tablero::setSeleccion(int x, int y) {
     seleccionX = x;
     seleccionY = y;
+    casillasResaltadas.clear();
+    casillasEnJaque.clear();
+
     Pieza* pieza = obtenerPieza(x, y);
     if (pieza && pieza->getBando() == turno) {
-        casillasResaltadas = pieza->movimientosPosibles(*this);
-    }
-    else {
-        casillasResaltadas.clear();
+        auto movimientos = pieza->movimientosPosibles(*this);
+
+        for (auto& m : movimientos) {
+            std::unique_ptr<Tablero> copia(this->clonar()); // clona el tablero
+
+            Pieza* p = copia->obtenerPieza(x, y);
+            if (!p) continue;
+
+            // Mover la pieza en la copia (nota el orden fila, columna)
+            p->setPosicion(m.second, m.first);
+
+            // Actualizar estado jaque en la copia
+            copia->actualizarEstadoJaque();
+
+            // Si el rey queda en jaque, meter en casillasEnJaque, sino en casillasResaltadas
+            if (copia->estaEnJaque(p->getBando())) {
+                casillasEnJaque.push_back(m);
+            }
+            else {
+                casillasResaltadas.push_back(m);
+            }
+        }
     }
 }
+
 
 void Tablero::limpiarSeleccion() {
     seleccionX = -1;
     seleccionY = -1;
     casillasResaltadas.clear();
+    casillasEnJaque.clear();
 }
 
 int Tablero::getNumFilas() const {
@@ -464,6 +587,34 @@ int Tablero::getNumFilas() const {
 
 int Tablero::getNumColumnas() const {
     return numColumnas;
+}
+
+
+Tablero* Tablero::clonar() const {
+    Tablero* copia = new Tablero();
+
+    copia->numFilas = this->numFilas;
+    copia->numColumnas = this->numColumnas;
+    copia->turno = this->turno;
+    copia->ultimoPeonDobleX = this->ultimoPeonDobleX;
+    copia->ultimoPeonDobleY = this->ultimoPeonDobleY;
+    copia->turnoPeonDoble = this->turnoPeonDoble;
+
+    // Clonar todas las piezas
+    for (Pieza* p : this->piezas) {
+        Pieza* pc = p->clonar();
+        copia->piezas.push_back(pc);
+
+        // Identificar reyes
+        if (p->getBando() == 0) {
+            Rey* rey = dynamic_cast<Rey*>(pc);
+            if (rey) {
+                copia->reyBlanco = rey;
+            }
+        }
+    }
+
+    return copia;
 }
 
 /*const std::vector<Pieza*>& Tablero::getPiezas() const {

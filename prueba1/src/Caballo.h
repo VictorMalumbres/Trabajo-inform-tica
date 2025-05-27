@@ -16,5 +16,8 @@ public:
 
     int getValor() const override { return 3; } // Valor típico del caballo
 
+	Pieza* clonar() const override {
+		return new Caballo(*this);  // usa el constructor copia predeterminado
+	}
 
 };

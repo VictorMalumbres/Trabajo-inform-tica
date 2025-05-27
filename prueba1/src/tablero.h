@@ -90,6 +90,10 @@ public:
     bool estaEnJaque(int bando) const;
     void actualizarEstadoJaque();
 
+    std::vector<std::pair<int, int>> casillasEnJaque;
+
+    Tablero* clonar() const;
+
 };
 
 #endif // TABLERO_H
