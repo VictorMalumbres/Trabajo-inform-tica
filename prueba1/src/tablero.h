@@ -87,7 +87,8 @@ public:
 
     bool esCapturaAlPaso(int col, int fila, int bando) const;
 
-
+    bool estaEnJaque(int bando) const;
+    void actualizarEstadoJaque();
 
 };
 

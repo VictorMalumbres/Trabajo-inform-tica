@@ -2,6 +2,9 @@
 #include "Pieza.h"
 
 class Rey : public Pieza {
+
+private:
+    bool enJaque = false;
 public:
     Rey(int x, int y, int bando)
         : Pieza(x, y, bando) {
@@ -15,6 +18,12 @@ public:
     std::vector<std::pair<int, int>> movimientosPosibles(Tablero& tablero) override;
 
     int getValor() const override { return 1000; } // Valor típico del rey
+
+
+    
+  
+    void setEnJaque(bool valor) { enJaque = valor; }
+    bool estaEnJaque() const { return enJaque; }
 
 
 };

@@ -41,6 +41,24 @@ void Tablero::dibuja() {
                 glColor3f(0.0f, 0.0f, 0.0f);  // Negro
             }
 
+			//vamos a pintar de rosa si hay un rey en jaque
+
+            Pieza* p = obtenerPieza(j, i);
+            bool pintarRosa = false;
+
+            if (p != nullptr) {
+                Rey* rey = dynamic_cast<Rey*>(p);
+                if (rey && rey->estaEnJaque()) {
+                    pintarRosa = true;
+                }
+            }
+
+            // Si la casilla es la del rey en jaque, pintar rosa
+            if (pintarRosa) {
+                glColor3f(1.0f, 0.4f, 0.7f); // Rosa claro
+            }
+
+
             glBegin(GL_QUADS);
             glVertex3f(j * casillaSizeX, i * casillaSizeY, 0.0f);
             glVertex3f((j + 1) * casillaSizeX, i * casillaSizeY, 0.0f);
@@ -84,6 +102,24 @@ void Tablero::dibuja2() {
                 glColor3f(1.0f, 1.0f, 1.0f);
             else
                 glColor3f(0.0f, 0.0f, 0.0f);
+
+            //vamos a pintar de rosa si hay un rey en jaque
+
+            Pieza* p = obtenerPieza(j, i);
+            bool pintarRosa = false;
+
+            if (p != nullptr) {
+                Rey* rey = dynamic_cast<Rey*>(p);
+                if (rey && rey->estaEnJaque()) {
+                    pintarRosa = true;
+                }
+            }
+
+            // Si la casilla es la del rey en jaque, pintar rosa
+            if (pintarRosa) {
+                glColor3f(1.0f, 0.4f, 0.7f); // Rosa claro
+            }
+
 
             glBegin(GL_QUADS);
             glVertex3f(j * casillaSizeX, i * casillaSizeY, 0.0f);
@@ -201,6 +237,46 @@ bool Tablero::esCapturaAlPaso(int col, int fila, int bando) const {
 }
 
 
+void Tablero::actualizarEstadoJaque() {
+    for (Pieza* p : piezas) {
+        Rey* rey = dynamic_cast<Rey*>(p);
+        if (rey) {
+            bool enJaque = estaEnJaque(rey->getBando());
+            rey->setEnJaque(enJaque);
+        }
+    }
+}
+
+bool Tablero::estaEnJaque(int bando) const {
+    Pieza* rey = nullptr;
+    for (Pieza* p : piezas) {
+        Rey* r = dynamic_cast<Rey*>(p);
+        if (r && p->getBando() == bando) {
+            rey = p;
+            break;
+        }
+    }
+    if (!rey) return false;
+
+    int reyX = rey->getX();
+    int reyY = rey->getY();
+
+    for (Pieza* p : piezas) {
+        if (p->getBando() != bando) {
+            auto movs = p->movimientosPosibles(const_cast<Tablero&>(*this));
+            for (auto& m : movs) {
+                if (m.first == reyX && m.second == reyY) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+
+
+
 void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
     // Comprobar que es el turno de la pieza
     if (pieza->getBando() != turno) {
@@ -301,6 +377,10 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
 
     // Mover la pieza
     pieza->setPosicion(nuevaFila, nuevaColumna);
+
+    // Actualizar estado de jaque tras mover
+    actualizarEstadoJaque();
+
     glutPostRedisplay();
 
     // ----------- CORONACIÓN DEL PEÓN -----------

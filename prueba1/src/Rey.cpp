@@ -6,6 +6,11 @@
 void Rey::dibuja() {
     if (resaltado)glColor3f(1.0f, 1.0f, 0.0f); // Amarillo para resaltado
 
+
+    if (estaEnJaque()) {
+        glColor3f(1.0f, 0.4f, 0.7f); // Rosa si está en jaque
+    }
+
     if (getBando() == 0)
     {
         // Dibujo del fondo con textura
