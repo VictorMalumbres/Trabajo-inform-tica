@@ -90,8 +90,18 @@ std::vector<std::pair<int, int>> Caballo::movimientosPosibles(Tablero& tablero) 
         int nx = x + dx[i];
         int ny = y + dy[i];
         if (nx >= 0 && nx < tablero.getNumColumnas() && ny >= 0 && ny < tablero.getNumFilas()) {
-            movimientos.push_back({ nx, ny });
+            Pieza* p = tablero.obtenerPieza(nx, ny);
+            if (p == nullptr) {
+                
+                movimientos.push_back({ nx, ny });
+            }
+            else if (p->getBando() != getBando()) {
+                
+                movimientos.push_back({ nx, ny });
+            }
+          
         }
     }
     return movimientos;
 }
+

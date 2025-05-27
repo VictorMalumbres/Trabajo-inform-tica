@@ -147,7 +147,9 @@ std::vector<std::pair<int, int>> Peon::movimientosPosibles(Tablero& tablero) {
     if (x - 1 >= 0 && ny >= 0 && ny < filas) {
         Pieza* pIzq = tablero.obtenerPieza(x - 1, ny);
         if (pIzq != nullptr) {
-            movimientos.push_back({ x - 1, ny });
+            if (pIzq->getBando() != getBando()) {  // Solo capturas enemigas
+                movimientos.push_back({ x - 1, ny });
+            }
         }
         else if (tablero.esCapturaAlPaso(x - 1, ny, getBando())) {
             movimientos.push_back({ x - 1, ny }); // Para la captura al paso
@@ -157,7 +159,9 @@ std::vector<std::pair<int, int>> Peon::movimientosPosibles(Tablero& tablero) {
     if (x + 1 < cols && ny >= 0 && ny < filas) {
         Pieza* pDer = tablero.obtenerPieza(x + 1, ny);
         if (pDer != nullptr) {
-            movimientos.push_back({ x + 1, ny });
+            if (pDer->getBando() != getBando()) {  // Solo capturas enemigas
+                movimientos.push_back({ x + 1, ny });
+            }
         }
         else if (tablero.esCapturaAlPaso(x + 1, ny, getBando())) {
             movimientos.push_back({ x + 1, ny }); // Para la captura al paso
