@@ -483,7 +483,12 @@ void Mundo::procesarClick(int x, int y) {
             if (columna != origenX || fila != origenY) {
                 Pieza* p = tablero.obtenerPieza(origenX, origenY);
                 if (p != nullptr) {
-                    tablero.colocarPieza(p, columna, fila);
+                    if (p->mueve(tablero, columna, fila)) {
+                        tablero.colocarPieza(p, columna, fila);
+                    }
+                    else {
+                        std::cout << "Movimiento inválido" << std::endl;
+                    }
                 }
             }
             // Limpia la selección siempre

@@ -234,29 +234,30 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
             turnoPeonDoble != -1 &&
             turnoPeonDoble != pieza->getBando() &&
             nuevaColumna == ultimoPeonDobleX &&
-            pieza->getY() == ultimoPeonDobleY) {
+            pieza->getY() == (pieza->getBando() == 0 ? (nuevaFila - 1) : (nuevaFila + 1))) {
 
-            // Aquí eliminamos el peón que saltó dos casillas (captura al paso)
+            // Aquí eliminamos el peón
             int filaPeonCapturado = (pieza->getBando() == 0) ? nuevaFila - 1 : nuevaFila + 1;
-           
-
 
             for (auto it = piezas.begin(); it != piezas.end(); ++it) {
+              
                 if ((*it)->getX() == nuevaColumna && (*it)->getY() == filaPeonCapturado &&
                     dynamic_cast<Peon*>(*it)) {
+                    std::cout << "Peón capturado encontrado en (" << (*it)->getX() << "," << (*it)->getY() << ")" << std::endl;
+   
 
                     delete* it;
                     piezas.erase(it);
                    
                     glutPostRedisplay();
-
+	
                     break;
                 }
             }
         }
     }
 
-
+ 
 
     bool capturado = false;
 

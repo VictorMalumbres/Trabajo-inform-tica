@@ -113,7 +113,7 @@ bool Peon::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
         }
         // Captura al paso: casilla vacía pero permitido
         if (destino == nullptr && tablero.esCapturaAlPaso(nuevaColumna, nuevaFila, bando)) {
-            return true;
+             return true;
         }
     }
 
