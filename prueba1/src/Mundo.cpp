@@ -77,17 +77,29 @@ void Mundo::renderizarTexto(const std::string& texto, float x, float y, void* fu
 }
 
 void Mundo::renderizarTextoGrande(const char* texto, float x, float y, float escala) {
-    glPushMatrix();
-    glTranslatef(x, y, 0.0f);      // Mover el texto a la posición (x, y)
-    glScalef(escala, escala, 1.0f); // Escalar el texto
-    glLineWidth(2.0f);             // Grosor de las líneas del texto
+    glColor3f(1.0f, 0.4f, 0.7f); // Color rosita
 
-    for (const char* c = texto; *c != '\0'; ++c) {
-        glutStrokeCharacter(GLUT_STROKE_ROMAN, *c);
+    glPushMatrix();
+    glTranslatef(x, y, 0.0f);
+    glScalef(escala, escala, 1.0f);
+
+    glLineWidth(4.0f); // Grosor de línea para negrita
+
+    float offset = 0.005f;  // desplazamiento para simular negrita
+    for (float dx = -offset; dx <= offset; dx += offset) {
+        for (float dy = -offset; dy <= offset; dy += offset) {
+            glPushMatrix();
+            glTranslatef(dx, dy, 0.0f);
+            for (const char* c = texto; *c != '\0'; ++c) {
+                glutStrokeCharacter(GLUT_STROKE_ROMAN, *c);
+            }
+            glPopMatrix();
+        }
     }
 
     glPopMatrix();
 }
+
 /*void Mundo::renderizarTextoGrande(const char* texto, float x, float y, float escala) {
     glPushMatrix();
     glTranslatef(x, y, 0.0f);      // Mover el texto a la posición (x, y)
