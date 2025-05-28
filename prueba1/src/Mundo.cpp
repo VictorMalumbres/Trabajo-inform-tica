@@ -948,9 +948,6 @@ void Mundo::mostrarMenuOponente() {
     glVertex2f(-0.45f, 0.45f); glVertex2f(0.45f, 0.45f);
     glVertex2f(0.45f, 0.35f); glVertex2f(-0.45f, 0.35f);
 
-    glVertex2f(-0.45f, 0.25f); glVertex2f(0.45f, 0.25f);
-    glVertex2f(0.45f, 0.15f); glVertex2f(-0.45f, 0.15f);
-
     glVertex2f(-0.45f, 0.05f); glVertex2f(0.45f, 0.05f);
     glVertex2f(0.45f, -0.05f); glVertex2f(-0.45f, -0.05f);
     glEnd();
@@ -962,7 +959,6 @@ void Mundo::mostrarMenuOponente() {
     renderizarTextoGrande("MODO DE JUEGO", -0.45f, 0.8f, 0.0008f);
     renderizarTexto("1. Jugador VS Jugador", -0.4f, 0.58f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("2. Jugador VS Maquina", -0.4f, 0.38f, GLUT_BITMAP_HELVETICA_12);
-    //renderizarTexto("3. Jugador VS Máquina (+Dificil)", -0.4f, 0.18f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("4. Volver", -0.4f, -0.02f, GLUT_BITMAP_HELVETICA_12);
 
     glutSwapBuffers(); // Mostrar el contenido
