@@ -58,8 +58,25 @@ bool Peon::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
                 return true;
             }
             return false;
+
+        } 
+        // Aquí condicionamos el movimiento de 2 casillas solo para tableros con más de 5 filas (Demi)
+        if (dy == 2 * direccion && tablero.getNumFilas() > 5) { // Solo Demi
+            int filaInicial = (getBando() == 0) ? 1 : tablero.getNumFilas() - 2;
+            if (origenY == filaInicial) {
+                // Verificamos que el camino esté libre
+                if (tablero.obtenerPieza(nuevaColumna, nuevaFila) != nullptr) {
+                    return false;
+                }
+                Pieza* piezaIntermedia = tablero.obtenerPieza(nuevaColumna, origenY + direccion);
+                if (piezaIntermedia != nullptr) {
+                    return false;
+                }
+                return true;
+            }
+            return false;
         }
-        if (dy == 2 * direccion) { // Dos pasos desde fila inicial
+        /*if (dy == 2 * direccion) { // Dos pasos desde fila inicial
             int filaInicial = (getBando() == 0) ? 1 : 6;
             if (origenY == filaInicial) {
                 // Comprobar que no haya pieza en la casilla destino
@@ -80,7 +97,8 @@ bool Peon::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
             }
             return false;
         }
-        return false;
+        return false;*/
+        
     }
 
     // Movimiento diagonal para captura (normal o al paso)
@@ -114,6 +132,15 @@ std::vector<std::pair<int, int>> Peon::movimientosPosibles(Tablero& tablero) {
         movimientos.push_back({ x, ny });
 
         // Movimiento de 2 casillas desde la fila inicial
+        int filaInicial = (getBando() == 0) ? 1 : filas - 2;
+        int ny2 = y + 2 * dir;
+        if (y == filaInicial && ny2 >= 0 && ny2 < filas &&
+            !tablero.obtenerPieza(x, ny2) && !tablero.obtenerPieza(x, ny)) {
+            movimientos.push_back({ x, ny2 });
+        }
+    }
+    // Movimiento de 2 casillas desde la fila inicial solo si es Demi (filas > 5)
+    if (tablero.getNumFilas() > 5) {
         int filaInicial = (getBando() == 0) ? 1 : filas - 2;
         int ny2 = y + 2 * dir;
         if (y == filaInicial && ny2 >= 0 && ny2 < filas &&
