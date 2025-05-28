@@ -19,18 +19,10 @@ public:
 
     int getValor() const override { return 1000; } // Valor típico del rey
 
-
-    
-  
     void setEnJaque(bool valor) { enJaque = valor; }
     bool estaEnJaque() const { return enJaque; }
-
 
     Pieza* clonar() const {
         return new Rey(*this);  // usa el constructor copia predeterminado
     }
-
-
-
-
 };

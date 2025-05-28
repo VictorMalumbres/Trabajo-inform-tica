@@ -48,7 +48,7 @@ void Mundo::dibuja() {
         break;
     case INSTRUCCIONES:
         mostrarInstruccionesEnVentana();
-        break; 
+        break;
     case CONFIRMAR_MENU:
         mostrarConfirmacionMenu();
         break;
@@ -88,30 +88,6 @@ void Mundo::renderizarTextoGrande(const char* texto, float x, float y, float esc
 
     glPopMatrix();
 }
-
-//No lo elimino por si alguien lo fuese a utilizar
-
-/*void Mundo::manejarEntradaMenu(unsigned char key, int x, int y) {
-    switch (key) {
-    case '1':
-        mostrarInstruccionesEnVentana();
-        break;
-        ETSIDI::stopMusica();
-    case '2':
-        setModoJuego(1);
-        iniciarJuego();
-        break;
-        ETSIDI::stopMusica();
-    case '3':
-        setModoJuego(2);
-        iniciar2dojuego();
-        break;
-        ETSIDI::stopMusica();
-   
-    default:
-        break;
-    }
-}*/
 
 void Mundo::mostrarMenuEnVentana() {
     // Restablecer matrices de proyección y modelado
@@ -325,7 +301,7 @@ void Mundo::iniciarJuego() {
 
             glColor3f(1.0f, 1.0f, 0.0f);
             std::string texto1 = "JUEGO EN PAUSA";
-            glRasterPos2f(-0.8, 0.3f);
+            glRasterPos2f(-0.8, 0.5f);
             for (char c : texto1) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
 
             // Botón: Volver al menú
@@ -345,6 +321,14 @@ void Mundo::iniciarJuego() {
             glEnd();
             glColor3f(1.0f, 1.0f, 1.0f);
             mundo.renderizarTexto("Salir del juego", -0.17f, -0.23f, GLUT_BITMAP_HELVETICA_18);
+
+            glColor3f(0.2f, 0.6f, 0.6f); // azul verdoso
+            glBegin(GL_QUADS);
+            glVertex2f(-0.5f, 0.35f); glVertex2f(0.5f, 0.35f);
+            glVertex2f(0.5f, 0.20f); glVertex2f(-0.5f, 0.20f);
+            glEnd();
+            glColor3f(1.0f, 1.0f, 1.0f);
+            mundo.renderizarTexto("Reiniciar partida", -0.15f, 0.26f, GLUT_BITMAP_HELVETICA_18);
 
             glutSwapBuffers();
         }
@@ -380,7 +364,7 @@ void Mundo::iniciar2dojuego() {
 
             glColor3f(1.0f, 1.0f, 0.0f);
             std::string texto1 = "JUEGO EN PAUSA";
-            glRasterPos2f(-0.8, 0.3f);
+            glRasterPos2f(-0.8, 0.5f);
             for (char c : texto1) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
 
             // Botón: Volver al menú
@@ -400,6 +384,14 @@ void Mundo::iniciar2dojuego() {
             glEnd();
             glColor3f(1.0f, 1.0f, 1.0f);
             mundo.renderizarTexto("Salir del juego", -0.17f, -0.23f, GLUT_BITMAP_HELVETICA_18);
+
+            glColor3f(0.2f, 0.6f, 0.6f); // azul verdoso
+            glBegin(GL_QUADS);
+            glVertex2f(-0.5f, 0.35f); glVertex2f(0.5f, 0.35f);
+            glVertex2f(0.5f, 0.20f); glVertex2f(-0.5f, 0.20f);
+            glEnd();
+            glColor3f(1.0f, 1.0f, 1.0f);
+            mundo.renderizarTexto("Reiniciar partida", -0.15f, 0.26f, GLUT_BITMAP_HELVETICA_18);
 
             glutSwapBuffers();
         }
@@ -650,6 +642,15 @@ void Mundo::procesarClick(int x, int y) {
             juegoEnPausa = false;
             setEstadoActual(CONFIRMAR_SALIR);
             glutPostRedisplay();
+            return;
+        }
+
+        if (x_gl >= -0.5f && x_gl <= 0.5f && y_gl >= 0.20f && y_gl <= 0.35f) {
+            juegoEnPausa = false;
+
+            //reiniciar
+            if (modoJuego == 1) iniciarJuego();
+            else iniciar2dojuego();
             return;
         }
         // Si se hace clic fuera de los botones, no hacer nada
@@ -966,4 +967,3 @@ void Mundo::mostrarMenuOponente() {
 
     glutSwapBuffers(); // Mostrar el contenido
 }
-

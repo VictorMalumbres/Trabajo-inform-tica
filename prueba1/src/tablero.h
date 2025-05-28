@@ -6,7 +6,6 @@
 #include "Pieza.h"
 #include "Alfil.h"
 #include "Caballo.h"
-
 #include "Torre.h"
 #include "Reina.h"
 #include "Rey.h"
@@ -26,13 +25,11 @@ private:
     Rey* reyBlanco;
     Rey* reyNegro;
 
-
     int ultimoPeonDobleX = -1;  // columna del peón que avanzó dos casillas
     int ultimoPeonDobleY = -1;  // fila intermedia (no la final)
     int turnoPeonDoble = -1;    // qué bando movió ese peón (0 o 1)
    
     //void renderizarTexto(const std::string& texto, float x, float y, void* fuente);
-
 public:
     Tablero();
     //void mostrarMenuEnVentana(); //menú texto
@@ -93,8 +90,6 @@ public:
     std::vector<std::pair<int, int>> casillasEnJaque;
 
     Tablero* clonar() const;
-
 };
-
 #endif // TABLERO_H
 
