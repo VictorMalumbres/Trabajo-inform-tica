@@ -79,6 +79,7 @@ bool Alfil::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
     }
     return true;
 }
+
 std::vector<std::pair<int, int>> Alfil::movimientosPosibles(Tablero& tablero) {
     std::vector<std::pair<int, int>> movimientos;
     int x = getX();
@@ -88,59 +89,24 @@ std::vector<std::pair<int, int>> Alfil::movimientosPosibles(Tablero& tablero) {
 
     // Diagonal arriba-derecha
     for (int nx = x + 1, ny = y + 1; nx < cols && ny < filas; ++nx, ++ny) {
-        Pieza* p = tablero.obtenerPieza(nx, ny);
-        if (p == nullptr) {
-            movimientos.push_back({ nx, ny });
-        }
-        else {
-            if (p->getBando() != getBando()) {
-                movimientos.push_back({ nx, ny }); // Captura pieza enemiga
-            }
-            break; // Bloquea la diagonal
-        }
+        movimientos.push_back({ nx, ny });
+        if (tablero.obtenerPieza(nx, ny)) break;
     }
-
     // Diagonal arriba-izquierda
     for (int nx = x - 1, ny = y + 1; nx >= 0 && ny < filas; --nx, ++ny) {
-        Pieza* p = tablero.obtenerPieza(nx, ny);
-        if (p == nullptr) {
-            movimientos.push_back({ nx, ny });
-        }
-        else {
-            if (p->getBando() != getBando()) {
-                movimientos.push_back({ nx, ny });
-            }
-            break;
-        }
+        movimientos.push_back({ nx, ny });
+        if (tablero.obtenerPieza(nx, ny)) break;
     }
-
     // Diagonal abajo-derecha
     for (int nx = x + 1, ny = y - 1; nx < cols && ny >= 0; ++nx, --ny) {
-        Pieza* p = tablero.obtenerPieza(nx, ny);
-        if (p == nullptr) {
-            movimientos.push_back({ nx, ny });
-        }
-        else {
-            if (p->getBando() != getBando()) {
-                movimientos.push_back({ nx, ny });
-            }
-            break;
-        }
+        movimientos.push_back({ nx, ny });
+        if (tablero.obtenerPieza(nx, ny)) break;
     }
-
     // Diagonal abajo-izquierda
     for (int nx = x - 1, ny = y - 1; nx >= 0 && ny >= 0; --nx, --ny) {
-        Pieza* p = tablero.obtenerPieza(nx, ny);
-        if (p == nullptr) {
-            movimientos.push_back({ nx, ny });
-        }
-        else {
-            if (p->getBando() != getBando()) {
-                movimientos.push_back({ nx, ny });
-            }
-            break;
-        }
+        movimientos.push_back({ nx, ny });
+        if (tablero.obtenerPieza(nx, ny)) break;
     }
-
     return movimientos;
 }
+

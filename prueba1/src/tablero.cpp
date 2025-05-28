@@ -432,11 +432,6 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
     // Buscar si hay una pieza en la casilla destino
     for (auto it = piezas.begin(); it != piezas.end(); ++it) {
         if ((*it)->getX() == nuevaColumna && (*it)->getY() == nuevaFila) {
-
-            // Si la pieza en destino es del mismo bando, no mover ni eliminar nada
-            if ((*it)->getBando() == pieza->getBando()) {
-                return; // Movimiento inválido, cancela el movimiento
-			}
             if ((*it)->getBando() == pieza->getBando() && dynamic_cast<Rey*>(*it)) {
                 return; // No se mueve ni elimina nada
             }

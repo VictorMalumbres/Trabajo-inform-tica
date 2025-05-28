@@ -93,60 +93,24 @@ std::vector<std::pair<int, int>> Torre::movimientosPosibles(Tablero& tablero) {
 
     // Derecha
     for (int nx = x + 1; nx < cols; ++nx) {
-        Pieza* p = tablero.obtenerPieza(nx, y);
-        if (p == nullptr) {
-            movimientos.push_back({ nx, y });
-        }
-        else {
-            if (p->getBando() != getBando()) {
-                movimientos.push_back({ nx, y });
-            }
-            break;
-        }
+        movimientos.push_back({ nx, y });
+        if (tablero.obtenerPieza(nx, y)) break;
     }
-
     // Izquierda
     for (int nx = x - 1; nx >= 0; --nx) {
-        Pieza* p = tablero.obtenerPieza(nx, y);
-        if (p == nullptr) {
-            movimientos.push_back({ nx, y });
-        }
-        else {
-            if (p->getBando() != getBando()) {
-                movimientos.push_back({ nx, y });
-            }
-            break;
-        }
+        movimientos.push_back({ nx, y });
+        if (tablero.obtenerPieza(nx, y)) break;
     }
-
     // Arriba
     for (int ny = y + 1; ny < filas; ++ny) {
-        Pieza* p = tablero.obtenerPieza(x, ny);
-        if (p == nullptr) {
-            movimientos.push_back({ x, ny });
-        }
-        else {
-            if (p->getBando() != getBando()) {
-                movimientos.push_back({ x, ny });
-            }
-            break;
-        }
+        movimientos.push_back({ x, ny });
+        if (tablero.obtenerPieza(x, ny)) break;
     }
-
     // Abajo
     for (int ny = y - 1; ny >= 0; --ny) {
-        Pieza* p = tablero.obtenerPieza(x, ny);
-        if (p == nullptr) {
-            movimientos.push_back({ x, ny });
-        }
-        else {
-            if (p->getBando() != getBando()) {
-                movimientos.push_back({ x, ny });
-            }
-            break;
-        }
+        movimientos.push_back({ x, ny });
+        if (tablero.obtenerPieza(x, ny)) break;
     }
-
     return movimientos;
 }
 
