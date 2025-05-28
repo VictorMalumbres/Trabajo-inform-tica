@@ -11,7 +11,10 @@ enum EstadoMundo {
     VICTORIA,
     EMPATE,
     CORONACION,
-    OPONENTE
+    OPONENTE,
+    INSTRUCCIONES_DEMI,
+	INSTRUCCIONES_SILVERMAN,
+    INSTRUCCIONES_PIEZAS
 };
 
 class Mundo {
@@ -47,6 +50,9 @@ public:
     void mostrarConfirmacionSalir();
     void mostrarMenuEnVentana(); //menú texto
     void mostrarInstruccionesEnVentana(); //instrucciones juego
+	void mostrarInstruccionesDemi(); //instrucciones juego demi
+	void mostrarInstruccionesSilverman(); //instrucciones juego silverman
+	void mostrarInstruccionesPiezas(); //instrucciones piezas
 
     void iniciarJuego(); //silverman
     void iniciar2dojuego(); //demi

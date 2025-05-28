@@ -66,7 +66,20 @@ void Mundo::dibuja() {
         break;
     case OPONENTE:
         mostrarMenuOponente();
+		break;
+	case INSTRUCCIONES_DEMI:
+		mostrarInstruccionesDemi();
+		break;
+	case INSTRUCCIONES_SILVERMAN:
+		mostrarInstruccionesSilverman();
+		break;
+	case INSTRUCCIONES_PIEZAS:
+		mostrarInstruccionesPiezas();
+		break;
     }
+    
+   
+
 }
 
 void Mundo::renderizarTexto(const std::string& texto, float x, float y, void* fuente) {
@@ -201,9 +214,9 @@ void Mundo::mostrarInstruccionesEnVentana() {
     // Dibujar texto encima de los rectángulos
     glColor3f(1.0f, 1.0f, 1.0f); // Blanco
     renderizarTexto("INSTRUCCIONES DEL JUEGO", -0.3f, 0.6f, GLUT_BITMAP_HELVETICA_18);
-    renderizarTexto("1. El objetivo del juego es capturar las piezas del oponente.", -0.8f, 0.4f, GLUT_BITMAP_HELVETICA_12);
-    renderizarTexto("2. Cada pieza tiene movimientos especificos.", -0.8f, 0.2f, GLUT_BITMAP_HELVETICA_12);
-    renderizarTexto("3. El juego termina cuando el Rey de un jugador es capturado.", -0.8f, 0.0f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("1. Instrucciones modo DEMI.", -0.8f, 0.4f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("2. Instrucciones modo silverman.", -0.8f, 0.2f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("3. Movimiento estandar piezas.", -0.8f, 0.0f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("Presione la tecla esc para volver al menu...", -0.8f, -0.3f, GLUT_BITMAP_HELVETICA_12);
 
     glutSwapBuffers(); // Mostrar contenido en pantalla
@@ -226,12 +239,28 @@ void manejarTeclado(unsigned char key, int x, int y) {
             glutPostRedisplay();
         }
     }
-    
-    else if (mundo.getEstadoActual() == INSTRUCCIONES && key == 27) { // 27 = ESC
+
+/* else if (mundo.getEstadoActual() == INSTRUCCIONES && key == 27) { // 27 = ESC
         mundo.setEstadoActual(MENU);
         glutPostRedisplay();
         return;
+    }*/
+   
+
+    else if ((mundo.getEstadoActual() == INSTRUCCIONES ||
+        mundo.getEstadoActual() == INSTRUCCIONES_DEMI ||
+        mundo.getEstadoActual() == INSTRUCCIONES_SILVERMAN ||
+        mundo.getEstadoActual() == INSTRUCCIONES_PIEZAS) && key == 27) { // ESC
+        if (mundo.getEstadoActual() == INSTRUCCIONES) {
+            mundo.setEstadoActual(MENU);  // Volver al menú principal
+        }
+        else {
+            mundo.setEstadoActual(INSTRUCCIONES);  // Volver al menú de instrucciones
+        }
+        glutPostRedisplay();
+        return;
     }
+
 
     if (juegoEnPausa) {  //Sin esto se podia pulsar en cualquier momento
         if (key == 'q' || key == 'Q') {
@@ -544,6 +573,29 @@ void Mundo::procesarClick(int x, int y) {
 
         }
     }
+
+	if (estadoActual == INSTRUCCIONES) {
+        if (x_gl >= -0.6f && x_gl <= 0.6f) {
+            if (y_gl >= 0.4f && y_gl <= 0.5f) {
+                // Instrucciones modo DEMI
+                estadoActual = INSTRUCCIONES_DEMI;
+                glutPostRedisplay();
+                return;
+            }
+            else if (y_gl >= 0.2f && y_gl <= 0.3f) {
+                // Instrucciones modo SILVERMAN
+                estadoActual = INSTRUCCIONES_SILVERMAN;
+                glutPostRedisplay();
+                return;
+            }
+            else if (y_gl >= 0.0f && y_gl <= 0.1f) {
+                // Movimiento piezas estándar
+                estadoActual = INSTRUCCIONES_PIEZAS;
+                glutPostRedisplay();
+                return;
+            }
+        }
+	}
     if (estadoActual == OPONENTE) {
         // Convertir coordenadas de ventana a OpenGL [-1, 1]
         float x_gl = (float)x / 400.0f - 1.0f;      // Correcto para 800px de ancho
@@ -987,4 +1039,68 @@ void Mundo::mostrarMenuOponente() {
     renderizarTexto("4. Volver", -0.4f, -0.02f, GLUT_BITMAP_HELVETICA_12);
 
     glutSwapBuffers(); // Mostrar el contenido
+}
+
+void Mundo::mostrarInstruccionesSilverman() {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Fondo para instrucciones Silverman
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/instrucciones.png").id);
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0); glVertex2f(-1.0f, -1.0f);
+    glTexCoord2f(1, 0); glVertex2f(1.0f, -1.0f);
+    glTexCoord2f(1, 1); glVertex2f(1.0f, 1.0f);
+    glTexCoord2f(0, 1); glVertex2f(-1.0f, 1.0f);
+    glEnd();
+
+    glDisable(GL_TEXTURE_2D);
+
+    glColor3f(1, 1, 1);
+
+    renderizarTextoGrande("SILVERMAN", -0.15f, 0.75f, 0.001f);
+
+    renderizarTexto("Juego de Ajedrez 4x5 con torres y reina.", -0.5f, 0.55f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("Te da la posibilidad de jugar con un amigo en el mismo ordenador.", -0.5f, 0.50f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("Esta singular variante del miniajedrez tiene un tablero de 4x5 casillas", -0.5f, 0.45f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("y no tiene los alfiles ni los caballos.", -0.5f, 0.40f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("Sigue las reglas estándar del Ajedrez, el peón de su posición inicial", -0.5f, 0.35f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("puede ir adelante de solo una casilla.", -0.5f, 0.30f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("En la promoción puedes elegir entre dama y torre, no hay enroque.", -0.5f, 0.25f, GLUT_BITMAP_HELVETICA_12);
+
+    renderizarTexto("Presione ESC para volver al menu...", -0.5f, -0.3f, GLUT_BITMAP_HELVETICA_12);
+
+    glutSwapBuffers();
+}
+
+void Mundo::mostrarInstruccionesPiezas() {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Fondo para instrucciones piezas estándar
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/instrucciones.png").id);
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0); glVertex2f(-1.0f, -1.0f);
+    glTexCoord2f(1, 0); glVertex2f(1.0f, -1.0f);
+    glTexCoord2f(1, 1); glVertex2f(1.0f, 1.0f);
+    glTexCoord2f(0, 1); glVertex2f(-1.0f, 1.0f);
+    glEnd();
+
+    glDisable(GL_TEXTURE_2D);
+
+    glColor3f(1, 1, 1);
+
+    renderizarTextoGrande("MOVIMIENTO DE PIEZAS ESTÁNDAR", -0.3f, 0.75f, 0.001f);
+
+    renderizarTexto("Cada pieza se mueve según las reglas clásicas del ajedrez.", -0.5f, 0.55f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("- Peones avanzan hacia adelante una casilla, con captura diagonal.", -0.5f, 0.50f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("- Torres se mueven en líneas rectas horizontales y verticales.", -0.5f, 0.45f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("- Alfiles se mueven en diagonal.", -0.5f, 0.40f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("- Caballos se mueven en L.", -0.5f, 0.35f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("- Rey se mueve una casilla en cualquier dirección.", -0.5f, 0.30f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("Presione ESC para volver al menu...", -0.5f, -0.3f, GLUT_BITMAP_HELVETICA_12);
+
+    glutSwapBuffers();
 }
