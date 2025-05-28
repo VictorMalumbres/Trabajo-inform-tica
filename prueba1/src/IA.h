@@ -18,6 +18,8 @@ public:
 
     static bool estaAmenazada(Tablero& tablero, int col, int fil, int bandoPropio);
 
+    int evaluarJugada(Tablero& tablero, Pieza* pieza, int col, int fil, int bando);
+
 private:
     int bando_;
 
