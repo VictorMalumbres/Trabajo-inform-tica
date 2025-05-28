@@ -254,8 +254,6 @@ void manejarTeclado(unsigned char key, int x, int y) {
         return;
     }
 
-<<<<<<< HEAD
-
     if (juegoEnPausa) {  //Sin esto se podia pulsar en cualquier momento
         if (key == 'q' || key == 'Q') {
             juegoEnPausa = false;
@@ -272,8 +270,7 @@ void manejarTeclado(unsigned char key, int x, int y) {
         }
     }
 
-=======
->>>>>>> 082ad12d4b413389eb48ee3f1059ebc912e93b86
+
     else if (key == '-') {  //Bajar la musica en el juego
         if (mundo.getVolumen() > 0) {
             mundo.decrementoVolumen();
