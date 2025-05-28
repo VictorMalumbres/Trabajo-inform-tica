@@ -476,8 +476,6 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool s
     turno = 1 - turno; // Cambiar turno
 }
 
-
-
 void Tablero::anadirPieza(Pieza* pieza) {
     piezas.push_back(pieza);
 }
@@ -533,7 +531,6 @@ void Tablero::setSeleccion(int x, int y) {
     }
 }
 
-
 void Tablero::limpiarSeleccion() {
     seleccionX = -1;
     seleccionY = -1;
@@ -548,7 +545,6 @@ int Tablero::getNumFilas() const {
 int Tablero::getNumColumnas() const {
     return numColumnas;
 }
-
 
 Tablero* Tablero::clonar() const {
     Tablero* copia = new Tablero();
