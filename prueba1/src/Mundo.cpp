@@ -1047,6 +1047,47 @@ void Mundo::mostrarMenuOponente() {
     glutSwapBuffers(); // Mostrar el contenido
 }
 
+void Mundo::mostrarInstruccionesDemi() {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Fondo para instrucciones Demi
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/instrucciones.png").id);
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0); glVertex2f(-1.0f, -1.0f);
+    glTexCoord2f(1, 0); glVertex2f(1.0f, -1.0f);
+    glTexCoord2f(1, 1); glVertex2f(1.0f, 1.0f);
+    glTexCoord2f(0, 1); glVertex2f(-1.0f, 1.0f);
+    glEnd();
+
+    glDisable(GL_TEXTURE_2D);
+
+    glColor3f(1, 1, 1);
+
+    // Título fijo
+    renderizarTextoGrande("DEMI", -0.15f, 0.75f, 0.001f);
+
+    // Texto centrado horizontalmente justo debajo del título
+    float x_text = -0.5f;  // Ajusta según convenga
+    float y_start = 0.55f;
+    float line_height = 0.05f;
+
+    renderizarTexto("Juego de miniajedrez Demi con el cual puedes jugar", x_text, y_start, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("contra el ordenador o entre dos con un amigo.", x_text, y_start - line_height, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("Esta singular variante del mini ajedrez tiene un tablero", x_text, y_start - 2 * line_height, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("estrecho de 4x8 casillas que lleva la mitad de las piezas", x_text, y_start - 3 * line_height, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("del ajedrez estándar y excluye las reinas.", x_text, y_start - 4 * line_height, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("Sigue las reglas estándar del Ajedrez, en la promoción", x_text, y_start - 5 * line_height, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("puedes elegir entre alfil, caballo y torre,", x_text, y_start - 6 * line_height, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("es posible la captura al paso y no hay enroque.", x_text, y_start - 7 * line_height, GLUT_BITMAP_HELVETICA_12);
+
+    renderizarTexto("Presione ESC para volver al menu...", x_text, -0.3f, GLUT_BITMAP_HELVETICA_12);
+
+    glutSwapBuffers();
+}
+
+
 void Mundo::mostrarInstruccionesSilverman() {
     glClear(GL_COLOR_BUFFER_BIT);
 
