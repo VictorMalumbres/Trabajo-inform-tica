@@ -5,59 +5,55 @@
 #include <cmath>
 
 void Torre::dibuja() {
-    if (resaltado)glColor3f(1.0f, 1.0f, 0.0f); // Amarillo para resaltado
+    if (resaltado)
+        glColor3f(1.0f, 1.0f, 0.0f); // Amarillo para resaltado
 
-    if (getBando() == 0) 
-    {
-        // Dibujo del fondo con textura
-        glPushMatrix();  // Guardamos la matriz actual
+    glPushMatrix();
 
-        // Posicionamos la imagen centrada en la celda
-        glTranslated(getX() + 0.5f, getY() + 0.5f, 0);  // Centrado en la celda
+    glTranslated(getX() + 0.5f, getY() + 0.5f, 0);  // Centrado en la celda
 
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/torre_blanco.png").id);
-        // Dibujamos un cuadrado centrado con tamaño 0.6x0.6 (como el cubo anterior)
-        float size = 0.3f;  // Mitad del tamaño total (0.6 / 2)
-        glBegin(GL_QUADS);
-        colorR = 1.0f;
-        colorG = 1.0f;
-        colorB = 1.0f;  // blanco
-        glColor3f(colorR, colorG, colorB);  // blanco
-        glTexCoord2d(0, 1); glVertex3f(-size, -size, 0);  // esquina inferior izquierda
-        glTexCoord2d(1, 1); glVertex3f(size, -size, 0);  // esquina inferior derecha
-        glTexCoord2d(1, 0); glVertex3f(size, size, 0);  // esquina superior derecha
-        glTexCoord2d(0, 0); glVertex3f(-size, size, 0);  // esquina superior izquierda
-        glEnd();
-        glDisable(GL_TEXTURE_2D);
-        glPopMatrix();  // Restauramos la matriz original
+    GLuint texID;
+    float size;
+    if (getBando() == 0) {
+        texID = ETSIDI::getTexture("imagenes/TorreBlanco.png").id;
+        size = 0.3f;
     }
-    else 
-    {
-        // Dibujo del fondo con textura
-        glPushMatrix();  // Guardamos la matriz actual
-
-        // Posicionamos la imagen centrada en la celda
-        glTranslated(getX() + 0.5f, getY() + 0.5f, 0);  // Centrado en la celda
-
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/torre_negro.png").id);
-        // Dibujamos un cuadrado centrado con tamaño 0.6x0.6 (como el cubo anterior)
-        float size = 0.3f;  // Mitad del tamaño total (0.6 / 2)
-        glBegin(GL_QUADS);
-        colorR = 1.0f;
-        colorG = 1.0f;
-        colorB = 1.0f;  // blanco
-        glColor3f(colorR, colorG, colorB);  // blanco
-        glTexCoord2d(0, 1); glVertex3f(-size, -size, 0);  // esquina inferior izquierda
-        glTexCoord2d(1, 1); glVertex3f(size, -size, 0);  // esquina inferior derecha
-        glTexCoord2d(1, 0); glVertex3f(size, size, 0);  // esquina superior derecha
-        glTexCoord2d(0, 0); glVertex3f(-size, size, 0);  // esquina superior izquierda
-        glEnd();
-        glDisable(GL_TEXTURE_2D);
-        glPopMatrix();  // Restauramos la matriz original
+    else {
+        texID = ETSIDI::getTexture("imagenes/TorreNegro.png").id;
+        size = 0.45f;
     }
+
+    if (texID == 0) {
+        glPopMatrix();
+        return;  // No se pudo cargar textura
+    }
+
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);  // Activa blending para transparencia
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glBindTexture(GL_TEXTURE_2D, texID);
+
+    // Filtros lineales para suavizar la textura
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Usa color blanco para no modificar la textura
+    glColor3f(1.0f, 1.0f, 1.0f);
+
+    glBegin(GL_QUADS);
+    glTexCoord2d(0, 1); glVertex3f(-size, -size, 0);
+    glTexCoord2d(1, 1); glVertex3f(size, -size, 0);
+    glTexCoord2d(1, 0); glVertex3f(size, size, 0);
+    glTexCoord2d(0, 0); glVertex3f(-size, size, 0);
+    glEnd();
+
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
+
+    glPopMatrix();
 }
+
 
 
 bool Torre::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {

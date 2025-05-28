@@ -3,9 +3,9 @@
 #include "ETSIDI.h"
 #include "Tablero.h"
 #include <cmath>
-
 void Alfil::dibuja() {
-    if (resaltado)glColor3f(1.0f, 1.0f, 0.0f); // Amarillo para resaltado
+    if (resaltado)
+        glColor3f(1.0f, 1.0f, 0.0f); // Amarillo para resaltado
 
     if (getBando() == 0)
     {
@@ -16,19 +16,26 @@ void Alfil::dibuja() {
         glTranslated(getX() + 0.5f, getY() + 0.5f, 0);  // Centrado en la celda
 
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/alfil_blanco.png").id);
-        // Dibujamos un cuadrado centrado con tamaño 0.6x0.6 (como el cubo anterior)
+        glEnable(GL_BLEND);  // <-- Activa blending para transparencia
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  // <-- Función de mezcla correcta
+
+        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/AlfilBlanco.png").id);
+
+        // Filtros lineales para mejor calidad
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
         float size = 0.3f;  // Mitad del tamaño total (0.6 / 2)
+
         glBegin(GL_QUADS);
-        colorR = 1.0f;
-        colorG = 1.0f;
-        colorB = 1.0f;  // blanco
         glColor3f(colorR, colorG, colorB);  // blanco
-        glTexCoord2d(0, 1); glVertex3f(-size, -size, 0);  // esquina inferior izquierda
-        glTexCoord2d(1, 1); glVertex3f(size, -size, 0);  // esquina inferior derecha
-        glTexCoord2d(1, 0); glVertex3f(size, size, 0);  // esquina superior derecha
-        glTexCoord2d(0, 0); glVertex3f(-size, size, 0);  // esquina superior izquierda
+        glTexCoord2d(0, 1); glVertex3f(-size, -size, 0);
+        glTexCoord2d(1, 1); glVertex3f(size, -size, 0);
+        glTexCoord2d(1, 0); glVertex3f(size, size, 0);
+        glTexCoord2d(0, 0); glVertex3f(-size, size, 0);
         glEnd();
+
+        glDisable(GL_BLEND);  // <-- Desactiva blending
         glDisable(GL_TEXTURE_2D);
         glPopMatrix();  // Restauramos la matriz original
     }
@@ -41,23 +48,31 @@ void Alfil::dibuja() {
         glTranslated(getX() + 0.5f, getY() + 0.5f, 0);  // Centrado en la celda
 
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/alfil_negro.png").id);
-        // Dibujamos un cuadrado centrado con tamaño 0.6x0.6 (como el cubo anterior)
-        float size = 0.3f;  // Mitad del tamaño total (0.6 / 2)
+        glEnable(GL_BLEND);  // <-- Activa blending para transparencia
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  // <-- Función de mezcla correcta
+
+        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/AlfilNegro.png").id);
+
+        // Filtros lineales para mejor calidad
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        float size = 0.4f;  // Mitad del tamaño total (0.6 / 2)
+
         glBegin(GL_QUADS);
-        colorR = 1.0f;
-        colorG = 1.0f;
-        colorB = 1.0f; //negro
         glColor3f(colorR, colorG, colorB);  // negro
-        glTexCoord2d(0, 1); glVertex3f(-size, -size, 0);  // esquina inferior izquierda
-        glTexCoord2d(1, 1); glVertex3f(size, -size, 0);  // esquina inferior derecha
-        glTexCoord2d(1, 0); glVertex3f(size, size, 0);  // esquina superior derecha
-        glTexCoord2d(0, 0); glVertex3f(-size, size, 0);  // esquina superior izquierda
+        glTexCoord2d(0, 1); glVertex3f(-size, -size, 0);
+        glTexCoord2d(1, 1); glVertex3f(size, -size, 0);
+        glTexCoord2d(1, 0); glVertex3f(size, size, 0);
+        glTexCoord2d(0, 0); glVertex3f(-size, size, 0);
         glEnd();
+
+        glDisable(GL_BLEND);  // <-- Desactiva blending
         glDisable(GL_TEXTURE_2D);
         glPopMatrix();  // Restauramos la matriz original
     }
 }
+
 
 bool Alfil::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
     int origenX = getX();

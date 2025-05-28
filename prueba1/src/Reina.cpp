@@ -6,19 +6,13 @@
 
 void Reina::dibuja() {
     if (resaltado)
-        glColor3f(1.0f, 1.0f, 0.0f);
+        glColor3f(1, 1, 0);
 
     glPushMatrix();
-
     glTranslated(getX() + 0.5f, getY() + 0.5f, 0);
 
-    GLuint texID;
-    if (getBando() == 0) {
-        texID = ETSIDI::getTexture("imagenes/LucyWild.png").id;
-    }
-    else {
-        texID = ETSIDI::getTexture("imagenes/ReinaNegro.png").id;
-    }
+    GLuint texID = (getBando() == 0) ? ETSIDI::getTexture("imagenes/ReinaBlanca.png").id
+        : ETSIDI::getTexture("imagenes/ReinaNegro.png").id;
 
     if (texID == 0) {
         glPopMatrix();
@@ -31,13 +25,13 @@ void Reina::dibuja() {
 
     glBindTexture(GL_TEXTURE_2D, texID);
 
-    // Para mejor calidad, usa filtros lineales
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // Filtros sin suavizado para nitidez
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glColor3f(1.0f, 1.0f, 1.0f);
+    glColor3f(1, 1, 1);
 
-    float size = 0.3f;
+    float size = 0.4f;  // Ajusta según resolución imagen y espacio
     glBegin(GL_QUADS);
     glTexCoord2d(0, 1); glVertex3f(-size, -size, 0);
     glTexCoord2d(1, 1); glVertex3f(size, -size, 0);
@@ -50,6 +44,10 @@ void Reina::dibuja() {
 
     glPopMatrix();
 }
+
+
+
+
 
 
 bool Reina::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
