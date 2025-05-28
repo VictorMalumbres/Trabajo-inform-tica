@@ -819,7 +819,6 @@ void Mundo::mostrarConfirmacionSalir() {
     glEnd();
     renderizarTexto("NO", 0.18f, -0.22f, GLUT_BITMAP_HELVETICA_18);
     
-
     glutSwapBuffers();
 }
 
