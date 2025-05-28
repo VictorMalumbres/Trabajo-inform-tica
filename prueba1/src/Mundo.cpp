@@ -161,10 +161,11 @@ void Mundo::mostrarMenuEnVentana() {
 
     glVertex2f(-0.45f, 0.05f); glVertex2f(0.45f, 0.05f);
     glVertex2f(0.45f, -0.05f); glVertex2f(-0.45f, -0.05f);
-    glEnd();
 
-    // Cambiar color del texto a blanco
-    glColor3f(10.0f, 10.0f, 10.0f);
+    glColor3f(0.0f, 0.5f, 0.0f); // verde
+    glVertex2f(-0.45f, -0.25f); glVertex2f(0.45f, -0.25f);
+    glVertex2f(0.45f, -0.15f); glVertex2f(-0.45f, -0.15f);
+    glEnd();
 
     // Dibujar el título del menú
     renderizarTextoGrande("MENU DEL JUEGO", -0.45f, 0.8f, 0.0008f);
@@ -172,9 +173,9 @@ void Mundo::mostrarMenuEnVentana() {
     renderizarTexto("2. Jugar partida SILVERMAN 4X5", -0.4f, 0.38f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("3. Jugar partida DEMI", -0.4f, 0.18f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("4. Salir", -0.4f, -0.02f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("Seleccione una opcion con el raton...", -0.3f, -0.22f, GLUT_BITMAP_HELVETICA_12);
 
-    //Instrucciones de la música en el juego
-    renderizarTexto("Seleccione una opcion con el raton...", -0.4f, -0.2f, GLUT_BITMAP_HELVETICA_12);
+     //Instrucciones de la música en el juego
     renderizarTexto("Usa + o - para cambiar el volumen en el juego", 0.45f, -0.38f, GLUT_BITMAP_HELVETICA_10);
     renderizarTexto("Pulsa espacio para pausar el juego", 0.45f, -0.43f, GLUT_BITMAP_HELVETICA_10);
 
@@ -184,20 +185,14 @@ void Mundo::mostrarMenuEnVentana() {
 void Mundo::mostrarInstruccionesEnVentana() {
     glClear(GL_COLOR_BUFFER_BIT); // Limpiar la ventana
 
-    // Fondo con textura (igual que tu ejemplo)
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/instrucciones.png").id);
-
+    // Dibujar fondo general
+    glColor3f(0.1f, 0.1f, 0.1f); // Gris oscuro
     glBegin(GL_QUADS);
-    glTexCoord2f(0, 0); glVertex2f(-1.0f, -1.0f);
-    glTexCoord2f(1, 0); glVertex2f(1.0f, -1.0f);
-    glTexCoord2f(1, 1); glVertex2f(1.0f, 1.0f);
-    glTexCoord2f(0, 1); glVertex2f(-1.0f, 1.0f);
+    glVertex2f(-0.95f, 0.75f); glVertex2f(0.95f, 0.75f);
+    glVertex2f(0.95f, -0.4f); glVertex2f(-0.95f, -0.4f);
     glEnd();
 
-    glDisable(GL_TEXTURE_2D);
-
-    // Colores para los rectángulos de fondo más grandes para cada instrucción
+    // Dibujar rectángulos de fondo más grandes para cada instrucción
     glColor3f(0.2f, 0.2f, 0.6f); // Azul oscuro
     glBegin(GL_QUADS);
     // Instrucción 1
@@ -212,7 +207,6 @@ void Mundo::mostrarInstruccionesEnVentana() {
     glEnd();
 
     // Dibujar texto encima de los rectángulos
-    glColor3f(1.0f, 1.0f, 1.0f); // Blanco
     renderizarTexto("INSTRUCCIONES DEL JUEGO", -0.3f, 0.6f, GLUT_BITMAP_HELVETICA_18);
     renderizarTexto("1. Instrucciones modo DEMI.", -0.8f, 0.4f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("2. Instrucciones modo silverman.", -0.8f, 0.2f, GLUT_BITMAP_HELVETICA_12);
@@ -222,7 +216,6 @@ void Mundo::mostrarInstruccionesEnVentana() {
     glutSwapBuffers(); // Mostrar contenido en pantalla
     glutKeyboardFunc(manejarTeclado);
 }
-
 
 void manejarTeclado(unsigned char key, int x, int y) {
     if (mundo.getEstadoActual() == JUEGO) {
@@ -261,6 +254,7 @@ void manejarTeclado(unsigned char key, int x, int y) {
         return;
     }
 
+<<<<<<< HEAD
 
     if (juegoEnPausa) {  //Sin esto se podia pulsar en cualquier momento
         if (key == 'q' || key == 'Q') {
@@ -278,6 +272,8 @@ void manejarTeclado(unsigned char key, int x, int y) {
         }
     }
 
+=======
+>>>>>>> 082ad12d4b413389eb48ee3f1059ebc912e93b86
     else if (key == '-') {  //Bajar la musica en el juego
         if (mundo.getVolumen() > 0) {
             mundo.decrementoVolumen();
@@ -328,30 +324,25 @@ void Mundo::mostrarPausa() {
     glRasterPos2f(-0.8, 0.5f);
     for (char c : texto1) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
 
-    // Botón: Volver al menú
+    // Botón de volver al menú
     glColor3f(0.2f, 0.6f, 0.2f); // Verde
     glBegin(GL_QUADS);
     glVertex2f(-0.5f, 0.1f); glVertex2f(0.5f, 0.1f);
     glVertex2f(0.5f, -0.05f); glVertex2f(-0.5f, -0.05f);
-    glEnd();
-    glColor3f(1.0f, 1.0f, 1.0f);
-    renderizarTexto("Volver al menu", -0.15f, 0.02f, GLUT_BITMAP_HELVETICA_18);
 
-    // Botón: Salir del juego
+    // Botón de salir del juego
     glColor3f(0.6f, 0.2f, 0.2f); // Rojo
-    glBegin(GL_QUADS);
     glVertex2f(-0.5f, -0.15f); glVertex2f(0.5f, -0.15f);
     glVertex2f(0.5f, -0.3f); glVertex2f(-0.5f, -0.3f);
-    glEnd();
-    glColor3f(1.0f, 1.0f, 1.0f);
-    renderizarTexto("Salir del juego", -0.17f, -0.23f, GLUT_BITMAP_HELVETICA_18);
 
-    glColor3f(0.2f, 0.6f, 0.6f); // azul verdoso
-    glBegin(GL_QUADS);
+    // Botón de reiniciar partida
+    glColor3f(0.2f, 0.6f, 0.6f); // Azul verdoso
     glVertex2f(-0.5f, 0.35f); glVertex2f(0.5f, 0.35f);
     glVertex2f(0.5f, 0.20f); glVertex2f(-0.5f, 0.20f);
     glEnd();
-    glColor3f(1.0f, 1.0f, 1.0f);
+
+    renderizarTexto("Volver al menu", -0.15f, 0.02f, GLUT_BITMAP_HELVETICA_18);
+    renderizarTexto("Salir del juego", -0.17f, -0.23f, GLUT_BITMAP_HELVETICA_18);
     renderizarTexto("Reiniciar partida", -0.15f, 0.26f, GLUT_BITMAP_HELVETICA_18);
 
     glutSwapBuffers();
@@ -763,9 +754,6 @@ void Mundo::procesarClick(int x, int y) {
 
         return;
     }
-
-
-
 }
 
 void Mundo::mostrarConfirmacionMenu() {
@@ -779,7 +767,6 @@ void Mundo::mostrarConfirmacionMenu() {
     glEnd();
 
     // Mensaje
-    glColor3f(1.0f, 1.0f, 1.0f);
     renderizarTexto("¿Estas seguro de que quieres volver al menu?", -0.7f, 0.2f, GLUT_BITMAP_HELVETICA_18);
 
     // Botón Sí
@@ -788,7 +775,6 @@ void Mundo::mostrarConfirmacionMenu() {
     glVertex2f(-0.4f, -0.1f); glVertex2f(-0.1f, -0.1f);
     glVertex2f(-0.1f, -0.3f); glVertex2f(-0.4f, -0.3f);
     glEnd();
-    glColor3f(1.0f, 1.0f, 1.0f);
     renderizarTexto("SI", -0.32f, -0.22f, GLUT_BITMAP_HELVETICA_18);
 
     // Botón No
@@ -797,7 +783,6 @@ void Mundo::mostrarConfirmacionMenu() {
     glVertex2f(0.1f, -0.1f); glVertex2f(0.4f, -0.1f);
     glVertex2f(0.4f, -0.3f); glVertex2f(0.1f, -0.3f);
     glEnd();
-    glColor3f(1.0f, 1.0f, 1.0f);
     renderizarTexto("NO", 0.18f, -0.22f, GLUT_BITMAP_HELVETICA_18);
 
     glutSwapBuffers();
@@ -819,7 +804,6 @@ void Mundo::mostrarConfirmacionSalir() {
 
 
     // Mensaje
-    glColor3f(1.0f, 1.0f, 1.0f);
     renderizarTexto("¿Estas seguro de que quieres salir del juego?", -0.7f, 0.2f, GLUT_BITMAP_HELVETICA_18);
 
     // Botón Sí
@@ -828,7 +812,6 @@ void Mundo::mostrarConfirmacionSalir() {
     glVertex2f(-0.4f, -0.1f); glVertex2f(-0.1f, -0.1f);
     glVertex2f(-0.1f, -0.3f); glVertex2f(-0.4f, -0.3f);
     glEnd();
-    glColor3f(1.0f, 1.0f, 1.0f);
     renderizarTexto("SI", -0.32f, -0.22f, GLUT_BITMAP_HELVETICA_18);
 
     // Botón No
@@ -837,7 +820,6 @@ void Mundo::mostrarConfirmacionSalir() {
     glVertex2f(0.1f, -0.1f); glVertex2f(0.4f, -0.1f);
     glVertex2f(0.4f, -0.3f); glVertex2f(0.1f, -0.3f);
     glEnd();
-    glColor3f(1.0f, 1.0f, 1.0f);
     renderizarTexto("NO", 0.18f, -0.22f, GLUT_BITMAP_HELVETICA_18);
     
 
@@ -898,7 +880,6 @@ void Mundo::mostrarMenuVictoria() {
     glVertex2f(-0.4f, 0.1f); glVertex2f(0.4f, 0.1f);
     glVertex2f(0.4f, -0.05f); glVertex2f(-0.4f, -0.05f);
     glEnd();
-    glColor3f(1.0f, 1.0f, 1.0f);
     renderizarTexto("Volver a jugar", -0.15f, 0.02f, GLUT_BITMAP_HELVETICA_18);
 
     // Botón: Volver al menú
@@ -907,7 +888,6 @@ void Mundo::mostrarMenuVictoria() {
     glVertex2f(-0.4f, -0.15f); glVertex2f(0.4f, -0.15f);
     glVertex2f(0.4f, -0.3f); glVertex2f(-0.4f, -0.3f);
     glEnd();
-    glColor3f(1.0f, 1.0f, 1.0f);
     renderizarTexto("Volver al menu", -0.17f, -0.23f, GLUT_BITMAP_HELVETICA_18);
 
     glutSwapBuffers();
@@ -941,7 +921,6 @@ void Mundo::mostrarMenuEmpate() {  //Menu de empate, practicamente igual que el 
     glVertex2f(-0.4f, 0.1f); glVertex2f(0.4f, 0.1f);
     glVertex2f(0.4f, -0.05f); glVertex2f(-0.4f, -0.05f);
     glEnd();
-    glColor3f(1.0f, 1.0f, 1.0f);
     renderizarTexto("Volver a jugar", -0.15f, 0.02f, GLUT_BITMAP_HELVETICA_18);
 
     // Botón: Volver al menú
@@ -950,7 +929,6 @@ void Mundo::mostrarMenuEmpate() {  //Menu de empate, practicamente igual que el 
     glVertex2f(-0.4f, -0.15f); glVertex2f(0.4f, -0.15f);
     glVertex2f(0.4f, -0.3f); glVertex2f(-0.4f, -0.3f);
     glEnd();
-    glColor3f(1.0f, 1.0f, 1.0f);
     renderizarTexto("Volver al menu", -0.16f, -0.23f, GLUT_BITMAP_HELVETICA_18);
 
     glutSwapBuffers();
@@ -967,23 +945,58 @@ void Mundo::mostrarMenuCoronacion() {
 
     glClear(GL_COLOR_BUFFER_BIT);
 
+    // Fondo general del menú
     glColor3f(0.1f, 0.1f, 0.1f);
     glBegin(GL_QUADS);
     glVertex2f(-0.5f, 0.5f); glVertex2f(0.5f, 0.5f);
     glVertex2f(0.5f, -0.5f); glVertex2f(-0.5f, -0.5f);
     glEnd();
 
-    // Opciones según el modo de juego
     if (modoJuego == 1) { // Silverman
-        this->renderizarTexto("Elige pieza:", -0.1f, 0.3f, GLUT_BITMAP_HELVETICA_18);
-        this->renderizarTexto("1. Torre", -0.1f, 0.1f, GLUT_BITMAP_HELVETICA_18);
-        this->renderizarTexto("2. Reina", -0.1f, -0.1f, GLUT_BITMAP_HELVETICA_18);
+        renderizarTexto("Elige pieza:", -0.1f, 0.3f, GLUT_BITMAP_HELVETICA_18);
+
+        // Rectángulo para "1. Torre"
+        glColor3f(0.2f, 0.2f, 0.6f);
+        glBegin(GL_QUADS);
+        glVertex2f(-0.15f, 0.18f); glVertex2f(0.25f, 0.18f);
+        glVertex2f(0.25f, 0.06f); glVertex2f(-0.15f, 0.06f);
+        glEnd();
+        renderizarTexto("1. Torre", -0.1f, 0.1f, GLUT_BITMAP_HELVETICA_18);
+
+        // Rectángulo para "2. Reina"
+        glColor3f(0.2f, 0.2f, 0.6f);
+        glBegin(GL_QUADS);
+        glVertex2f(-0.15f, -0.02f); glVertex2f(0.25f, -0.02f);
+        glVertex2f(0.25f, -0.14f); glVertex2f(-0.15f, -0.14f);
+        glEnd();
+        renderizarTexto("2. Reina", -0.1f, -0.1f, GLUT_BITMAP_HELVETICA_18);
     }
     else { // Demi
-        this->renderizarTexto("Elige pieza:", -0.1f, 0.3f, GLUT_BITMAP_HELVETICA_18);
-        this->renderizarTexto("1. Alfil", -0.1f, 0.15f, GLUT_BITMAP_HELVETICA_18);
-        this->renderizarTexto("2. Caballo", -0.1f, 0.0f, GLUT_BITMAP_HELVETICA_18);
-        this->renderizarTexto("3. Torre", -0.1f, -0.15f, GLUT_BITMAP_HELVETICA_18);
+        renderizarTexto("Elige pieza:", -0.1f, 0.3f, GLUT_BITMAP_HELVETICA_18);
+
+        // Rectángulo para "1. Alfil"
+        glColor3f(0.2f, 0.2f, 0.6f);
+        glBegin(GL_QUADS);
+        glVertex2f(-0.15f, 0.23f); glVertex2f(0.25f, 0.23f);
+        glVertex2f(0.25f, 0.11f); glVertex2f(-0.15f, 0.11f);
+        glEnd();
+        renderizarTexto("1. Alfil", -0.1f, 0.15f, GLUT_BITMAP_HELVETICA_18);
+
+        // Rectángulo para "2. Caballo"
+        glColor3f(0.2f, 0.2f, 0.6f);
+        glBegin(GL_QUADS);
+        glVertex2f(-0.15f, 0.08f); glVertex2f(0.25f, 0.08f);
+        glVertex2f(0.25f, -0.04f); glVertex2f(-0.15f, -0.04f);
+        glEnd();
+        renderizarTexto("2. Caballo", -0.1f, 0.0f, GLUT_BITMAP_HELVETICA_18);
+
+        // Rectángulo para "3. Torre"
+        glColor3f(0.2f, 0.2f, 0.6f);
+        glBegin(GL_QUADS);
+        glVertex2f(-0.15f, -0.07f); glVertex2f(0.25f, -0.07f);
+        glVertex2f(0.25f, -0.19f); glVertex2f(-0.15f, -0.19f);
+        glEnd();
+        renderizarTexto("3. Torre", -0.1f, -0.15f, GLUT_BITMAP_HELVETICA_18);
     }
 
     glutSwapBuffers();
@@ -1003,7 +1016,7 @@ void Mundo::mostrarMenuOponente() {
 
     // Fondo con textura
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/silvermanydemi.png").id);
+    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/fondo_menu.png").id);
 
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0); glVertex2f(-1.0f, -1.0f);
@@ -1028,9 +1041,6 @@ void Mundo::mostrarMenuOponente() {
     glVertex2f(-0.45f, 0.05f); glVertex2f(0.45f, 0.05f);
     glVertex2f(0.45f, -0.05f); glVertex2f(-0.45f, -0.05f);
     glEnd();
-
-    // Cambiar color del texto a blanco
-    glColor3f(10.0f, 10.0f, 10.0f);
 
     // Dibujar el título del menú
     renderizarTextoGrande("MODO DE JUEGO", -0.45f, 0.8f, 0.0008f);
