@@ -209,7 +209,7 @@ void Mundo::mostrarInstruccionesEnVentana() {
     // Dibujar texto encima de los rectángulos
     renderizarTexto("INSTRUCCIONES DEL JUEGO", -0.3f, 0.6f, GLUT_BITMAP_HELVETICA_18);
     renderizarTexto("1. Instrucciones modo DEMI.", -0.8f, 0.4f, GLUT_BITMAP_HELVETICA_12);
-    renderizarTexto("2. Instrucciones modo silverman.", -0.8f, 0.2f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("2. Instrucciones modo SILVERMAN.", -0.8f, 0.2f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("3. Movimiento estandar piezas.", -0.8f, 0.0f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("Presione la tecla esc para volver al menu...", -0.8f, -0.3f, GLUT_BITMAP_HELVETICA_12);
 
@@ -1066,7 +1066,7 @@ void Mundo::mostrarInstruccionesDemi() {
     glColor3f(1, 1, 1);
 
     // Título fijo
-    renderizarTextoGrande("DEMI", -0.15f, 0.75f, 0.001f);
+    renderizarTextoGrande("DEMI", -0.45f, 0.8f, 0.0008f);
 
     // Texto centrado horizontalmente justo debajo del título
     float x_text = -0.5f;  // Ajusta según convenga
@@ -1106,7 +1106,7 @@ void Mundo::mostrarInstruccionesSilverman() {
 
     glColor3f(1, 1, 1);
 
-    renderizarTextoGrande("SILVERMAN", -0.15f, 0.75f, 0.001f);
+    renderizarTextoGrande("SILVERMAN", -0.45f, 0.8f, 0.0008f);
 
     renderizarTexto("Juego de Ajedrez 4x5 con torres y reina.", -0.5f, 0.55f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("Te da la posibilidad de jugar con un amigo en el mismo ordenador.", -0.5f, 0.50f, GLUT_BITMAP_HELVETICA_12);
@@ -1139,7 +1139,7 @@ void Mundo::mostrarInstruccionesPiezas() {
 
     glColor3f(1, 1, 1);
 
-    renderizarTextoGrande("MOVIMIENTO DE PIEZAS ESTÁNDAR", -0.3f, 0.75f, 0.001f);
+    renderizarTextoGrande("MOVIMIENTO DE PIEZAS ESTÁNDAR", -0.9f, 0.8f, 0.0008f);
 
     renderizarTexto("Cada pieza se mueve según las reglas clásicas del ajedrez.", -0.5f, 0.55f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("- Peones avanzan hacia adelante una casilla, con captura diagonal.", -0.5f, 0.50f, GLUT_BITMAP_HELVETICA_12);
