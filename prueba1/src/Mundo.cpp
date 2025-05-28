@@ -171,16 +171,20 @@ void Mundo::mostrarMenuEnVentana() {
 void Mundo::mostrarInstruccionesEnVentana() {
     glClear(GL_COLOR_BUFFER_BIT); // Limpiar la ventana
 
-    // Dibujar fondo general
-    glColor3f(0.1f, 0.1f, 0.1f); // Gris oscuro
+    // Fondo con textura (igual que tu ejemplo)
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/instrucciones.png").id);
+
     glBegin(GL_QUADS);
-    glVertex2f(-0.95f, 0.75f);
-    glVertex2f(0.95f, 0.75f);
-    glVertex2f(0.95f, -0.4f);
-    glVertex2f(-0.95f, -0.4f);
+    glTexCoord2f(0, 0); glVertex2f(-1.0f, -1.0f);
+    glTexCoord2f(1, 0); glVertex2f(1.0f, -1.0f);
+    glTexCoord2f(1, 1); glVertex2f(1.0f, 1.0f);
+    glTexCoord2f(0, 1); glVertex2f(-1.0f, 1.0f);
     glEnd();
 
-    // Dibujar rectángulos de fondo más grandes para cada instrucción
+    glDisable(GL_TEXTURE_2D);
+
+    // Colores para los rectángulos de fondo más grandes para cada instrucción
     glColor3f(0.2f, 0.2f, 0.6f); // Azul oscuro
     glBegin(GL_QUADS);
     // Instrucción 1
@@ -205,6 +209,7 @@ void Mundo::mostrarInstruccionesEnVentana() {
     glutSwapBuffers(); // Mostrar contenido en pantalla
     glutKeyboardFunc(manejarTeclado);
 }
+
 
 void manejarTeclado(unsigned char key, int x, int y) {
     if (mundo.getEstadoActual() == JUEGO) {
