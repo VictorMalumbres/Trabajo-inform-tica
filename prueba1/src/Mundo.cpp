@@ -88,6 +88,19 @@ void Mundo::renderizarTextoGrande(const char* texto, float x, float y, float esc
 
     glPopMatrix();
 }
+/*void Mundo::renderizarTextoGrande(const char* texto, float x, float y, float escala) {
+    glPushMatrix();
+    glTranslatef(x, y, 0.0f);      // Mover el texto a la posición (x, y)
+    glScalef(escala, escala, 1.0f); // Escalar el texto
+    glLineWidth(2.0f);             // Grosor de las líneas del texto
+
+    for (const char* c = texto; *c != '\0'; ++c) {
+        glutStrokeCharacter(GLUT_STROKE_ROMAN, *c);
+    }
+
+    glPopMatrix();
+}*/
+
 
 void Mundo::mostrarMenuEnVentana() {
     // Restablecer matrices de proyección y modelado
@@ -105,7 +118,7 @@ void Mundo::mostrarMenuEnVentana() {
 
     // Fondo con textura
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/fondo_menu.png").id);
+    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/MENU.png").id);
 
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0); glVertex2f(-1.0f, -1.0f);
