@@ -149,8 +149,7 @@ void Mundo::mostrarMenuEnVentana() {
     glVertex2f(-0.45f, 0.05f); glVertex2f(0.45f, 0.05f);
     glVertex2f(0.45f, -0.05f); glVertex2f(-0.45f, -0.05f);
 
-    glColor3f(0.0f, 0.5f, 0.0f); // RGB
-
+    glColor3f(0.0f, 0.5f, 0.0f); // verde
     glVertex2f(-0.45f, -0.25f); glVertex2f(0.45f, -0.25f);
     glVertex2f(0.45f, -0.15f); glVertex2f(-0.45f, -0.15f);
     glEnd();
@@ -284,10 +283,12 @@ void Mundo::mostrarPausa() {
     glVertex2f(0.5f, -0.05f); glVertex2f(-0.5f, -0.05f);
 
     // Botón de salir del juego
+    glColor3f(0.6f, 0.2f, 0.2f); // Rojo
     glVertex2f(-0.5f, -0.15f); glVertex2f(0.5f, -0.15f);
     glVertex2f(0.5f, -0.3f); glVertex2f(-0.5f, -0.3f);
 
     // Botón de reiniciar partida
+    glColor3f(0.2f, 0.6f, 0.6f); // Azul verdoso
     glVertex2f(-0.5f, 0.35f); glVertex2f(0.5f, 0.35f);
     glVertex2f(0.5f, 0.20f); glVertex2f(-0.5f, 0.20f);
     glEnd();
@@ -682,9 +683,6 @@ void Mundo::procesarClick(int x, int y) {
 
         return;
     }
-
-
-
 }
 
 void Mundo::mostrarConfirmacionMenu() {
