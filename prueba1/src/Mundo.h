@@ -13,8 +13,6 @@ enum EstadoMundo {
     OPONENTE
 };
 
-
-
 class Mundo {
 private:
     Tablero tablero;

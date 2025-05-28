@@ -19,6 +19,4 @@ public:
     Pieza* clonar() const {
         return new Reina(*this);  // usa el constructor copia predeterminado
     }
-
-
 };
