@@ -15,7 +15,7 @@ void Peon::dibuja() {
         glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/minions.png").id);
     }
     else {
-        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/peon_negro.png").id);
+        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/minionmor.png").id);
     }
 
     glColor3f(1.0f, 1.0f, 1.0f);  // Color blanco para no modificar la textura

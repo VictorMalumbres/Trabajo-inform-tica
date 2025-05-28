@@ -17,23 +17,7 @@ void IA::jugar(Tablero& tablero) {
         auto movs = p->movimientosPosibles(tablero);
         for (auto& mv : movs) {
             int col = mv.first, fil = mv.second;
-            Pieza* objetivo = tablero.obtenerPieza(col, fil);
-            int score = 0;
-            if (objetivo && objetivo->getBando() != bando_) {
-                score += objetivo->getValor() * 10; // Prioriza capturas valiosas
-            }
-            // Penaliza si la pieza quedaría amenazada tras mover
-            if (IA::estaAmenazada(tablero, col, fil, bando_)) {
-                score -= p->getValor();
-            }
-
-            
-            // score -= estaAmenazada(tablero, p, col, fil) ? p->getValor() : 0;
-
-            // Bonus por mover piezas valiosas fuera de peligro (opcional)
-            // if (p->getValor() >= 5 && estaAmenazada(tablero, p, p->getX(), p->getY()))
-            //     score += 5;
-
+            int score = IA::evaluarJugada(tablero, p, col, fil, bando_);
             if (p->mueve(tablero, col, fil))
                 jugadas.push_back(Movimiento{ p, col, fil }), puntuaciones.push_back(score);
         }
@@ -62,4 +46,35 @@ bool IA::estaAmenazada( Tablero& tablero, int col, int fil, int bandoPropio) {
         }
     }
     return false;
+}
+
+int IA::evaluarJugada(Tablero& tablero, Pieza* pieza, int col, int fil, int bando) {
+    int score = 0;
+    Pieza* objetivo = tablero.obtenerPieza(col, fil);
+
+    // Captura valiosa
+    if (objetivo && objetivo->getBando() != bando) {
+        score += objetivo->getValor() * 10;
+    }
+
+    // Penaliza si la pieza queda amenazada tras mover
+    if (IA::estaAmenazada(tablero, col, fil, bando)) {
+        score -= pieza->getValor();
+    }
+
+    // Bonifica si tras mover, una pieza rival queda amenazada
+    for (Pieza* rival : tablero.getPiezas()) {
+        if (rival->getBando() != bando && IA::estaAmenazada(tablero, rival->getX(), rival->getY(), bando)) {
+            score += rival->getValor();
+        }
+    }
+
+    // Bonifica si la jugada protege una pieza propia valiosa
+    // (Por ejemplo, si tras mover, una pieza propia amenazada ya no lo está)
+    // Esto requiere simular el movimiento y comprobar amenazas antes y después
+
+    // Penaliza si deja al rey propio en jaque
+    // (Requiere simular el movimiento y comprobar si el rey está en jaque)
+
+    return score;
 }
