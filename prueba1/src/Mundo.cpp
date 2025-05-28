@@ -66,10 +66,8 @@ void Mundo::dibuja() {
         break;
     case OPONENTE:
         mostrarMenuOponente();
-
     }
 }
-
 
 void Mundo::renderizarTexto(const std::string& texto, float x, float y, void* fuente) {
     glColor3f(1.0f, 1.0f, 1.0f); // Color del texto (blanco)
@@ -99,23 +97,8 @@ void Mundo::renderizarTextoGrande(const char* texto, float x, float y, float esc
             glPopMatrix();
         }
     }
-
     glPopMatrix();
 }
-
-/*void Mundo::renderizarTextoGrande(const char* texto, float x, float y, float escala) {
-    glPushMatrix();
-    glTranslatef(x, y, 0.0f);      // Mover el texto a la posición (x, y)
-    glScalef(escala, escala, 1.0f); // Escalar el texto
-    glLineWidth(2.0f);             // Grosor de las líneas del texto
-
-    for (const char* c = texto; *c != '\0'; ++c) {
-        glutStrokeCharacter(GLUT_STROKE_ROMAN, *c);
-    }
-
-    glPopMatrix();
-}*/
-
 
 void Mundo::mostrarMenuEnVentana() {
     // Restablecer matrices de proyección y modelado
@@ -129,7 +112,6 @@ void Mundo::mostrarMenuEnVentana() {
     tablero.reiniciarTablero();
     tablero2.reiniciarTablero();
     glClear(GL_COLOR_BUFFER_BIT); // Limpiar la ventana
-   
 
     // Fondo con textura
     glEnable(GL_TEXTURE_2D);
@@ -177,6 +159,8 @@ void Mundo::mostrarMenuEnVentana() {
     renderizarTexto("2. Jugar partida SILVERMAN 4X5", -0.4f, 0.38f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("3. Jugar partida DEMI", -0.4f, 0.18f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("4. Salir", -0.4f, -0.02f, GLUT_BITMAP_HELVETICA_12);
+
+    //Instrucciones de la música en el juego
     renderizarTexto("Seleccione una opcion con el raton...", -0.4f, -0.2f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("Usa + o - para cambiar el volumen en el juego", 0.45f, -0.38f, GLUT_BITMAP_HELVETICA_10);
     renderizarTexto("Pulsa espacio para pausar el juego", 0.45f, -0.43f, GLUT_BITMAP_HELVETICA_10);
@@ -187,7 +171,7 @@ void Mundo::mostrarMenuEnVentana() {
 void Mundo::mostrarInstruccionesEnVentana() {
     glClear(GL_COLOR_BUFFER_BIT); // Limpiar la ventana
 
-    // Dibujar fondo general (opcional)
+    // Dibujar fondo general
     glColor3f(0.1f, 0.1f, 0.1f); // Gris oscuro
     glBegin(GL_QUADS);
     glVertex2f(-0.95f, 0.75f);
@@ -231,7 +215,7 @@ void manejarTeclado(unsigned char key, int x, int y) {
                 std::cout << "Juego pausado" << std::endl;
             }
             else {
-                ETSIDI::playMusica(mundo.musicaActual.c_str(), true); // <--- CORREGIDO
+                ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
                 std::cout << "Juego reanudado" << std::endl;
             }
             glutPostRedisplay();
@@ -246,7 +230,7 @@ void manejarTeclado(unsigned char key, int x, int y) {
 
     if (juegoEnPausa) {  //Sin esto se podia pulsar en cualquier momento
         if (key == 'q' || key == 'Q') {
-            juegoEnPausa = false; // <-- Añade esta línea
+            juegoEnPausa = false;
             mundo.setEstadoActual(CONFIRMAR_SALIR);
             glutPostRedisplay();
         }
@@ -254,7 +238,6 @@ void manejarTeclado(unsigned char key, int x, int y) {
         else if (key == 'm' || key == 'M') {
             juegoEnPausa = false;
             mundo.setEstadoActual(CONFIRMAR_MENU);
-            // Si quieres que la música del menú suene inmediatamente:
             mundo.musicaActual = "sonidos/elevador.mp3";
             ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
             glutPostRedisplay();
@@ -274,23 +257,19 @@ void manejarTeclado(unsigned char key, int x, int y) {
             mundo.volumenMusica();
         }
     }
-
-
-
-
 }
 
 void Mundo::volumenMusica() {
     if (mundo.volumen == 3) {
-        mundo.musicaActual = "sonidos/musica_juego1.mp3";
+        mundo.musicaActual = "sonidos/musica_clasica.mp3";
         ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
     }
     if (mundo.volumen == 2) {
-        mundo.musicaActual = "sonidos/musica_juego1 (-50%).mp3";
+        mundo.musicaActual = "sonidos/musica_clasica.mp3";
         ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
     }
     else if (mundo.volumen == 1) {
-        mundo.musicaActual = "sonidos/musica_juego1 (-85%).mp3";
+        mundo.musicaActual = "sonidos/musica_clasica.mp3";
         ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
     }
     else if (mundo.volumen == 0) {
@@ -302,6 +281,48 @@ void Mundo::manejarTeclado(unsigned char key, int x, int y) {
     ::manejarTeclado(key, x, y);
 }
 
+void Mundo::mostrarPausa() {
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glColor3f(1.0f, 1.0f, 0.0f);
+    std::string texto1 = "JUEGO EN PAUSA";
+    glRasterPos2f(-0.8, 0.5f);
+    for (char c : texto1) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+
+    // Botón: Volver al menú
+    glColor3f(0.2f, 0.6f, 0.2f); // Verde
+    glBegin(GL_QUADS);
+    glVertex2f(-0.5f, 0.1f); glVertex2f(0.5f, 0.1f);
+    glVertex2f(0.5f, -0.05f); glVertex2f(-0.5f, -0.05f);
+    glEnd();
+    glColor3f(1.0f, 1.0f, 1.0f);
+    renderizarTexto("Volver al menu", -0.15f, 0.02f, GLUT_BITMAP_HELVETICA_18);
+
+    // Botón: Salir del juego
+    glColor3f(0.6f, 0.2f, 0.2f); // Rojo
+    glBegin(GL_QUADS);
+    glVertex2f(-0.5f, -0.15f); glVertex2f(0.5f, -0.15f);
+    glVertex2f(0.5f, -0.3f); glVertex2f(-0.5f, -0.3f);
+    glEnd();
+    glColor3f(1.0f, 1.0f, 1.0f);
+    renderizarTexto("Salir del juego", -0.17f, -0.23f, GLUT_BITMAP_HELVETICA_18);
+
+    glColor3f(0.2f, 0.6f, 0.6f); // azul verdoso
+    glBegin(GL_QUADS);
+    glVertex2f(-0.5f, 0.35f); glVertex2f(0.5f, 0.35f);
+    glVertex2f(0.5f, 0.20f); glVertex2f(-0.5f, 0.20f);
+    glEnd();
+    glColor3f(1.0f, 1.0f, 1.0f);
+    renderizarTexto("Reiniciar partida", -0.15f, 0.26f, GLUT_BITMAP_HELVETICA_18);
+
+    glutSwapBuffers();
+}
+
 void Mundo::iniciarJuego() {
     mundo.volumenMusica();
     musica = false;
@@ -309,7 +330,7 @@ void Mundo::iniciarJuego() {
     mundo.enJuego = true;
     estadoActual = JUEGO;
     inicializaModo1();
-    glutKeyboardFunc(manejarTeclado);
+    //glutKeyboardFunc(manejarTeclado);
     glutDisplayFunc([]() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -318,47 +339,8 @@ void Mundo::iniciarJuego() {
         }
         else {
             ETSIDI::stopMusica();
-            glMatrixMode(GL_PROJECTION);
-            glLoadIdentity();
-            gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
-
-            glMatrixMode(GL_MODELVIEW);
-            glLoadIdentity();
-
-            glColor3f(1.0f, 1.0f, 0.0f);
-            std::string texto1 = "JUEGO EN PAUSA";
-            glRasterPos2f(-0.8, 0.5f);
-            for (char c : texto1) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
-
-            // Botón: Volver al menú
-            glColor3f(0.2f, 0.6f, 0.2f); // Verde
-            glBegin(GL_QUADS);
-            glVertex2f(-0.5f, 0.1f); glVertex2f(0.5f, 0.1f);
-            glVertex2f(0.5f, -0.05f); glVertex2f(-0.5f, -0.05f);
-            glEnd();
-            glColor3f(1.0f, 1.0f, 1.0f);
-            mundo.renderizarTexto("Volver al menu", -0.15f, 0.02f, GLUT_BITMAP_HELVETICA_18);
-
-            // Botón: Salir del juego
-            glColor3f(0.6f, 0.2f, 0.2f); // Rojo
-            glBegin(GL_QUADS);
-            glVertex2f(-0.5f, -0.15f); glVertex2f(0.5f, -0.15f);
-            glVertex2f(0.5f, -0.3f); glVertex2f(-0.5f, -0.3f);
-            glEnd();
-            glColor3f(1.0f, 1.0f, 1.0f);
-            mundo.renderizarTexto("Salir del juego", -0.17f, -0.23f, GLUT_BITMAP_HELVETICA_18);
-
-            glColor3f(0.2f, 0.6f, 0.6f); // azul verdoso
-            glBegin(GL_QUADS);
-            glVertex2f(-0.5f, 0.35f); glVertex2f(0.5f, 0.35f);
-            glVertex2f(0.5f, 0.20f); glVertex2f(-0.5f, 0.20f);
-            glEnd();
-            glColor3f(1.0f, 1.0f, 1.0f);
-            mundo.renderizarTexto("Reiniciar partida", -0.15f, 0.26f, GLUT_BITMAP_HELVETICA_18);
-
-            glutSwapBuffers();
+            mundo.mostrarPausa();
         }
-
     });
     glutIdleFunc([]() {glutPostRedisplay();});
 }
@@ -379,45 +361,7 @@ void Mundo::iniciar2dojuego() {
         }
         else {
             ETSIDI::stopMusica();
-            glMatrixMode(GL_PROJECTION);
-            glLoadIdentity();
-            gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
-
-            glMatrixMode(GL_MODELVIEW);
-            glLoadIdentity();
-
-            glColor3f(1.0f, 1.0f, 0.0f);
-            std::string texto1 = "JUEGO EN PAUSA";
-            glRasterPos2f(-0.8, 0.5f);
-            for (char c : texto1) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
-
-            // Botón: Volver al menú
-            glColor3f(0.2f, 0.6f, 0.2f); // Verde
-            glBegin(GL_QUADS);
-            glVertex2f(-0.5f, 0.1f); glVertex2f(0.5f, 0.1f);
-            glVertex2f(0.5f, -0.05f); glVertex2f(-0.5f, -0.05f);
-            glEnd();
-            glColor3f(1.0f, 1.0f, 1.0f);
-            mundo.renderizarTexto("Volver al menu", -0.15f, 0.02f, GLUT_BITMAP_HELVETICA_18);
-
-            // Botón: Salir del juego
-            glColor3f(0.6f, 0.2f, 0.2f); // Rojo
-            glBegin(GL_QUADS);
-            glVertex2f(-0.5f, -0.15f); glVertex2f(0.5f, -0.15f);
-            glVertex2f(0.5f, -0.3f); glVertex2f(-0.5f, -0.3f);
-            glEnd();
-            glColor3f(1.0f, 1.0f, 1.0f);
-            mundo.renderizarTexto("Salir del juego", -0.17f, -0.23f, GLUT_BITMAP_HELVETICA_18);
-
-            glColor3f(0.2f, 0.6f, 0.6f); // azul verdoso
-            glBegin(GL_QUADS);
-            glVertex2f(-0.5f, 0.35f); glVertex2f(0.5f, 0.35f);
-            glVertex2f(0.5f, 0.20f); glVertex2f(-0.5f, 0.20f);
-            glEnd();
-            glColor3f(1.0f, 1.0f, 1.0f);
-            mundo.renderizarTexto("Reiniciar partida", -0.15f, 0.26f, GLUT_BITMAP_HELVETICA_18);
-
-            glutSwapBuffers();
+            mundo.mostrarPausa();
         }
 
     });
@@ -501,7 +445,7 @@ void Mundo::procesarClick(int x, int y) {
                         tablero.colocarPieza(p, columna, fila);
                     }
                     else {
-                        std::cout << "Movimiento inválido" << std::endl;
+                        std::cout << "Movimiento invalido" << std::endl;
                     }
                 }
             }
@@ -801,6 +745,7 @@ void Mundo::mostrarConfirmacionMenu() {
 
     glutSwapBuffers();
 }
+
 void Mundo::mostrarConfirmacionSalir() {
     // Fondo con imagen de la librería
     glEnable(GL_TEXTURE_2D);
@@ -841,6 +786,7 @@ void Mundo::mostrarConfirmacionSalir() {
 
     glutSwapBuffers();
 }
+
 void Mundo::setEstadoActual(EstadoMundo estado) {
     estadoActual = estado;
     if (estado == MENU) {
@@ -866,6 +812,7 @@ void Mundo::inicializarTableros() {
     tablero.setMundo(this);
     tablero2.setMundo(this);
 }
+
 void Mundo::mostrarMenuVictoria() {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -908,6 +855,7 @@ void Mundo::mostrarMenuVictoria() {
 
     glutSwapBuffers();
 }
+
 void Mundo::mostrarMenuEmpate() {  //Menu de empate, practicamente igual que el de victoria
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -950,6 +898,7 @@ void Mundo::mostrarMenuEmpate() {  //Menu de empate, practicamente igual que el 
 
     glutSwapBuffers();
 }
+
 void Mundo::mostrarMenuCoronacion() {
     // Configura la proyección y el modelo de vista
     glMatrixMode(GL_PROJECTION);

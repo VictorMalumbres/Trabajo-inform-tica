@@ -45,9 +45,7 @@ public:
     void setEstadoActual(EstadoMundo estado); // Declaración sin cuerpo
 
     void mostrarConfirmacionSalir();
-
     void mostrarMenuEnVentana(); //menú texto
-    //void manejarEntradaMenu(unsigned char key, int x, int y); //menú switch
     void mostrarInstruccionesEnVentana(); //instrucciones juego
 
     void iniciarJuego(); //silverman
@@ -61,11 +59,11 @@ public:
     void procesarClick(int x, int y);  //Procesar el movimiento de raton
     bool estaEnMenu() const;
     void mostrarConfirmacionMenu();
+
     EstadoMundo getEstadoActual() const { return estadoActual; }
 
     void volverAlMenu();
     void inicializarTableros();
-
 
     // ** Declaración de la función manejarTeclado **
     static void manejarTeclado(unsigned char key, int x, int y);

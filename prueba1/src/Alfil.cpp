@@ -4,8 +4,7 @@
 #include "Tablero.h"
 #include <cmath>
 void Alfil::dibuja() {
-    if (resaltado)
-        glColor3f(1.0f, 1.0f, 0.0f); // Amarillo para resaltado
+    if (resaltado);
 
     if (getBando() == 0)
     {

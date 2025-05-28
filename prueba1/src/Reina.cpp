@@ -5,8 +5,7 @@
 #include <cmath>
 
 void Reina::dibuja() {
-    if (resaltado)
-        glColor3f(1, 1, 0);
+    if (resaltado);
 
     glPushMatrix();
     glTranslated(getX() + 0.5f, getY() + 0.5f, 0);
