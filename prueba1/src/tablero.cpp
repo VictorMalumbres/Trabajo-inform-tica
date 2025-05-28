@@ -481,6 +481,12 @@ void Tablero::setSeleccion(int x, int y) {
         auto movimientos = pieza->movimientosPosibles(*this);
 
         for (auto& m : movimientos) {
+
+            // Validar movimiento con mueve() para asegurarnos que es legal
+            if (!pieza->mueve(*this, m.first, m.second)) {
+                continue;  // No añadir movimientos inválidos
+            }
+
             std::unique_ptr<Tablero> copia(this->clonar()); // clona el tablero
 
             Pieza* p = copia->obtenerPieza(x, y);
