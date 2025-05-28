@@ -35,8 +35,11 @@ void Rey::dibuja() {
 
     glBindTexture(GL_TEXTURE_2D, texID);
 
-    // Filtros lineales sin mipmaps (para evitar el error y suavizar la textura)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    // Si tu entorno soporta mipmaps, descomenta la siguiente línea:
+    // glGenerateMipmap(GL_TEXTURE_2D);
+
+    // Configura los filtros para mejor calidad
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // o GL_LINEAR_MIPMAP_LINEAR si usas mipmaps
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     glColor3f(1.0f, 1.0f, 1.0f); // Color blanco
