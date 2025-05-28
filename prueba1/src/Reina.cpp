@@ -5,59 +5,52 @@
 #include <cmath>
 
 void Reina::dibuja() {
-    if (resaltado)glColor3f(1.0f, 1.0f, 0.0f); // Amarillo para resaltado
+    if (resaltado)
+        glColor3f(1.0f, 1.0f, 0.0f);
 
-    if (getBando() == 0)
-    {
-        // Dibujo del fondo con textura
-        glPushMatrix();  // Guardamos la matriz actual
+    glPushMatrix();
 
-        // Posicionamos la imagen centrada en la celda
-        glTranslated(getX() + 0.5f, getY() + 0.5f, 0);  // Centrado en la celda
+    glTranslated(getX() + 0.5f, getY() + 0.5f, 0);
 
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/reina_blanco.png").id);
-        // Dibujamos un cuadrado centrado con tamaño 0.6x0.6 (como el cubo anterior)
-        float size = 0.3f;  // Mitad del tamaño total (0.6 / 2)
-        glBegin(GL_QUADS);
-        colorR = 1.0f;
-        colorG = 1.0f;
-        colorB = 1.0f;  // blanco
-        glColor3f(colorR, colorG, colorB);  // blanco
-        glTexCoord2d(0, 1); glVertex3f(-size, -size, 0);  // esquina inferior izquierda
-        glTexCoord2d(1, 1); glVertex3f(size, -size, 0);  // esquina inferior derecha
-        glTexCoord2d(1, 0); glVertex3f(size, size, 0);  // esquina superior derecha
-        glTexCoord2d(0, 0); glVertex3f(-size, size, 0);  // esquina superior izquierda
-        glEnd();
-        glDisable(GL_TEXTURE_2D);
-        glPopMatrix();  // Restauramos la matriz original
+    GLuint texID;
+    if (getBando() == 0) {
+        texID = ETSIDI::getTexture("imagenes/LucyWild.png").id;
     }
-    else
-    {
-        // Dibujo del fondo con textura
-        glPushMatrix();  // Guardamos la matriz actual
-
-        // Posicionamos la imagen centrada en la celda
-        glTranslated(getX() + 0.5f, getY() + 0.5f, 0);  // Centrado en la celda
-
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/reina_negro.png").id);
-        // Dibujamos un cuadrado centrado con tamaño 0.6x0.6 (como el cubo anterior)
-        float size = 0.3f;  // Mitad del tamaño total (0.6 / 2)
-        glBegin(GL_QUADS);
-        colorR = 1.0f;
-        colorG = 1.0f;
-        colorB = 1.0f; //negro
-        glColor3f(colorR, colorG, colorB);  // negro
-        glTexCoord2d(0, 1); glVertex3f(-size, -size, 0);  // esquina inferior izquierda
-        glTexCoord2d(1, 1); glVertex3f(size, -size, 0);  // esquina inferior derecha
-        glTexCoord2d(1, 0); glVertex3f(size, size, 0);  // esquina superior derecha
-        glTexCoord2d(0, 0); glVertex3f(-size, size, 0);  // esquina superior izquierda
-        glEnd();
-        glDisable(GL_TEXTURE_2D);
-        glPopMatrix();  // Restauramos la matriz original
+    else {
+        texID = ETSIDI::getTexture("imagenes/ReinaNegro.png").id;
     }
+
+    if (texID == 0) {
+        glPopMatrix();
+        return;
+    }
+
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glBindTexture(GL_TEXTURE_2D, texID);
+
+    // Para mejor calidad, usa filtros lineales
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glColor3f(1.0f, 1.0f, 1.0f);
+
+    float size = 0.3f;
+    glBegin(GL_QUADS);
+    glTexCoord2d(0, 1); glVertex3f(-size, -size, 0);
+    glTexCoord2d(1, 1); glVertex3f(size, -size, 0);
+    glTexCoord2d(1, 0); glVertex3f(size, size, 0);
+    glTexCoord2d(0, 0); glVertex3f(-size, size, 0);
+    glEnd();
+
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
+
+    glPopMatrix();
 }
+
 
 bool Reina::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
     int origenX = getX();
