@@ -4,8 +4,7 @@
 #include "Tablero.h"
 
 void Caballo::dibuja() {
-    if (resaltado)
-        glColor3f(1.0f, 1.0f, 0.0f); // Amarillo para resaltado
+    if (resaltado);
 
     glPushMatrix();
     glTranslated(getX() + 0.5f, getY() + 0.5f, 0);  // Centrado en la celda

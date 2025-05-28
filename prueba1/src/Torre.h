@@ -1,7 +1,6 @@
 #pragma once
 #include "Pieza.h"
 
-
 class Torre : public Pieza {
 public:
     Torre(int x, int y, int bando)
@@ -21,6 +20,5 @@ public:
     Pieza* clonar() const {
         return new Torre(*this);  // usa el constructor copia predeterminado
     }
-
 
 };

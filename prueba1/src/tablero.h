@@ -19,8 +19,6 @@ private:
     int seleccionY = -1; // Fila seleccionada, -1 si ninguna
     int numFilas;
     int numColumnas;
-    //int filas;
-    //int columnas;
     int turno; // 0 = blanco, 1 = negro
     Rey* reyBlanco;
     Rey* reyNegro;
@@ -30,13 +28,10 @@ private:
     int turnoPeonDoble = -1;    // qué bando movió ese peón (0 o 1)
 
     int contadorMovimiento = 0;  //Contar movimientos realizados sin comer piezas (para las tablas)
-   
-    //void renderizarTexto(const std::string& texto, float x, float y, void* fuente);
+
 public:
     Tablero();
-    //void mostrarMenuEnVentana(); //menú texto
-    //void manejarEntradaMenu(unsigned char key, int x, int y); //menú switch
-    //void mostrarInstruccionesEnVentana(); //instrucciones juego
+
     void iniciarPartida(int modoJuego); //correr el juego
 
     int getNumFilas() const;
@@ -44,13 +39,6 @@ public:
 
     void cambiarTurno() { turno = 1 - turno; }
 
- 
-
-    //void iniciarJuego(); //silverman
-    //void iniciar2dojuego(); //demi
-    //void cerrarAplicacion();
-    //void mostrarPausa();
-   
     void dibuja();
     void dibuja2();
     void inicializaSilverman();
@@ -60,9 +48,6 @@ public:
     void colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool simular = false); //simular para evitar overflow en tablas
     void anadirPieza(Pieza* pieza);  // Para inicializar el tablero
 
-    //void setSeleccion(int x, int y) { seleccionX = x; seleccionY = y; }
-    //void limpiarSeleccion() { seleccionX = -1; seleccionY = -1; }
-
     int getSeleccionX() const { return seleccionX; }
     int getSeleccionY() const { return seleccionY; }
 
@@ -71,9 +56,7 @@ public:
 
     void reiniciarTablero();
 
-
-	std::vector<Pieza*>& getPiezas() { return piezas; }
-    //const std::vector<Pieza*>& getPiezas() const;
+    std::vector<Pieza*>& getPiezas() { return piezas; }
 
     void setSeleccion(int x, int y);
 

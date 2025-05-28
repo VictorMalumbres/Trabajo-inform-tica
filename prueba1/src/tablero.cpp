@@ -3,9 +3,6 @@
 #include <iostream>
 #include <string>
 #include "Mundo.h"
-//#pragma warning(disable : 4996) //deshabilita el error por unsafe 
-//Mundo mundo;
-
 
 Tablero::Tablero() {
     // Constructor de Tablero, inicializa el vector de piezas
@@ -19,7 +16,6 @@ void Tablero::iniciarPartida(int modoJuego) {
     else if (modoJuego == 2) {
         inicializaDemi();
     }
-    //glutDisplayFunc([]() { mundo.dibuja(); });
     glutPostRedisplay();
 }
 
@@ -59,7 +55,6 @@ void Tablero::dibuja() {
                 glColor3f(1.0f, 0.4f, 0.7f); // Rosa claro
             }
 
-
             glBegin(GL_QUADS);
             glVertex3f(j * casillaSizeX, i * casillaSizeY, 0.0f);
             glVertex3f((j + 1) * casillaSizeX, i * casillaSizeY, 0.0f);
@@ -81,9 +76,6 @@ void Tablero::dibuja() {
         glVertex3f(col * casillaSizeX, (fil + 1) * casillaSizeY, 0.2f);
         glEnd();
     }
-
-
-
 
     // 2. Dibuja las casillas resaltadas en rojo (AQUÍ VA EL CÓDIGO NUEVO)
     for (const auto& pos : casillasResaltadas) {
@@ -178,7 +170,6 @@ void Tablero::dibuja2() {
     }
 }
 
-
 void Tablero::inicializaSilverman() {
     piezas.clear();
     numFilas = 5;
@@ -190,7 +181,6 @@ void Tablero::inicializaSilverman() {
 
     piezas.push_back(new Torre(0, 0, 0));
     piezas.push_back(new Reina(1, 0,0));
-    //piezas.push_back(new Rey(2, 0, 0));
     piezas.push_back(new Torre(3, 0, 0));
 
     piezas.push_back(new Peon(0, 1, 0));
@@ -204,7 +194,6 @@ void Tablero::inicializaSilverman() {
 
     piezas.push_back(new Torre(0, 4, 1));
     piezas.push_back(new Reina(1, 4, 1));
-    //piezas.push_back(new Rey(2, 4, 1));
     piezas.push_back(new Torre(3, 4, 1));
 
     piezas.push_back(new Peon(0, 3, 1));
@@ -224,7 +213,6 @@ void Tablero::inicializaDemi() {
     piezas.push_back(reyBlanco);
 
     piezas.push_back(new Torre(3, 0, 0));
-    //piezas.push_back(new Rey(0, 0,  0));
     piezas.push_back(new Caballo(2, 0, 0));
     piezas.push_back(new Alfil(1, 0, 0));      // Alfil blanco
 
@@ -238,10 +226,9 @@ void Tablero::inicializaDemi() {
     piezas.push_back(reyNegro);
 
     piezas.push_back(new Torre(3, 7, 1));
-    //piezas.push_back(new Rey(0, 7, 1));
     piezas.push_back(new Caballo(2, 7, 1));
-
     piezas.push_back(new Alfil(1, 7, 1));      // Alfil negro
+
     piezas.push_back(new Peon(0, 6, 1));    
     piezas.push_back(new Peon(1, 6, 1));    
     piezas.push_back(new Peon(2, 6, 1));
@@ -264,7 +251,6 @@ bool Tablero::esCapturaAlPaso(int col, int fila, int bando) const {
         col == ultimoPeonDobleX &&
         fila == ultimoPeonDobleY);
 }
-
 
 void Tablero::actualizarEstadoJaque() {
     for (Pieza* p : piezas) {
@@ -302,9 +288,6 @@ bool Tablero::estaEnJaque(int bando) const {
     }
     return false;
 }
-
-
-
 
 void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool simular) {
     // Comprobar que es el turno de la pieza
@@ -629,6 +612,3 @@ bool Tablero::materialInsuficiente() const {
         };
     return escaso(blancas) && escaso(negras);
 }
-/*const std::vector<Pieza*>& Tablero::getPiezas() const {
-    return piezas;
-}*/

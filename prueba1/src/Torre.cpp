@@ -5,8 +5,7 @@
 #include <cmath>
 
 void Torre::dibuja() {
-    if (resaltado)
-        glColor3f(1.0f, 1.0f, 0.0f); // Amarillo para resaltado
+    if (resaltado);
 
     glPushMatrix();
 
@@ -53,8 +52,6 @@ void Torre::dibuja() {
 
     glPopMatrix();
 }
-
-
 
 bool Torre::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
     int origenX = getX();
@@ -109,4 +106,3 @@ std::vector<std::pair<int, int>> Torre::movimientosPosibles(Tablero& tablero) {
     }
     return movimientos;
 }
-
