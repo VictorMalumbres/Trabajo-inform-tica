@@ -28,6 +28,8 @@ private:
     int ultimoPeonDobleX = -1;  // columna del peón que avanzó dos casillas
     int ultimoPeonDobleY = -1;  // fila intermedia (no la final)
     int turnoPeonDoble = -1;    // qué bando movió ese peón (0 o 1)
+
+    int contadorMovimiento = 0;  //Contar movimientos realizados sin comer piezas (para las tablas)
    
     //void renderizarTexto(const std::string& texto, float x, float y, void* fuente);
 public:
@@ -55,7 +57,7 @@ public:
     void inicializaDemi();
 
     Pieza* obtenerPieza(int columna, int fila) const;
-    void colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila);
+    void colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool simular = false); //simular para evitar overflow en tablas
     void anadirPieza(Pieza* pieza);  // Para inicializar el tablero
 
     //void setSeleccion(int x, int y) { seleccionX = x; seleccionY = y; }
@@ -94,6 +96,9 @@ public:
     Rey* getRey(int bando) const {
         return (bando == 0) ? reyBlanco : reyNegro;
     }
+
+    bool esStalemate(int bando);  //Rey ahogado
+    bool materialInsuficiente() const;  //Material insuficiente (Rey o Rey+Alfil o Rey+Caballo)
 
 };
 #endif // TABLERO_H

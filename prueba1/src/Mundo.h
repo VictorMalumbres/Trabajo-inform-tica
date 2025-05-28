@@ -9,6 +9,7 @@ enum EstadoMundo {
     CONFIRMAR_MENU,
     CONFIRMAR_SALIR,
     VICTORIA,
+    EMPATE,
     CORONACION,
     OPONENTE
 };
@@ -18,7 +19,7 @@ private:
     Tablero tablero;
     Tablero tablero2;
     int modoJuego; // 1 para 4x5, 2 para 4x8
-    //int volumen = 2;
+    int volumen = 2;  //0-> No hay musica   1->Musica 15%   2->Musica 50%   3->Musica 100%
 
     bool enJuego = false;
     bool activarIA = false;
@@ -35,8 +36,10 @@ private:
 public:
     Mundo();
 
-    int volumen = 2;  //Habria que ponerlo en private
     std::string musicaActual;
+    int getVolumen() const { return volumen; };  //Para manejar volumen como private;
+    void decrementoVolumen() { volumen--; };
+    void incrementoVolumen() { volumen++; };
 
     void setModoJuego(int modo) { modoJuego = modo; } //modo de juego
     void setEstadoActual(EstadoMundo estado); // Declaración sin cuerpo
@@ -68,6 +71,7 @@ public:
     static void manejarTeclado(unsigned char key, int x, int y);
     int jugadorGanador = -1; // 0 = blancas, 1 = negras
     void mostrarMenuVictoria();
+    void mostrarMenuEmpate();
 
     int coronacionX = -1;
     int coronacionY = -1;

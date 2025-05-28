@@ -306,7 +306,7 @@ bool Tablero::estaEnJaque(int bando) const {
 
 
 
-void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
+void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool simular) {
     // Comprobar que es el turno de la pieza
     if (pieza->getBando() != turno) {
         return; // No es turno de esta pieza
@@ -458,6 +458,31 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
         turnoPeonDoble = -1;
     }
 
+    if (!simular) {
+        contadorMovimiento++;
+
+        if (dynamic_cast<Peon*>(pieza) || capturado) {
+            contadorMovimiento = 0;
+        }
+
+        //Tablas por movimientos sin acción
+        if (contadorMovimiento >= 100) {  //100 jugadas totales: 50 blancas y 50 negras
+            mundo->setEstadoActual(EMPATE);
+            return;
+        }
+
+        //Tablas por ahogamiento
+        if (esStalemate(turno)) {
+            mundo->setEstadoActual(EMPATE);
+            return;
+        }
+
+        //Tablas por piezas insuficientes
+        if (materialInsuficiente()) {
+            mundo->setEstadoActual(EMPATE);
+            return;
+        }
+    }
 
     casillasResaltadas.clear();
     casillasEnJaque.clear();
@@ -569,6 +594,41 @@ Tablero* Tablero::clonar() const {
     return copia;
 }
 
+//Rey ahogado
+bool Tablero::esStalemate(int bando) {
+    if (estaEnJaque(bando)) return false; //Si es jaque, no es ahogado
+    //Por cada pieza del bando
+    for (Pieza* p : piezas) {
+        if (p->getBando() != bando) continue;
+        auto movs = p->movimientosPosibles(*this);
+        for (auto& m : movs) {
+            //Clona el tablero para probar el movimiento
+            std::unique_ptr<Tablero> copia(this->clonar());
+            Pieza* pc = copia->obtenerPieza(p->getX(), p->getY());
+            if (!pc) continue;
+            if (pc->mueve(*copia, m.first, m.second)) {
+                //Si tras mover no queda en jaque, hay al menos un movimiento legal
+                copia->colocarPieza(pc, m.first, m.second, true);
+                if (!copia->estaEnJaque(bando)) return false;
+            }
+        }
+    }
+    return true; //No hay movimiento legal y no estaba en jaque
+}
+
+//Piezas insuficientes para realizar jaque
+bool Tablero::materialInsuficiente() const {
+    int blancas = 0, negras = 0;
+    for (auto p : piezas) {
+        int v = p->getValor();
+        if (p->getBando() == 0) blancas |= v;
+        else                  negras |= v;
+    }
+    auto escaso = [](int mask) {  //Usamos el valor de las piezas para establecer que piezas son (Rey 1000, Alfil y Caballo 3)
+        return mask == 1000 || mask == (1000 | 3);
+        };
+    return escaso(blancas) && escaso(negras);
+}
 /*const std::vector<Pieza*>& Tablero::getPiezas() const {
     return piezas;
 }*/

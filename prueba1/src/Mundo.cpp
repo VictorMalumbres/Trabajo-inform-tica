@@ -57,7 +57,10 @@ void Mundo::dibuja() {
         break;
     case VICTORIA:
         mostrarMenuVictoria();
-        break; 
+        break;
+    case EMPATE:
+        mostrarMenuEmpate();
+        break;
     case CORONACION:
         mostrarMenuCoronacion();
         break;
@@ -259,15 +262,15 @@ void manejarTeclado(unsigned char key, int x, int y) {
     }
 
     else if (key == '-') {  //Bajar la musica en el juego
-        if (mundo.volumen > 0) {
-            mundo.volumen--;
+        if (mundo.getVolumen() > 0) {
+            mundo.decrementoVolumen();
             mundo.volumenMusica();
         }
     }
 
     else if (key == '+') {  //Subir la musica en el juego
-        if (mundo.volumen < 3) {
-            mundo.volumen++;
+        if (mundo.getVolumen() < 3) {
+            mundo.incrementoVolumen();
             mundo.volumenMusica();
         }
     }
@@ -300,8 +303,6 @@ void Mundo::manejarTeclado(unsigned char key, int x, int y) {
 }
 
 void Mundo::iniciarJuego() {
-    //musicaActual = "sonidos/musica_juego1.mp3";
-    //ETSIDI::playMusica(musicaActual.c_str(), true);
     mundo.volumenMusica();
     musica = false;
 
@@ -363,8 +364,6 @@ void Mundo::iniciarJuego() {
 }
 
 void Mundo::iniciar2dojuego() {
-    //musicaActual = "sonidos/musica_juego1.mp3";
-    //ETSIDI::playMusica(musicaActual.c_str(), true);
     mundo.volumenMusica();
     musica = false;
 
@@ -464,8 +463,6 @@ void Mundo::procesarClick(int x, int y) {
         if (x_gl >= -0.4f && x_gl <= -0.1f && y_gl >= -0.3f && y_gl <= -0.1f) {
             // Aquí debes ponerlo:
             setEstadoActual(MENU);
-            //musicaActual = "sonidos/elevador.mp3";
-            //ETSIDI::playMusica(musicaActual.c_str(), true);
             glutPostRedisplay();
             return;
         }
@@ -634,13 +631,6 @@ void Mundo::procesarClick(int x, int y) {
                 std::cout << "Opción 2: Jugador VS IA" << std::endl;
                 return;
             }
-            /*else if (y_gl >= 0.15f && y_gl <= 0.25f) {
-                // Opción 3: Jugar partida DEMI
-                setModoJuego(2);
-                iniciar2dojuego();
-                std::cout << "Opción 3: Jugar DEMI" << std::endl;
-                return;
-            }*/
             else if (y_gl >= -0.05f && y_gl <= 0.05f) {
                 // Opción 4: Volver al menu
                 setEstadoActual(MENU); // <-- Cambia esto
@@ -682,6 +672,25 @@ void Mundo::procesarClick(int x, int y) {
         return;
     }
     if (estadoActual == VICTORIA) {
+        float x_gl = (float)x / 400.0f - 1.0f;
+        float y_gl = 1.0f - (float)y / 300.0f;
+
+        // Volver a jugar
+        if (x_gl >= -0.4f && x_gl <= 0.4f && y_gl >= -0.05f && y_gl <= 0.1f) {
+            if (modoJuego == 1)
+                iniciarJuego();
+            else
+                iniciar2dojuego();
+            return;
+        }
+        // Volver al menú
+        if (x_gl >= -0.4f && x_gl <= 0.4f && y_gl >= -0.3f && y_gl <= -0.15f) {
+            setEstadoActual(MENU);
+            glutPostRedisplay();
+            return;
+        }
+    }
+    if (estadoActual == EMPATE) {  //Deteccion de botones para menu empate
         float x_gl = (float)x / 400.0f - 1.0f;
         float y_gl = 1.0f - (float)y / 300.0f;
 
@@ -835,14 +844,9 @@ void Mundo::mostrarConfirmacionSalir() {
 void Mundo::setEstadoActual(EstadoMundo estado) {
     estadoActual = estado;
     if (estado == MENU) {
-        //musicaActual = "sonidos/elevador.mp3";
-        //ETSIDI::playMusica(musicaActual.c_str(), true);
-        //musica = true;
         mundo.enJuego = false;
     }
     else if (estado == JUEGO) {
-        //musicaActual = "sonidos/musica_juego1.mp3";
-        //ETSIDI::playMusica(musicaActual.c_str(), true);
         mundo.volumenMusica();
     }
     // No pongas música para CONFIRMAR_MENU ni CONFIRMAR_SALIR
@@ -901,6 +905,48 @@ void Mundo::mostrarMenuVictoria() {
     glEnd();
     glColor3f(1.0f, 1.0f, 1.0f);
     renderizarTexto("Volver al menu", -0.17f, -0.23f, GLUT_BITMAP_HELVETICA_18);
+
+    glutSwapBuffers();
+}
+void Mundo::mostrarMenuEmpate() {  //Menu de empate, practicamente igual que el de victoria
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Fondo
+    glColor3f(0.1f, 0.1f, 0.1f);
+    glBegin(GL_QUADS);
+    glVertex2f(-1.0f, 1.0f); glVertex2f(1.0f, 1.0f);
+    glVertex2f(1.0f, -1.0f); glVertex2f(-1.0f, -1.0f);
+    glEnd();
+
+    // Mensaje de empate (más pequeño y centrado)
+    glColor3f(1.0f, 1.0f, 0.0f);
+    std::string mensaje = "EMPATE";
+    renderizarTextoGrande(mensaje.c_str(), -0.18f, 0.5f, 0.0007f);
+
+    // Botón: Volver a jugar
+    glColor3f(0.2f, 0.6f, 0.2f);
+    glBegin(GL_QUADS);
+    glVertex2f(-0.4f, 0.1f); glVertex2f(0.4f, 0.1f);
+    glVertex2f(0.4f, -0.05f); glVertex2f(-0.4f, -0.05f);
+    glEnd();
+    glColor3f(1.0f, 1.0f, 1.0f);
+    renderizarTexto("Volver a jugar", -0.15f, 0.02f, GLUT_BITMAP_HELVETICA_18);
+
+    // Botón: Volver al menú
+    glColor3f(0.2f, 0.2f, 0.6f);
+    glBegin(GL_QUADS);
+    glVertex2f(-0.4f, -0.15f); glVertex2f(0.4f, -0.15f);
+    glVertex2f(0.4f, -0.3f); glVertex2f(-0.4f, -0.3f);
+    glEnd();
+    glColor3f(1.0f, 1.0f, 1.0f);
+    renderizarTexto("Volver al menu", -0.16f, -0.23f, GLUT_BITMAP_HELVETICA_18);
 
     glutSwapBuffers();
 }
