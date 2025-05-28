@@ -20,6 +20,8 @@ public:
 
     int evaluarJugada(Tablero& tablero, Pieza* pieza, int col, int fil, int bando);
 
+    static int contarProteccionRey(Tablero& tablero, int bando);
+
 private:
     int bando_;
 

@@ -62,6 +62,17 @@ int IA::evaluarJugada(Tablero& tablero, Pieza* pieza, int col, int fil, int band
         score -= pieza->getValor();
     }
 
+    // Si la pieza es el rey, penaliza si se mueve a una casilla amenazada
+    if (pieza->getValor() >= 1000 && IA::estaAmenazada(tablero, col, fil, bando)) {
+        score -= 1000;
+    }
+
+    // Penaliza si deja al rey propio en jaque
+    if (tablero.estaEnJaque(bando)) {
+        score -= 1000;
+    }
+	// Bonifica si mueve a una casilla segura (no amenazada)
+
     // Bonifica si tras mover, una pieza rival queda amenazada
     for (Pieza* rival : tablero.getPiezas()) {
         if (rival->getBando() != bando && IA::estaAmenazada(tablero, rival->getX(), rival->getY(), bando)) {
@@ -69,12 +80,51 @@ int IA::evaluarJugada(Tablero& tablero, Pieza* pieza, int col, int fil, int band
         }
     }
 
+    // Bonifica si tras mover, el rey está más protegido
+    int proteccionAntes = contarProteccionRey(tablero, bando);
+
+    // Si la jugada mueve una pieza a una casilla adyacente al rey, bonifica si esa casilla estaba amenazada
+    Rey* rey = tablero.getRey(bando);
+
+    int rx = rey->getX();
+    int ry = rey->getY();
+    if (std::abs(col - rx) <= 1 && std::abs(fil - ry) <= 1 && !(col == rx && fil == ry)) {
+        if (IA::estaAmenazada(tablero, col, fil, bando)) {
+            score += 5; // Bonificación por proteger al rey
+        }
+    }
+
+    // (Opcional) Si la pieza que se mueve es el rey, bonifica si se mueve a una casilla no amenazada
+    if (pieza == rey && !IA::estaAmenazada(tablero, col, fil, bando)) {
+        score += 10; // Bonificación por mover el rey a una casilla segura
+    }
+
+
     // Bonifica si la jugada protege una pieza propia valiosa
     // (Por ejemplo, si tras mover, una pieza propia amenazada ya no lo está)
     // Esto requiere simular el movimiento y comprobar amenazas antes y después
 
-    // Penaliza si deja al rey propio en jaque
-    // (Requiere simular el movimiento y comprobar si el rey está en jaque)
 
     return score;
 }
+
+// Función auxiliar para contar piezas que protegen al rey
+int IA::contarProteccionRey(Tablero& tablero, int bando) {
+    Rey* rey = tablero.getRey(bando);
+    int x = rey->getX();
+    int y = rey->getY();
+    int proteccion = 0;
+    for (Pieza* aliada : tablero.getPiezas()) {
+        if (aliada->getBando() == bando && aliada != rey) {
+            auto movs = aliada->movimientosPosibles(tablero);
+            for (const auto& mv : movs) {
+                if (mv.first == x && mv.second == y) {
+                    proteccion++;
+                    break;
+                }
+            }
+        }
+    }
+    return proteccion;
+}
+

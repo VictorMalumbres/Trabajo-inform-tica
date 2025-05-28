@@ -90,6 +90,11 @@ public:
     std::vector<std::pair<int, int>> casillasEnJaque;
 
     Tablero* clonar() const;
+
+    Rey* getRey(int bando) const {
+        return (bando == 0) ? reyBlanco : reyNegro;
+    }
+
 };
 #endif // TABLERO_H
 
