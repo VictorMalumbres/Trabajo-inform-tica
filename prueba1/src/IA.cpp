@@ -128,3 +128,7 @@ int IA::contarProteccionRey(Tablero& tablero, int bando) {
     return proteccion;
 }
 
+Pieza* IA::elegirPiezaCoronacion(int x, int y) {
+    //de momento siempre Torre:
+    return new Torre(x, y, bando_);
+}

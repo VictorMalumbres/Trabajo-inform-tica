@@ -77,4 +77,8 @@ public:
 
     void volumenMusica();
     void mostrarMenuOponente();
+
+    bool isIAActiva() const { return activarIA; };
+    int getModoJuego() const { return modoJuego; };
+    IA& getIA() { return iaNegras; };
 };

@@ -419,15 +419,31 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila) {
                 piezas.erase(it);
             }
 
-            // Guardar la posición y el bando para la coronación
-            if (mundo) {
-                mundo->coronacionX = nuevaColumna;
-                mundo->coronacionY = nuevaFila;
-                mundo->colorCoronacion = bando;
-                mundo->peonACoronarse = nullptr; // Ya lo eliminaste, pero puedes guardar nullptr o la info
-                mundo->setEstadoActual(CORONACION);
-                glutPostRedisplay();
+            if (mundo->isIAActiva() && bando == 1) {
+                //Coronacion automatica para la IA (silverman)
+                if (mundo->getModoJuego() == 1) {  //En silverman siempre se elige reina pues es torre + alfil juntos
+                    piezas.push_back(new Reina(nuevaColumna, nuevaFila, bando));
+                    cambiarTurno();
+                }
+                //Coronacion automatica para la IA (demi)
+                else if (mundo->getModoJuego() == 2) {
+                    piezas.push_back(mundo->getIA().elegirPiezaCoronacion(nuevaColumna, nuevaFila));
+                    cambiarTurno();
+                }
             }
+
+            else {
+                // Guardar la posición y el bando para la coronación
+                if (mundo) {
+                    mundo->coronacionX = nuevaColumna;
+                    mundo->coronacionY = nuevaFila;
+                    mundo->colorCoronacion = bando;
+                    mundo->peonACoronarse = nullptr; // Ya lo eliminaste, pero puedes guardar nullptr o la info
+                    mundo->setEstadoActual(CORONACION);
+                    glutPostRedisplay();
+                }
+            }
+            
             return; // Termina la función tras coronar
         }
     }
