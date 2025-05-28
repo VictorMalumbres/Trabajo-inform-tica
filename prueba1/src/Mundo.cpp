@@ -946,7 +946,7 @@ void Mundo::mostrarMenuOponente() {
 
     // Fondo con textura
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/silverman.png").id);
+    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/silvermanydemi.png").id);
 
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0); glVertex2f(-1.0f, -1.0f);
