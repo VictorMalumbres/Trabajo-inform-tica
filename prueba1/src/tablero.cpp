@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include "Mundo.h"
+#include "Pieza.h"
 
 Tablero::Tablero() {
     // Constructor de Tablero, inicializa el vector de piezas
@@ -38,7 +39,7 @@ void Tablero::dibuja() {
                 glColor3f(0.0f, 0.0f, 0.0f);  // Negro
             }
 
-			//vamos a pintar de rosa si hay un rey en jaque
+            //vamos a pintar de rosa si hay un rey en jaque
 
             Pieza* p = obtenerPieza(j, i);
             bool pintarRosa = false;
@@ -180,7 +181,7 @@ void Tablero::inicializaSilverman() {
     piezas.push_back(reyBlanco);
 
     piezas.push_back(new Torre(0, 0, 0));
-    piezas.push_back(new Reina(1, 0,0));
+    piezas.push_back(new Reina(1, 0, 0));
     piezas.push_back(new Torre(3, 0, 0));
 
     piezas.push_back(new Peon(0, 1, 0));
@@ -216,8 +217,8 @@ void Tablero::inicializaDemi() {
     piezas.push_back(new Caballo(2, 0, 0));
     piezas.push_back(new Alfil(1, 0, 0));      // Alfil blanco
 
-    piezas.push_back(new Peon(0, 1, 0));    
-    piezas.push_back(new Peon(1, 1, 0));    
+    piezas.push_back(new Peon(0, 1, 0));
+    piezas.push_back(new Peon(1, 1, 0));
     piezas.push_back(new Peon(2, 1, 0));
     piezas.push_back(new Peon(3, 1, 0));
 
@@ -229,8 +230,8 @@ void Tablero::inicializaDemi() {
     piezas.push_back(new Caballo(2, 7, 1));
     piezas.push_back(new Alfil(1, 7, 1));      // Alfil negro
 
-    piezas.push_back(new Peon(0, 6, 1));    
-    piezas.push_back(new Peon(1, 6, 1));    
+    piezas.push_back(new Peon(0, 6, 1));
+    piezas.push_back(new Peon(1, 6, 1));
     piezas.push_back(new Peon(2, 6, 1));
     piezas.push_back(new Peon(3, 6, 1));
 }
@@ -289,45 +290,9 @@ bool Tablero::estaEnJaque(int bando) const {
     return false;
 }
 
-bool Tablero::esJaqueMate(int bando) {
-    if (!estaEnJaque(bando)) return false;
-
-    for (Pieza* p : piezas) {
-        if (p->getBando() != bando) continue;
-        auto movs = p->movimientosPosibles(*this);
-        for (auto& m : movs) {
-            std::unique_ptr<Tablero> copia(this->clonar());
-            Pieza* pc = copia->obtenerPieza(p->getX(), p->getY());
-            if (!pc) continue;
-            if (pc->mueve(*copia, m.first, m.second)) {
-                // Simular el movimiento sin usar colocarPieza()
-                int originalX = pc->getX();
-                int originalY = pc->getY();
-                Pieza* capturada = copia->obtenerPieza(m.first, m.second);
-
-                if (capturada) {
-                    // Eliminar la pieza simulada
-                    auto& piezasCopia = copia->getPiezas();
-                    piezasCopia.erase(std::remove(piezasCopia.begin(), piezasCopia.end(), capturada), piezasCopia.end());
-                    delete capturada;
-                }
-
-                pc->setPosicion(m.second, m.first);
-                copia->actualizarEstadoJaque();
-
-                if (!copia->estaEnJaque(bando)) {
-                    return false;  // Hay al menos un movimiento que evita el jaque
-                }
-            }
-
-        }
-    }
-    return true;
-}
-
 void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool simular) {
-    // Comprobar que es el turno de la pieza
-    if (pieza->getBando() != turno) {
+    // Solo comprobar el turno si NO es simulación
+    if (!simular && pieza->getBando() != turno) {
         return; // No es turno de esta pieza
     }
     // Validar movimiento usando la pieza
@@ -342,7 +307,6 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool s
     if (peonMovido) {
         int deltaFila = nuevaFila - pieza->getY();
         if (abs(deltaFila) == 2) {
-            // Peón avanzó dos casillas
             ultimoPeonDobleX = nuevaColumna;
             ultimoPeonDobleY = nuevaFila - (deltaFila / 2);  // casilla intermedia
             turnoPeonDoble = pieza->getBando();
@@ -360,26 +324,19 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool s
             nuevaColumna == ultimoPeonDobleX &&
             pieza->getY() == (pieza->getBando() == 0 ? (nuevaFila - 1) : (nuevaFila + 1))) {
 
-            // Aquí eliminamos el peón
             int filaPeonCapturado = (pieza->getBando() == 0) ? nuevaFila - 1 : nuevaFila + 1;
 
             for (auto it = piezas.begin(); it != piezas.end(); ++it) {
-              
                 if ((*it)->getX() == nuevaColumna && (*it)->getY() == filaPeonCapturado &&
                     dynamic_cast<Peon*>(*it)) {
-                     // compruebo posicion peon capturado--->std::cout << "Peón capturado encontrado en (" << (*it)->getX() << "," << (*it)->getY() << ")" << std::endl;
                     delete* it;
                     piezas.erase(it);
-                   
                     glutPostRedisplay();
-	
                     break;
                 }
             }
         }
     }
-
- 
 
     bool capturado = false;
 
@@ -392,24 +349,21 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool s
             else {
                 if (dynamic_cast<Rey*>(*it)) {
                     if (pieza->getBando() == 0) {
-                        // El rey negro ha sido capturado, ganan las blancas
                         if (mundo) {
-                            mundo->jugadorGanador = 0; // Blancas ganan
+                            mundo->jugadorGanador = 0;
                             mundo->setEstadoActual(VICTORIA);
                             glutPostRedisplay();
                         }
                     }
                     else {
-                        // El rey blanco ha sido capturado, ganan las negras
                         if (mundo) {
-                            mundo->jugadorGanador = 1; // Negras ganan
+                            mundo->jugadorGanador = 1;
                             mundo->setEstadoActual(VICTORIA);
                             glutPostRedisplay();
                         }
                     }
-                    return;  // Salir para no seguir con el movimiento ni cambiar turno
+                    return;
                 }
-
                 delete* it;
                 piezas.erase(it);
                 capturado = true;
@@ -423,15 +377,6 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool s
 
     // Actualizar estado de jaque tras mover
     actualizarEstadoJaque();
-
-    if (esJaqueMate(turno)) {
-        if (mundo) {
-            mundo->jugadorGanador = 1 - turno; // El otro jugador gana
-            mundo->setEstadoActual(JAQUE_MATE);
-            glutPostRedisplay();
-        }
-        return;
-    }
 
     glutPostRedisplay();
 
@@ -447,39 +392,31 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool s
                 piezas.erase(it);
             }
 
-            if (mundo->isIAActiva() && bando == 1) {
-                //Coronacion automatica para la IA (silverman)
-                if (mundo->getModoJuego() == 1) {  //En silverman siempre se elige reina pues es torre + alfil juntos
+            if (mundo && mundo->isIAActiva() && bando == 1) {
+                if (mundo->getModoJuego() == 1) {
                     piezas.push_back(new Reina(nuevaColumna, nuevaFila, bando));
                     cambiarTurno();
                 }
-                //Coronacion automatica para la IA (demi)
                 else if (mundo->getModoJuego() == 2) {
                     piezas.push_back(mundo->getIA().elegirPiezaCoronacion(nuevaColumna, nuevaFila));
                     cambiarTurno();
                 }
             }
-
             else {
-                // Guardar la posición y el bando para la coronación
                 if (mundo) {
                     mundo->coronacionX = nuevaColumna;
                     mundo->coronacionY = nuevaFila;
                     mundo->colorCoronacion = bando;
-                    mundo->peonACoronarse = nullptr; // Ya lo eliminaste, pero puedes guardar nullptr o la info
+                    mundo->peonACoronarse = nullptr;
                     mundo->setEstadoActual(CORONACION);
                     glutPostRedisplay();
                 }
             }
-            
-            return; // Termina la función tras coronar
+            return;
         }
     }
-
-    
     // ----------- FIN CORONACIÓN DEL PEÓN -----------
-    // 
-    // Si no hubo avance doble, resetea la oportunidad de captura al paso
+
     if (!esAvanceDoble) {
         ultimoPeonDobleX = -1;
         ultimoPeonDobleY = -1;
@@ -493,19 +430,16 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool s
             contadorMovimiento = 0;
         }
 
-        //Tablas por movimientos sin acción
-        if (contadorMovimiento >= 100) {  //100 jugadas totales: 50 blancas y 50 negras
+        if (contadorMovimiento >= 100) {
             mundo->setEstadoActual(EMPATE);
             return;
         }
 
-        //Tablas por ahogamiento
         if (esStalemate(turno)) {
             mundo->setEstadoActual(EMPATE);
             return;
         }
 
-        //Tablas por piezas insuficientes
         if (materialInsuficiente()) {
             mundo->setEstadoActual(EMPATE);
             return;
@@ -517,9 +451,23 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool s
     seleccionX = -1;
     seleccionY = -1;
 
+    // Comprobar jaque mate antes de cambiar el turno
+    int bandoActual = pieza->getBando();
+    int bandoOponente = 1 - bandoActual;
+    if (!simular && esJaqueMate(bandoOponente)) {
+        if (mundo) {
+            mundo->jugadorGanador = bandoActual;
+            mundo->setEstadoActual(VICTORIA);
+            glutPostRedisplay();
+        }
+        return;
+    }
 
-    turno = 1 - turno; // Cambiar turno
+    if (!simular) {
+        turno = 1 - turno;
+    }
 }
+
 
 void Tablero::anadirPieza(Pieza* pieza) {
     piezas.push_back(pieza);
@@ -653,4 +601,32 @@ bool Tablero::materialInsuficiente() const {
         return mask == 1000 || mask == (1000 | 3);
         };
     return escaso(blancas) && escaso(negras);
+}
+
+
+bool Tablero::esJaqueMate(int bando) {
+    // 1. Si el rey no está en jaque, no es jaque mate
+    if (!estaEnJaque(bando))
+        return false;
+
+    // 2. Busca si existe algún movimiento legal que saque al rey del jaque
+    for (Pieza* p : piezas) {
+        if (p->getBando() != bando) continue;
+        int x = p->getX(), y = p->getY();
+        for (auto& mv : p->movimientosPosibles(*this)) {
+            int nx = mv.first, ny = mv.second;
+            // Simula el movimiento
+            Tablero* hijo = this->clonar();
+            Pieza* ph = hijo->obtenerPieza(x, y);
+            if (!ph) { delete hijo; continue; }
+            hijo->colocarPieza(ph, nx, ny, /*simular=*/true);
+            if (!hijo->estaEnJaque(bando)) {
+                delete hijo;
+                return false;
+            }
+            delete hijo;
+        }
+    }
+    // Si no hay movimientos legales que eviten el jaque, es jaque mate
+    return true;
 }

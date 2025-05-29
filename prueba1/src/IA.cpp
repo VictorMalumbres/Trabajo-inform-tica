@@ -1,68 +1,207 @@
 #include "IA.h"
 #include "tablero.h"
 #include "Pieza.h"
-#include <cstdlib>
 
-IA::IA(int bando)
+#include <algorithm>
+#include <iostream>
+
+IA::IA(int bando, int profundidad)
     : bando_(bando)
+    , maxDepth_(profundidad)
 {
 }
 
 void IA::jugar(Tablero& tablero) {
-    std::vector<Movimiento> jugadas;
-    std::vector<int> puntuaciones;
-
-    for (Pieza* p : tablero.getPiezas()) {
-        if (p->getBando() != bando_) continue;
-        auto movs = p->movimientosPosibles(tablero);
-        for (auto& mv : movs) {
-            int col = mv.first, fil = mv.second;
-            int score = IA::evaluarJugada(tablero, p, col, fil, bando_);
-            if (p->mueve(tablero, col, fil)) {
-                std::unique_ptr<Tablero> copia(tablero.clonar());
-                Pieza* pc = copia->obtenerPieza(p->getX(), p->getY());
-                if (!pc) continue;
-
-                if (pc->mueve(*copia, col, fil)) {
-                    // Simular el movimiento manualmente
-                    Pieza* capturada = copia->obtenerPieza(col, fil);
-                    if (capturada) {
-                        auto& piezasCopia = copia->getPiezas();
-                        piezasCopia.erase(std::remove(piezasCopia.begin(), piezasCopia.end(), capturada), piezasCopia.end());
-                        delete capturada;
-                    }
-
-                    pc->setPosicion(fil, col);
-                    copia->actualizarEstadoJaque();
-
-                    if (!copia->estaEnJaque(bando_)) {
-                        jugadas.push_back(Movimiento{ p, col, fil });
-                        puntuaciones.push_back(score);
-                    }
-                }
-            }
-
-        }
+    if (tablero.getTurno() != bando_) {
+        // No es nuestro turno, no hacemos nada
+        return;
     }
-    if (jugadas.empty()) return;
 
-    // Elige la jugada con mayor puntuación (si hay empate, elige aleatoria entre las mejores)
-    int maxScore = *std::max_element(puntuaciones.begin(), puntuaciones.end());
-    std::vector<int> mejores;
-    for (size_t i = 0; i < puntuaciones.size(); ++i)
-        if (puntuaciones[i] == maxScore) mejores.push_back(i);
+    tablero.limpiarSeleccion();
 
-    int idx = mejores[std::rand() % mejores.size()];
-    Movimiento m = jugadas[idx];
-    tablero.colocarPieza(m.pieza, m.col, m.fil);
+    // Hacemos una copia para la búsqueda
+    Tablero* copia = tablero.clonar();
+    std::pair<int, Movimiento> resultado =
+        minimax(copia, maxDepth_, INT_MIN, INT_MAX, true);
+    int eval = resultado.first;
+    Movimiento mov = resultado.second;
+    delete copia;
+
+    std::cout << "[IA] eval=" << eval
+        << " mueve (" << mov.origX << "," << mov.origY << ")->("
+        << mov.destX << "," << mov.destY << ")\n";
+
+    // Aplica el movimiento **real** con colocarPieza
+    Pieza* p = tablero.obtenerPieza(mov.origX, mov.origY);
+    if (p) {
+        tablero.colocarPieza(p, mov.destX, mov.destY);
+    }
+    else {
+        std::cerr << "[IA] ERROR: no hay pieza en origen\n";
+    }
 }
 
-// Devuelve true si la casilla (col, fil) está amenazada por alguna pieza del oponente
+std::pair<int, IA::Movimiento>
+
+IA::minimax(Tablero* tablero, int depth, int alpha, int beta, bool maximizingPlayer) {
+
+    if (depth == 0) {
+        return { evaluarTablero(*tablero), {0,0,0,0} };
+    }
+
+    int jugador = maximizingPlayer ? bando_ : (1 - bando_);
+    std::vector<std::pair<int, Movimiento>> candidatos;
+    std::vector<std::pair<int, Movimiento>> propios;
+
+    // Recorremos todas las piezas de `jugador`
+    for (Pieza* p : tablero->getPiezas()) {
+        if (p->getBando() != jugador) continue;
+        int x = p->getX(), y = p->getY();
+
+        for (auto& mv : p->movimientosPosibles(*tablero)) {
+            int nx = mv.first, ny = mv.second;
+
+            // Simulamos en un clon
+            Tablero* hijo = tablero->clonar();
+            Pieza* ph = hijo->obtenerPieza(x, y);
+            if (!ph) {
+                delete hijo;
+                continue;
+            }
+
+            hijo->colocarPieza(ph, nx, ny, true);
+
+            // 2) Si dejamos al propio rey en jaque => descartamos
+            if (hijo->estaEnJaque(jugador)) {
+                delete hijo;
+                continue;
+            }
+
+            // 3) Llamada recursiva
+            int score = minimax(hijo, depth - 1, alpha, beta,
+                !maximizingPlayer).first;
+            delete hijo;
+
+            Pieza* destino = tablero->obtenerPieza(nx, ny);
+            bool selfCapture = destino && destino->getBando() == jugador;
+            Movimiento mov{ x, y, nx, ny };
+            if (selfCapture) {
+                propios.emplace_back(score, mov);
+            }
+            else {
+                candidatos.emplace_back(score, mov);
+            }
+        }
+    }
+
+    // Si no hay movimientos “no?propios” pero sí “propios”, los usamos
+    if (candidatos.empty() && !propios.empty()) {
+        candidatos = std::move(propios);
+    }
+
+    // Si no hay movimientos legales, devolvemos jaque mate o tablas
+    if (candidatos.empty()) {
+        // Si el rey está en jaque, es mate; si no, tablas (0)
+        bool jaque = tablero->estaEnJaque(jugador);
+        int val;
+        if (jaque) {
+            val = maximizingPlayer ? INT_MIN / 2 : INT_MAX / 2;
+        }
+        else {
+            val = 0;
+        }
+
+        /*if (depth == maxDepth_) {
+            // Recorremos sin filtros y devolvemos la primera válida
+            for (Pieza* p : tablero->getPiezas()) {
+                if (p->getBando() != jugador) continue;
+                int x = p->getX(), y = p->getY();
+                for (auto& mv : p->movimientosPosibles(*tablero)) {
+                    Tablero* hijo = tablero->clonar();
+                    Pieza* ph = hijo->obtenerPieza(x, y);
+                    if (!ph) { delete hijo; continue; }
+                    hijo->colocarPieza(ph, mv.first, mv.second, true);
+                    // Solo aceptamos si no deja al rey en jaque
+                    if (!hijo->estaEnJaque(jugador)) {
+                        Movimiento mov{ x, y, mv.first, mv.second };
+                        delete hijo;
+                        return { evaluarTablero(*tablero), mov };
+                    }
+                    delete hijo;
+                }
+            }
+        }
+        // Subniveles o fallo absoluto: devolvemos jaque o tablas
+        return { val, {0,0,0,0} };*/
+
+        if (depth == maxDepth_) {
+            for (Pieza* p : tablero->getPiezas()) {
+                if (p->getBando() != jugador) continue;
+                int x = p->getX(), y = p->getY();
+                for (auto& mv : p->movimientosPosibles(*tablero)) {
+                    Tablero* hijo = tablero->clonar();
+                    Pieza* ph = hijo->obtenerPieza(x, y);
+                    if (!ph) { delete hijo; continue; }
+                    hijo->colocarPieza(ph, mv.first, mv.second, /*simular=*/true);
+                    if (!hijo->estaEnJaque(jugador)) {
+                        Movimiento m{ x,y,mv.first,mv.second };
+                        int matEval = evaluarTablero(*tablero);
+                        delete hijo;
+                        return { matEval, m };
+                    }
+                    delete hijo;
+                }
+            }
+        }
+
+        // Jaque mate o tablas (sin movimientos legales)
+        return { val, {0,0,0,0} };
+    }
+
+    // Seleccionamos mejor o peor según maximizingPlayer
+    int mejorScore = candidatos[0].first;
+    for (auto& par : candidatos) {
+        if (maximizingPlayer && par.first > mejorScore)
+            mejorScore = par.first;
+        if (!maximizingPlayer && par.first < mejorScore)
+            mejorScore = par.first;
+    }
+
+    // Poda alpha-beta
+    if (maximizingPlayer) alpha = std::max(alpha, mejorScore);
+    else              beta = std::min(beta, mejorScore);
+    if (beta <= alpha) {
+        // En poda podemos devolver un mov cualquiera con ese score
+        for (auto& c : candidatos) {
+            if (c.first == mejorScore)
+                return c;
+        }
+    }
+
+    // Recolectamos todos los movimientos que empatan con mejorScore
+    std::vector<Movimiento> empates;
+    for (auto& c : candidatos)
+        if (c.first == mejorScore)
+            empates.push_back(c.second);
+
+    // Escogemos uno al azar para no repetir siempre el mismo
+    Movimiento elegido = empates[std::rand() % empates.size()];
+    return { mejorScore, elegido };
+}
+
+int IA::evaluarTablero(Tablero& tablero) const {
+    int score = 0;
+    for (Pieza* p : tablero.getPiezas()) {
+        int v = p->getValor();
+        score += (p->getBando() == bando_) ? v : -v;
+    }
+    return score;
+}
+
 bool IA::estaAmenazada(Tablero& tablero, int col, int fil, int bandoPropio) {
     for (Pieza* p : tablero.getPiezas()) {
-        if (p->getBando() == bandoPropio) continue; // Solo piezas del oponente
-        auto movs = p->movimientosPosibles(tablero);
-        for (const auto& mv : movs) {
+        if (p->getBando() == bandoPropio) continue;
+        for (auto& mv : p->movimientosPosibles(tablero)) {
             if (mv.first == col && mv.second == fil)
                 return true;
         }
@@ -70,224 +209,7 @@ bool IA::estaAmenazada(Tablero& tablero, int col, int fil, int bandoPropio) {
     return false;
 }
 
-int IA::evaluarJugada(Tablero& tablero, Pieza* pieza, int col, int fil, int bando) {
-    int score = 0;
-    Pieza* objetivo = tablero.obtenerPieza(col, fil);
-
-    // Penaliza si intenta capturar una pieza propia
-    if (objetivo && objetivo->getBando() == bando) {
-        score -= objetivo->getValor() * 20; // Penalización fuerte
-    }
-
-    // Captura valiosa
-    if (objetivo && objetivo->getBando() != bando) {
-        score += objetivo->getValor() * 10;
-    }
-
-    // Penaliza si la pieza que se mueve queda amenazada tras mover
-    if (IA::estaAmenazada(tablero, col, fil, bando)) {
-        score -= pieza->getValor() * 2;
-    }
-
-    // Penaliza si hay otras piezas propias valiosas amenazadas
-    for (Pieza* aliada : tablero.getPiezas()) {
-        if (aliada->getBando() != bando || aliada == pieza) continue;
-        if (aliada->getValor() >= 5 && IA::estaAmenazada(tablero, aliada->getX(), aliada->getY(), bando)) {
-            score -= aliada->getValor();
-        }
-    }
-
-    // Si la pieza es el rey, penaliza si se mueve a una casilla amenazada
-    if (pieza->getValor() >= 1000 && IA::estaAmenazada(tablero, col, fil, bando)) {
-        score -= 1000;
-    }
-
-    // Penaliza si deja al rey propio en jaque (solo si ya está en jaque)
-    if (tablero.estaEnJaque(bando)) {
-        score -= 1000;
-    }
-
-    // Bonifica si tras mover, una pieza rival queda amenazada
-    for (Pieza* rival : tablero.getPiezas()) {
-        if (rival->getBando() != bando && IA::estaAmenazada(tablero, rival->getX(), rival->getY(), bando)) {
-            score += rival->getValor();
-        }
-    }
-
-    if (objetivo && objetivo->getBando() != bando) {
-        score += objetivo->getValor() * 5; // Bonificación proporcional al valor
-    }
-
-    // Bonifica si la jugada mueve una pieza aliada a una casilla adyacente al rey y esa casilla estaba amenazada
-    Rey* rey = tablero.getRey(bando);
-    int rx = rey->getX();
-    int ry = rey->getY();
-    if (std::abs(col - rx) <= 1 && std::abs(fil - ry) <= 1 && !(col == rx && fil == ry)) {
-        if (IA::estaAmenazada(tablero, col, fil, bando)) {
-            score += 5; // Bonificación por proteger al rey
-        }
-    }
-
-    // Bonifica si la pieza que se mueve es el rey y va a una casilla segura
-    if (pieza == rey && !IA::estaAmenazada(tablero, col, fil, bando)) {
-        score += 5;
-    }
-
-    // Evalúa la seguridad del rey: penaliza amenazas alrededor del rey
-    int amenazasAlrededor = IA::contarAmenazasAlrededorRey(tablero, bando);
-    score -= amenazasAlrededor * 3;
-
-    // Bonifica la movilidad de piezas aliadas cerca del rey (más movilidad, mejor defensa)
-    int movilidad = IA::movilidadCercaDelRey(tablero, bando);
-    score += movilidad;
-
-    // Bonifica si la jugada protege una pieza propia valiosa
-    for (Pieza* aliada : tablero.getPiezas()) {
-        if (aliada->getBando() != bando) continue;
-        // Considera valiosa si su valor es alto
-        if (aliada->getValor() >= 5 && aliada != pieza) {
-            // Si la pieza aliada está amenazada
-            if (IA::estaAmenazada(tablero, aliada->getX(), aliada->getY(), bando)) {
-                // ¿La jugada mueve una pieza a una casilla desde la que podría defender a la valiosa?
-                auto movs = pieza->movimientosPosibles(tablero);
-                for (const auto& mv : movs) {
-                    if (mv.first == aliada->getX() && mv.second == aliada->getY()) {
-                        score += aliada->getValor(); // Bonifica por proteger
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    // Bonifica si mueve a una casilla segura (no amenazada), priorizando piezas de mayor valor
-    if (!IA::estaAmenazada(tablero, col, fil, bando)) {
-        // Bonificación proporcional al valor de la pieza
-        score += pieza->getValor() * 5; // Ajusta el multiplicador según lo que valores
-    }
-
-    // Bonifica control del centro
-    if ((col >= 2 && col <= 5) && (fil >= 2 && fil <= 5)) {
-        score += 3;
-    }
-
-    // Bonifica desarrollo de piezas menores en apertura
-    if ((pieza->getValor() == 3) && (pieza->getBando() == bando)) {
-        int filaInicial = (bando == 0) ? 0 : tablero.getNumFilas() - 1;
-        if (pieza->getY() == filaInicial && fil != filaInicial) {
-            score += 4;
-        }
-    }
-
-    // Bonifica movilidad de la pieza (cantidad de movimientos posibles desde la posición actual)
-    int movilidad2 = pieza->movimientosPosibles(tablero).size();
-    score += movilidad2 / 2; // Ajusta el divisor según lo que valores
-
-    // Penaliza peones doblados
-    if (pieza->getValor() == 1) {
-        int peonesMismaCol = 0;
-        for (Pieza* aliada : tablero.getPiezas()) {
-            if (aliada->getBando() == bando && aliada->getValor() == 1 && aliada->getX() == col && aliada != pieza)
-                peonesMismaCol++;
-        }
-        if (peonesMismaCol > 0) score -= 5 * peonesMismaCol;
-    }
-
-    // Bonifica promoción de peones
-    if (pieza->getValor() == 1) {
-        int filaPromocion = (bando == 0) ? tablero.getNumFilas() - 1 : 0;
-        if (fil == filaPromocion) {
-            score += 50;
-        }
-    }
-
-    // Bonifica coordinación de piezas (casilla destino defendida)
-    int defensores = 0;
-    for (Pieza* aliada : tablero.getPiezas()) {
-        if (aliada->getBando() == bando && aliada != pieza) {
-            auto movs = aliada->movimientosPosibles(tablero);
-            for (const auto& mv : movs) {
-                if (mv.first == col && mv.second == fil) {
-                    defensores++;
-                    break;
-                }
-            }
-        }
-    }
-    score += defensores * 2;
-
-    /*// Penaliza mover la misma pieza varias veces en la apertura
-    static int turnoApertura = 10;
-    if (tablero.contadorMovimiento < turnoApertura && pieza->getValor() < 9) {
-        int filaInicial = (bando == 0) ? 0 : tablero.getNumFilas() - 1;
-        if (pieza->getY() != filaInicial) {
-            score -= 2;
-        }
-    }*/
-
-
-    return score;
-}
-
-
-// Función auxiliar para contar piezas que protegen al rey
-int IA::contarProteccionRey(Tablero& tablero, int bando) {
-    Rey* rey = tablero.getRey(bando);
-    int x = rey->getX();
-    int y = rey->getY();
-    int proteccion = 0;
-    for (Pieza* aliada : tablero.getPiezas()) {
-        if (aliada->getBando() == bando && aliada != rey) {
-            auto movs = aliada->movimientosPosibles(tablero);
-            for (const auto& mv : movs) {
-                if (mv.first == x && mv.second == y) {
-                    proteccion++;
-                    break;
-                }
-            }
-        }
-    }
-    return proteccion;
-}
-
-int IA::contarAmenazasAlrededorRey(Tablero& tablero, int bando) {
-    Rey* rey = tablero.getRey(bando);
-    int x = rey->getX();
-    int y = rey->getY();
-    int amenazas = 0;
-    for (int dx = -1; dx <= 1; ++dx) {
-        for (int dy = -1; dy <= 1; ++dy) {
-            if (dx == 0 && dy == 0) continue;
-            int nx = x + dx;
-            int ny = y + dy;
-            if (nx >= 0 && nx < tablero.getNumColumnas() && ny >= 0 && ny < tablero.getNumFilas()) {
-                if (IA::estaAmenazada(tablero, nx, ny, bando))
-                    amenazas++;
-            }
-        }
-    }
-    return amenazas;
-}
-
-int IA::movilidadCercaDelRey(Tablero& tablero, int bando) {
-    Rey* rey = tablero.getRey(bando);
-    int rx = rey->getX();
-    int ry = rey->getY();
-    int movilidad = 0;
-    for (Pieza* aliada : tablero.getPiezas()) {
-        if (aliada->getBando() != bando || aliada == rey) continue;
-        int ax = aliada->getX();
-        int ay = aliada->getY();
-        // Considera piezas en casillas adyacentes al rey
-        if (std::abs(ax - rx) <= 1 && std::abs(ay - ry) <= 1) {
-            movilidad += aliada->movimientosPosibles(tablero).size();
-        }
-    }
-    return movilidad;
-}
-
 Pieza* IA::elegirPiezaCoronacion(int x, int y) {  //Aqui se puede añadir si la IA quiere una u otra pieza
     //de momento siempre Torre:
     return new Torre(x, y, bando_);
 }
-
