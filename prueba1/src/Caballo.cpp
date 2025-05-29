@@ -53,39 +53,51 @@ void Caballo::dibuja() {
 
 
 bool Caballo::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
- 
-        int origenX = getX();
-        int origenY = getY();
 
-        int dx = std::abs(nuevaColumna - origenX);
-        int dy = std::abs(nuevaFila - origenY);
+    int origenX = getX();
+    int origenY = getY();
 
-        // Movimiento típico de caballo: 2 en una dirección y 1 en la otra
-        if (!((dx == 2 && dy == 1) || (dx == 1 && dy == 2))) {
-            return false;
-        }
+    int dx = std::abs(nuevaColumna - origenX);
+    int dy = std::abs(nuevaFila - origenY);
 
-        // El caballo puede saltar piezas, así que no verificamos el camino
-        // Solo verificar si la casilla destino tiene una pieza del mismo bando
+    // Movimiento típico de caballo: 2 en una dirección y 1 en la otra
+    if (!((dx == 2 && dy == 1) || (dx == 1 && dy == 2))) {
+        return false;
+    }
+
+    // El caballo puede saltar piezas, así que no verificamos el camino
+    // Solo verificar si la casilla destino tiene una pieza del mismo bando
 
 
-        return true; // Movimiento válido
-   
+    return true; // Movimiento válido
+
 }
 
 std::vector<std::pair<int, int>> Caballo::movimientosPosibles(Tablero& tablero) {
     std::vector<std::pair<int, int>> movimientos;
     int x = getX();
     int y = getY();
-    int dx[] = { 1, 2, 2, 1, -1, -2, -2, -1 };
-    int dy[] = { 2, 1, -1, -2, -2, -1, 1, 2 };
+    int cols = tablero.getNumColumnas();
+    int filas = tablero.getNumFilas();
+
+    const int dx[] = { 1, 2, 2, 1, -1, -2, -2, -1 };
+    const int dy[] = { 2, 1, -1, -2, -2, -1, 1, 2 };
 
     for (int i = 0; i < 8; ++i) {
         int nx = x + dx[i];
         int ny = y + dy[i];
-        if (nx >= 0 && nx < tablero.getNumColumnas() && ny >= 0 && ny < tablero.getNumFilas()) {
-            movimientos.push_back({ nx, ny });
+        if (nx >= 0 && nx < cols && ny >= 0 && ny < filas) {
+            Pieza* destino = tablero.obtenerPieza(nx, ny);
+            if (destino == nullptr) {
+                movimientos.push_back({ nx, ny });
+            }
+            else {
+                if (!(destino->getBando() == getBando() && destino->getValor() >= 1000)) {
+                    movimientos.push_back({ nx, ny });
+                }
+            }
         }
     }
     return movimientos;
 }
+

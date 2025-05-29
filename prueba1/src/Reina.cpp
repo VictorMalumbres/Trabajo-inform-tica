@@ -77,41 +77,30 @@ std::vector<std::pair<int, int>> Reina::movimientosPosibles(Tablero& tablero) {
     int cols = tablero.getNumColumnas();
     int filas = tablero.getNumFilas();
 
-    // Torre (horizontal y vertical)
-    for (int nx = x + 1; nx < cols; ++nx) {
-        movimientos.push_back({ nx, y });
-        if (tablero.obtenerPieza(nx, y)) break;
-    }
-    for (int nx = x - 1; nx >= 0; --nx) {
-        movimientos.push_back({ nx, y });
-        if (tablero.obtenerPieza(nx, y)) break;
-    }
-    for (int ny = y + 1; ny < filas; ++ny) {
-        movimientos.push_back({ x, ny });
-        if (tablero.obtenerPieza(x, ny)) break;
-    }
-    for (int ny = y - 1; ny >= 0; --ny) {
-        movimientos.push_back({ x, ny });
-        if (tablero.obtenerPieza(x, ny)) break;
-    }
+    // Ocho direcciones
+    const int dx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
+    const int dy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
 
-    // Alfil (diagonales)
-    for (int nx = x + 1, ny = y + 1; nx < cols && ny < filas; ++nx, ++ny) {
-        movimientos.push_back({ nx, ny });
-        if (tablero.obtenerPieza(nx, ny)) break;
-    }
-    for (int nx = x - 1, ny = y + 1; nx >= 0 && ny < filas; --nx, ++ny) {
-        movimientos.push_back({ nx, ny });
-        if (tablero.obtenerPieza(nx, ny)) break;
-    }
-    for (int nx = x + 1, ny = y - 1; nx < cols && ny >= 0; ++nx, --ny) {
-        movimientos.push_back({ nx, ny });
-        if (tablero.obtenerPieza(nx, ny)) break;
-    }
-    for (int nx = x - 1, ny = y - 1; nx >= 0 && ny >= 0; --nx, --ny) {
-        movimientos.push_back({ nx, ny });
-        if (tablero.obtenerPieza(nx, ny)) break;
+    for (int dir = 0; dir < 8; ++dir) {
+        int nx = x + dx[dir];
+        int ny = y + dy[dir];
+        while (nx >= 0 && nx < cols && ny >= 0 && ny < filas) {
+            Pieza* destino = tablero.obtenerPieza(nx, ny);
+            if (destino == nullptr) {
+                movimientos.push_back({ nx, ny });
+            }
+            else {
+                if (!(destino->getBando() == getBando() && destino->getValor() >= 1000)) {
+                    movimientos.push_back({ nx, ny });
+                }
+                break;
+            }
+            nx += dx[dir];
+            ny += dy[dir];
+        }
     }
     return movimientos;
 }
+
+
 

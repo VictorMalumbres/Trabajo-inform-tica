@@ -594,6 +594,7 @@ int Tablero::getNumColumnas() const {
 Tablero* Tablero::clonar() const {
     Tablero* copia = new Tablero();
 
+    copia->mundo = this->mundo;
     copia->numFilas = this->numFilas;
     copia->numColumnas = this->numColumnas;
     copia->turno = this->turno;

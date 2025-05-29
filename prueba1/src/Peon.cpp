@@ -73,7 +73,7 @@ bool Peon::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
             }
             return false;
 
-        } 
+        }
         // Aquí condicionamos el movimiento de 2 casillas solo para tableros con más de 5 filas (Demi)
         if (dy == 2 * direccion && tablero.getNumFilas() > 5) { // Solo Demi
             int filaInicial = (getBando() == 0) ? 1 : tablero.getNumFilas() - 2;
@@ -90,7 +90,7 @@ bool Peon::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
             }
             return false;
         }
-        
+
     }
 
     // Movimiento diagonal para captura (normal o al paso)
@@ -101,7 +101,7 @@ bool Peon::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
         }
         // Captura al paso: casilla vacía pero permitido
         if (destino == nullptr && tablero.esCapturaAlPaso(nuevaColumna, nuevaFila, bando)) {
-             return true;
+            return true;
         }
     }
 
@@ -145,7 +145,10 @@ std::vector<std::pair<int, int>> Peon::movimientosPosibles(Tablero& tablero) {
     if (x - 1 >= 0 && ny >= 0 && ny < filas) {
         Pieza* pIzq = tablero.obtenerPieza(x - 1, ny);
         if (pIzq != nullptr) {
-            movimientos.push_back({ x - 1, ny });
+            // No permitir capturar al rey aliado
+            if (!(pIzq->getBando() == getBando() && pIzq->getValor() >= 1000)) {
+                movimientos.push_back({ x - 1, ny });
+            }
         }
         else if (tablero.esCapturaAlPaso(x - 1, ny, getBando())) {
             movimientos.push_back({ x - 1, ny }); // Para la captura al paso
@@ -155,7 +158,10 @@ std::vector<std::pair<int, int>> Peon::movimientosPosibles(Tablero& tablero) {
     if (x + 1 < cols && ny >= 0 && ny < filas) {
         Pieza* pDer = tablero.obtenerPieza(x + 1, ny);
         if (pDer != nullptr) {
-            movimientos.push_back({ x + 1, ny });
+            // No permitir capturar al rey aliado
+            if (!(pDer->getBando() == getBando() && pDer->getValor() >= 1000)) {
+                movimientos.push_back({ x + 1, ny });
+            }
         }
         else if (tablero.esCapturaAlPaso(x + 1, ny, getBando())) {
             movimientos.push_back({ x + 1, ny }); // Para la captura al paso
