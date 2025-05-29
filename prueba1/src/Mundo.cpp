@@ -320,32 +320,67 @@ void Mundo::mostrarPausa() {
 
     glColor3f(1.0f, 1.0f, 0.0f);
     std::string texto1 = "JUEGO EN PAUSA";
-    glRasterPos2f(-0.8, 0.5f);
+    glRasterPos2f(-0.8f, 0.7f);
     for (char c : texto1) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
 
-    // Botón de volver al menú
-    glColor3f(0.2f, 0.6f, 0.2f); // Verde
+    float anchoBoton = 1.0f; // ancho total 1.0 (de -0.5 a 0.5)
+    float alturaBoton = 0.15f; // altura de cada botón
+    float separacion = 0.05f; // separación entre botones
+
+    // Posiciones verticales de los botones (de arriba a abajo)
+    float yBotonVerLeyenda = 0.5f;
+    float yBotonReiniciar = yBotonVerLeyenda - alturaBoton - separacion;
+    float yBotonVolverMenu = yBotonReiniciar - alturaBoton - separacion;
+    float yBotonSalirJuego = yBotonVolverMenu - alturaBoton - separacion;
+
+    // Botón Ver Leyenda
+    glColor3f(0.7f, 0.7f, 0.2f); // Amarillo claro
     glBegin(GL_QUADS);
-    glVertex2f(-0.5f, 0.1f); glVertex2f(0.5f, 0.1f);
-    glVertex2f(0.5f, -0.05f); glVertex2f(-0.5f, -0.05f);
-
-    // Botón de salir del juego
-    glColor3f(0.6f, 0.2f, 0.2f); // Rojo
-    glVertex2f(-0.5f, -0.15f); glVertex2f(0.5f, -0.15f);
-    glVertex2f(0.5f, -0.3f); glVertex2f(-0.5f, -0.3f);
-
-    // Botón de reiniciar partida
-    glColor3f(0.2f, 0.6f, 0.6f); // Azul verdoso
-    glVertex2f(-0.5f, 0.35f); glVertex2f(0.5f, 0.35f);
-    glVertex2f(0.5f, 0.20f); glVertex2f(-0.5f, 0.20f);
+    glVertex2f(-0.5f, yBotonVerLeyenda);
+    glVertex2f(0.5f, yBotonVerLeyenda);
+    glVertex2f(0.5f, yBotonVerLeyenda - alturaBoton);
+    glVertex2f(-0.5f, yBotonVerLeyenda - alturaBoton);
     glEnd();
 
-    renderizarTexto("Volver al menu", -0.15f, 0.02f, GLUT_BITMAP_HELVETICA_18);
-    renderizarTexto("Salir del juego", -0.17f, -0.23f, GLUT_BITMAP_HELVETICA_18);
-    renderizarTexto("Reiniciar partida", -0.15f, 0.26f, GLUT_BITMAP_HELVETICA_18);
+    // Botón Reiniciar partida
+    glColor3f(0.2f, 0.6f, 0.6f); // Azul verdoso
+    glBegin(GL_QUADS);
+    glVertex2f(-0.5f, yBotonReiniciar);
+    glVertex2f(0.5f, yBotonReiniciar);
+    glVertex2f(0.5f, yBotonReiniciar - alturaBoton);
+    glVertex2f(-0.5f, yBotonReiniciar - alturaBoton);
+    glEnd();
+
+    // Botón Volver al menú
+    glColor3f(0.2f, 0.6f, 0.2f); // Verde
+    glBegin(GL_QUADS);
+    glVertex2f(-0.5f, yBotonVolverMenu);
+    glVertex2f(0.5f, yBotonVolverMenu);
+    glVertex2f(0.5f, yBotonVolverMenu - alturaBoton);
+    glVertex2f(-0.5f, yBotonVolverMenu - alturaBoton);
+    glEnd();
+
+    // Botón Salir del juego
+    glColor3f(0.6f, 0.2f, 0.2f); // Rojo
+    glBegin(GL_QUADS);
+    glVertex2f(-0.5f, yBotonSalirJuego);
+    glVertex2f(0.5f, yBotonSalirJuego);
+    glVertex2f(0.5f, yBotonSalirJuego - alturaBoton);
+    glVertex2f(-0.5f, yBotonSalirJuego - alturaBoton);
+    glEnd();
+
+
+    renderizarTexto("Ver Leyenda", -0.17f, 0.4f, GLUT_BITMAP_HELVETICA_18);
+    renderizarTexto("Reiniciar partida", -0.17f, 0.2f, GLUT_BITMAP_HELVETICA_18);
+    renderizarTexto("Volver al menu", -0.17f, 0.0f, GLUT_BITMAP_HELVETICA_18);
+    renderizarTexto("Salir del juego", -0.17f, -0.2f, GLUT_BITMAP_HELVETICA_18);
+
+
+
 
     glutSwapBuffers();
 }
+
 
 void Mundo::iniciarJuego() {
     mundo.volumenMusica();
@@ -623,6 +658,14 @@ void Mundo::procesarClick(int x, int y) {
         float x_gl = (float)x / 400.0f - 1.0f; // 800px de ancho
         float y_gl = 1.0f - (float)y / 300.0f; // 600px de alto
 
+        // Botón "Ver Leyenda"
+        if (x_gl >= -0.5f && x_gl <= 0.5f && y_gl >= 0.40f && y_gl <= 0.55f) {
+            juegoEnPausa = false;
+            setEstadoActual(LEYENDA);
+            glutPostRedisplay();
+            return;
+        }
+
         // Botón "Volver al menú"
         if (x_gl >= -0.5f && x_gl <= 0.5f && y_gl >= -0.05f && y_gl <= 0.1f) {
             juegoEnPausa = false;
@@ -646,6 +689,7 @@ void Mundo::procesarClick(int x, int y) {
             else iniciar2dojuego();
             return;
         }
+
         // Si se hace clic fuera de los botones, no hacer nada
         return;
     }
