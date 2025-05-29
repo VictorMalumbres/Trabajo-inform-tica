@@ -1,42 +1,43 @@
 #pragma once
 #ifndef IA_H
 #define IA_H
-#include <random>
-#include <vector>
 
-//Adelanto de clases
+#include <utility>
+#include <vector>
+#include <climits>
+
 class Tablero;
 class Pieza;
 
 class IA {
 public:
-    //bando = 0 (blancas) o 1 (negras)
-    explicit IA(int bando);
+    // bando: 0 = blancas, 1 = negras
+    // profundidad: número de plies a explorar
+    explicit IA(int bando, int profundidad = 3);
 
-    //Para movimientos aleatorio sobre el tablero
+    // Calcula la mejor jugada y la ejecuta sobre 'tablero'
     void jugar(Tablero& tablero);
 
     static bool estaAmenazada(Tablero& tablero, int col, int fil, int bandoPropio);
-
-    int evaluarJugada(Tablero& tablero, Pieza* pieza, int col, int fil, int bando);
-
-    static int contarProteccionRey(Tablero& tablero, int bando);
-
-    int contarAmenazasAlrededorRey(Tablero& tablero, int bando);
-
-	int movilidadCercaDelRey(Tablero& tablero, int bando);
 
     Pieza* elegirPiezaCoronacion(int x, int y);
 
 private:
     int bando_;
+    int maxDepth_;
 
-    //Estructura para el movimiento
+    // Representa un movimiento: from (x,y) to (x',y')
     struct Movimiento {
-        Pieza* pieza;
-        int col;
-        int fil;
+        int origX, origY;
+        int destX, destY;
     };
+
+    // Minimax con poda alpha-beta. Devuelve {evaluación, mejorMovimiento}
+    std::pair<int, Movimiento>
+        minimax(Tablero* tablero, int depth, int alpha, int beta, bool maximizingPlayer);
+
+    // Heurística simple: diferencia de material
+    int evaluarTablero(Tablero& tablero) const;
 };
 
-#endif
+#endif // IA_H
