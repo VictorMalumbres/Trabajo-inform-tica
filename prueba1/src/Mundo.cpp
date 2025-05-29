@@ -294,11 +294,11 @@ void Mundo::volumenMusica() {
         ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
     }
     if (mundo.volumen == 2) {
-        mundo.musicaActual = "sonidos/musica_clasica.mp3";
+        mundo.musicaActual = "sonidos/musica_clasica (-50%).mp3";
         ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
     }
     else if (mundo.volumen == 1) {
-        mundo.musicaActual = "sonidos/musica_clasica.mp3";
+        mundo.musicaActual = "sonidos/musica_clasica (-85%).mp3";
         ETSIDI::playMusica(mundo.musicaActual.c_str(), true);
     }
     else if (mundo.volumen == 0) {
