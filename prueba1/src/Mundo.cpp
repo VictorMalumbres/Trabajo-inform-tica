@@ -76,14 +76,13 @@ void Mundo::dibuja() {
     case INSTRUCCIONES_PIEZAS:
         mostrarInstruccionesPiezas();
         break;
+
     case LEYENDA:
         mostrarLeyenda();
         break;
-    case JAQUE_MATE:
-        mostrarVentanaJaqueMate();
-        break;
     }
 }
+
 
 void Mundo::renderizarTexto(const std::string& texto, float x, float y, void* fuente) {
     glColor3f(1.0f, 1.0f, 1.0f); // Color del texto (blanco)
@@ -141,7 +140,7 @@ void Mundo::mostrarMenuEnVentana() {
     glEnd();
 
     glDisable(GL_TEXTURE_2D);
-    
+
     if (musica == false) {
         musicaActual = "sonidos/elevador.mp3";
         ETSIDI::playMusica(musicaActual.c_str(), true);
@@ -178,7 +177,7 @@ void Mundo::mostrarMenuEnVentana() {
     renderizarTexto("4. Salir", -0.4f, -0.02f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("Seleccione una opcion con el raton...", -0.3f, -0.22f, GLUT_BITMAP_HELVETICA_12);
 
-     //Instrucciones de la música en el juego
+    //Instrucciones de la música en el juego
     renderizarTexto("Usa + o - para cambiar el volumen en el juego", 0.45f, -0.38f, GLUT_BITMAP_HELVETICA_10);
     renderizarTexto("Pulsa espacio para pausar el juego", 0.45f, -0.43f, GLUT_BITMAP_HELVETICA_10);
 
@@ -236,12 +235,12 @@ void manejarTeclado(unsigned char key, int x, int y) {
         }
     }
 
-/* else if (mundo.getEstadoActual() == INSTRUCCIONES && key == 27) { // 27 = ESC
-        mundo.setEstadoActual(MENU);
-        glutPostRedisplay();
-        return;
-    }*/
-   
+    /* else if (mundo.getEstadoActual() == INSTRUCCIONES && key == 27) { // 27 = ESC
+            mundo.setEstadoActual(MENU);
+            glutPostRedisplay();
+            return;
+        }*/
+
 
     else if ((mundo.getEstadoActual() == INSTRUCCIONES ||
         mundo.getEstadoActual() == INSTRUCCIONES_DEMI ||
@@ -370,13 +369,18 @@ void Mundo::mostrarPausa() {
     glVertex2f(-0.5f, yBotonSalirJuego - alturaBoton);
     glEnd();
 
+
     renderizarTexto("Ver Leyenda", -0.17f, 0.4f, GLUT_BITMAP_HELVETICA_18);
     renderizarTexto("Reiniciar partida", -0.17f, 0.2f, GLUT_BITMAP_HELVETICA_18);
     renderizarTexto("Volver al menu", -0.17f, 0.0f, GLUT_BITMAP_HELVETICA_18);
     renderizarTexto("Salir del juego", -0.17f, -0.2f, GLUT_BITMAP_HELVETICA_18);
 
+
+
+
     glutSwapBuffers();
 }
+
 
 void Mundo::iniciarJuego() {
     mundo.volumenMusica();
@@ -396,8 +400,8 @@ void Mundo::iniciarJuego() {
             ETSIDI::stopMusica();
             mundo.mostrarPausa();
         }
-    });
-    glutIdleFunc([]() {glutPostRedisplay();});
+        });
+    glutIdleFunc([]() {glutPostRedisplay(); });
 }
 
 void Mundo::iniciar2dojuego() {
@@ -419,8 +423,8 @@ void Mundo::iniciar2dojuego() {
             mundo.mostrarPausa();
         }
 
-    });
-    glutIdleFunc([]() {glutPostRedisplay();});
+        });
+    glutIdleFunc([]() {glutPostRedisplay(); });
 }
 
 void Mundo::cerrarAplicacion() {
@@ -516,22 +520,22 @@ void Mundo::procesarClick(int x, int y) {
                 glutPostRedisplay();
             }
         }
-	}
-	else if (modoJuego == 2)
-	{
-		int columna = x / (800 / 4);            // Tablero 8x4
-		int fila = 7 - (y / (600 / 8));         // Convertimos coordenada Y
-		// Desactiva el resaltado de todas las piezas
-		for (Pieza* pieza : tablero2.getPiezas()) {
-			pieza->setResaltado(false);
-		}
-		// Usa la selección del tablero
-		if (tablero2.getSeleccionX() == -1 && tablero2.getSeleccionY() == -1) {
-			Pieza* p = tablero2.obtenerPieza(columna, fila);
-			if (p != nullptr) {
-				tablero2.setSeleccion(columna, fila);
-			}
-		}
+    }
+    else if (modoJuego == 2)
+    {
+        int columna = x / (800 / 4);            // Tablero 8x4
+        int fila = 7 - (y / (600 / 8));         // Convertimos coordenada Y
+        // Desactiva el resaltado de todas las piezas
+        for (Pieza* pieza : tablero2.getPiezas()) {
+            pieza->setResaltado(false);
+        }
+        // Usa la selección del tablero
+        if (tablero2.getSeleccionX() == -1 && tablero2.getSeleccionY() == -1) {
+            Pieza* p = tablero2.obtenerPieza(columna, fila);
+            if (p != nullptr) {
+                tablero2.setSeleccion(columna, fila);
+            }
+        }
         else {
             int origenX = tablero2.getSeleccionX();
             int origenY = tablero2.getSeleccionY();
@@ -558,7 +562,7 @@ void Mundo::procesarClick(int x, int y) {
     if (estadoActual == MENU) {
         // Convertir coordenadas de ventana a OpenGL [-1, 1]
         float x_gl = (float)x / 400.0f - 1.0f;      // Correcto para 800px de ancho
-        float y_gl = 1.0f - (float)y / 300.0f;      
+        float y_gl = 1.0f - (float)y / 300.0f;
 
 
 
@@ -595,7 +599,7 @@ void Mundo::procesarClick(int x, int y) {
         }
     }
 
-	if (estadoActual == INSTRUCCIONES) {
+    if (estadoActual == INSTRUCCIONES) {
         if (x_gl >= -0.6f && x_gl <= 0.6f) {
             if (y_gl >= 0.4f && y_gl <= 0.5f) {
                 // Instrucciones modo DEMI
@@ -616,7 +620,7 @@ void Mundo::procesarClick(int x, int y) {
                 return;
             }
         }
-	}
+    }
     if (estadoActual == OPONENTE) {
         float x_gl = (float)x / 400.0f - 1.0f;
         float y_gl = 1.0f - (float)y / 300.0f;
@@ -777,6 +781,7 @@ void Mundo::procesarClick(int x, int y) {
             }
         }
 
+
         return;
     }
     if (estadoActual == LEYENDA) {
@@ -786,24 +791,6 @@ void Mundo::procesarClick(int x, int y) {
         return;
     }
 
-    if (estadoActual == JAQUE_MATE) {
-        float x_gl = (float)x / 400.0f - 1.0f;
-        float y_gl = 1.0f - (float)y / 300.0f;
-
-        // Botón: Volver al Menú Principal
-        if (x_gl >= -0.4f && x_gl <= 0.4f && y_gl >= -0.05f && y_gl <= 0.1f) {
-            //reiniciar
-            if (modoJuego == 1) iniciarJuego();
-            else iniciar2dojuego();
-            estadoActual = MENU;
-            glutPostRedisplay();
-        }
-
-        // Botón: Salir del Juego
-        if (x_gl >= -0.4f && x_gl <= 0.4f && y_gl >= -0.3f && y_gl <= -0.15f) {
-            exit(0);
-        }
-    }
 }
 
 void Mundo::mostrarConfirmacionMenu() {
@@ -871,7 +858,7 @@ void Mundo::mostrarConfirmacionSalir() {
     glVertex2f(0.4f, -0.3f); glVertex2f(0.1f, -0.3f);
     glEnd();
     renderizarTexto("NO", 0.18f, -0.22f, GLUT_BITMAP_HELVETICA_18);
-    
+
     glutSwapBuffers();
 }
 
@@ -918,10 +905,34 @@ void Mundo::mostrarMenuVictoria() {
     glVertex2f(1.0f, -1.0f); glVertex2f(-1.0f, -1.0f);
     glEnd();
 
+    /*
+    // Mostrar mensaje de Jaque Mate si el estado es victoria
+    if (mundo && mundo->getEstadoActual() == VICTORIA) {
+        glColor3f(1.0f, 0.0f, 0.0f); // Rojo
+        glRasterPos2f(0.5f, numFilas / 2.0f); // Ajusta la posición según tu tablero
+
+        std::string mensaje = "JAQUE MATE";
+        for (char c : mensaje) {
+            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+        }
+
+        // Mostrar el ganador:
+        std::string ganador = (mundo->jugadorGanador == 0) ? "Ganan BLANCAS" : "Ganan NEGRAS";
+        glRasterPos2f(0.5f, numFilas / 2.0f - 1.0f); // Un poco más abajo
+        for (char c : ganador) {
+            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+        }
+    }
+    */
+
+    // Mensaje "JAQUE MATE" grande y centrado arriba
+    renderizarTextoGrande("JAQUE MATE", -0.43f, 0.7f, 0.0012f);
+
     // Mensaje de victoria (más pequeño y centrado)
     glColor3f(1.0f, 1.0f, 0.0f);
     std::string mensaje = (jugadorGanador == 0) ? "¡Ganan las BLANCAS!" : "¡Ganan las NEGRAS!";
     renderizarTextoGrande(mensaje.c_str(), -0.42f, 0.5f, 0.0007f);
+
 
     // Botón: Volver a jugar
     glColor3f(0.2f, 0.6f, 0.2f);
@@ -1140,6 +1151,7 @@ void Mundo::mostrarInstruccionesDemi() {
     glutSwapBuffers();
 }
 
+
 void Mundo::mostrarInstruccionesSilverman() {
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -1203,7 +1215,6 @@ void Mundo::mostrarInstruccionesPiezas() {
 
     glutSwapBuffers();
 }
-
 void Mundo::dibujarPieza(float x, float y, const char* nombre, int color) {
     char archivo[100] = "imagenes/";
     strcat_s(archivo, sizeof(archivo), nombre);
@@ -1237,6 +1248,7 @@ void Mundo::dibujarPieza(float x, float y, const char* nombre, int color) {
 
     renderizarTexto(nombre, x + 0.22f, y - 0.1f, GLUT_BITMAP_HELVETICA_18);
 }
+
 
 void Mundo::mostrarLeyenda() {
     glMatrixMode(GL_PROJECTION);
@@ -1283,47 +1295,6 @@ void Mundo::mostrarLeyenda() {
     }
 
     renderizarTexto("Haz clic para continuar", -0.3f, -0.85f, GLUT_BITMAP_HELVETICA_12);
-
-    glutSwapBuffers();
-}
-
-void Mundo::mostrarVentanaJaqueMate() {
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    // Fondo
-    glColor3f(0.1f, 0.1f, 0.1f);
-    glBegin(GL_QUADS);
-    glVertex2f(-1.0f, 1.0f); glVertex2f(1.0f, 1.0f);
-    glVertex2f(1.0f, -1.0f); glVertex2f(-1.0f, -1.0f);
-    glEnd();
-
-    // Mensaje de Jaque Mate
-    glColor3f(1.0f, 0.0f, 0.0f); // Rojo
-    std::string mensaje = (jugadorGanador == 0) ? "¡Jaque mate! Ganan las BLANCAS" : "¡Jaque mate! Ganan las NEGRAS";
-    renderizarTextoGrande(mensaje.c_str(), -0.5f, 0.5f, 0.0007f);
-
-    // Botón: Volver a jugar
-    glColor3f(0.2f, 0.6f, 0.2f);
-    glBegin(GL_QUADS);
-    glVertex2f(-0.4f, 0.1f); glVertex2f(0.4f, 0.1f);
-    glVertex2f(0.4f, -0.05f); glVertex2f(-0.4f, -0.05f);
-    glEnd();
-    renderizarTexto("Volver a jugar", -0.15f, 0.02f, GLUT_BITMAP_HELVETICA_18);
-
-    // Botón: Volver al menú
-    glColor3f(0.2f, 0.2f, 0.6f);
-    glBegin(GL_QUADS);
-    glVertex2f(-0.4f, -0.15f); glVertex2f(0.4f, -0.15f);
-    glVertex2f(0.4f, -0.3f); glVertex2f(-0.4f, -0.3f);
-    glEnd();
-    renderizarTexto("Volver al menú", -0.17f, -0.23f, GLUT_BITMAP_HELVETICA_18);
 
     glutSwapBuffers();
 }
