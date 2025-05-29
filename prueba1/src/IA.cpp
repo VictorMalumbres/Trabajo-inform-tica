@@ -36,7 +36,7 @@ void IA::jugar(Tablero& tablero) {
 }
 
 // Devuelve true si la casilla (col, fil) está amenazada por alguna pieza del oponente
-bool IA::estaAmenazada( Tablero& tablero, int col, int fil, int bandoPropio) {
+bool IA::estaAmenazada(Tablero& tablero, int col, int fil, int bandoPropio) {
     for (Pieza* p : tablero.getPiezas()) {
         if (p->getBando() == bandoPropio) continue; // Solo piezas del oponente
         auto movs = p->movimientosPosibles(tablero);
@@ -51,6 +51,11 @@ bool IA::estaAmenazada( Tablero& tablero, int col, int fil, int bandoPropio) {
 int IA::evaluarJugada(Tablero& tablero, Pieza* pieza, int col, int fil, int bando) {
     int score = 0;
     Pieza* objetivo = tablero.obtenerPieza(col, fil);
+
+    // Penaliza si intenta capturar una pieza propia
+    if (objetivo && objetivo->getBando() == bando) {
+        score -= objetivo->getValor() * 20; // Penalización fuerte
+    }
 
     // Captura valiosa
     if (objetivo && objetivo->getBando() != bando) {
@@ -138,6 +143,66 @@ int IA::evaluarJugada(Tablero& tablero, Pieza* pieza, int col, int fil, int band
         // Bonificación proporcional al valor de la pieza
         score += pieza->getValor() * 5; // Ajusta el multiplicador según lo que valores
     }
+
+    // Bonifica control del centro
+    if ((col >= 2 && col <= 5) && (fil >= 2 && fil <= 5)) {
+        score += 3;
+    }
+
+    // Bonifica desarrollo de piezas menores en apertura
+    if ((pieza->getValor() == 3) && (pieza->getBando() == bando)) {
+        int filaInicial = (bando == 0) ? 0 : tablero.getNumFilas() - 1;
+        if (pieza->getY() == filaInicial && fil != filaInicial) {
+            score += 4;
+        }
+    }
+
+    // Bonifica movilidad de la pieza (cantidad de movimientos posibles desde la posición actual)
+    int movilidad2 = pieza->movimientosPosibles(tablero).size();
+    score += movilidad2 / 2; // Ajusta el divisor según lo que valores
+
+    // Penaliza peones doblados
+    if (pieza->getValor() == 1) {
+        int peonesMismaCol = 0;
+        for (Pieza* aliada : tablero.getPiezas()) {
+            if (aliada->getBando() == bando && aliada->getValor() == 1 && aliada->getX() == col && aliada != pieza)
+                peonesMismaCol++;
+        }
+        if (peonesMismaCol > 0) score -= 5 * peonesMismaCol;
+    }
+
+    // Bonifica promoción de peones
+    if (pieza->getValor() == 1) {
+        int filaPromocion = (bando == 0) ? tablero.getNumFilas() - 1 : 0;
+        if (fil == filaPromocion) {
+            score += 50;
+        }
+    }
+
+    // Bonifica coordinación de piezas (casilla destino defendida)
+    int defensores = 0;
+    for (Pieza* aliada : tablero.getPiezas()) {
+        if (aliada->getBando() == bando && aliada != pieza) {
+            auto movs = aliada->movimientosPosibles(tablero);
+            for (const auto& mv : movs) {
+                if (mv.first == col && mv.second == fil) {
+                    defensores++;
+                    break;
+                }
+            }
+        }
+    }
+    score += defensores * 2;
+
+    /*// Penaliza mover la misma pieza varias veces en la apertura
+    static int turnoApertura = 10;
+    if (tablero.contadorMovimiento < turnoApertura && pieza->getValor() < 9) {
+        int filaInicial = (bando == 0) ? 0 : tablero.getNumFilas() - 1;
+        if (pieza->getY() != filaInicial) {
+            score -= 2;
+        }
+    }*/
+
 
     return score;
 }
