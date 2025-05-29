@@ -18,7 +18,7 @@ void Alfil::dibuja() {
         glEnable(GL_BLEND);  // <-- Activa blending para transparencia
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  // <-- Función de mezcla correcta
 
-        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/AlfilBlanco.png").id);
+        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/alfil_blanco.png").id);
 
         // Filtros lineales para mejor calidad
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -50,7 +50,7 @@ void Alfil::dibuja() {
         glEnable(GL_BLEND);  // <-- Activa blending para transparencia
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  // <-- Función de mezcla correcta
 
-        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/AlfilNegro.png").id);
+        glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/alfil_negro.png").id);
 
         // Filtros lineales para mejor calidad
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

@@ -14,11 +14,11 @@ void Torre::dibuja() {
     GLuint texID;
     float size;
     if (getBando() == 0) {
-        texID = ETSIDI::getTexture("imagenes/TorreBlanco.png").id;
+        texID = ETSIDI::getTexture("imagenes/torre_blanco.png").id;
         size = 0.3f;
     }
     else {
-        texID = ETSIDI::getTexture("imagenes/TorreNegro.png").id;
+        texID = ETSIDI::getTexture("imagenes/torre_negro.png").id;
         size = 0.45f;
     }
 

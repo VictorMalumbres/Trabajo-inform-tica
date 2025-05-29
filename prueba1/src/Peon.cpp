@@ -13,10 +13,10 @@ void Peon::dibuja() {
 
     GLuint texID;
     if (getBando() == 0) {
-        texID = ETSIDI::getTexture("imagenes/minions.png").id;
+        texID = ETSIDI::getTexture("imagenes/peon_blanco.png").id;
     }
     else {
-        texID = ETSIDI::getTexture("imagenes/minionmor.png").id;
+        texID = ETSIDI::getTexture("imagenes/peon_negro.png").id;
     }
 
     if (texID == 0) {

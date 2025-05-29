@@ -17,10 +17,10 @@ void Rey::dibuja() {
 
     GLuint texID;
     if (getBando() == 0) {
-        texID = ETSIDI::getTexture("imagenes/Gru.png").id;
+        texID = ETSIDI::getTexture("imagenes/rey_blanco.png").id;
     }
     else {
-        texID = ETSIDI::getTexture("imagenes/Dru.png").id;
+        texID = ETSIDI::getTexture("imagenes/rey_negro.png").id;
     }
 
     if (texID == 0) {

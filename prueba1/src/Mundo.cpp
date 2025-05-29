@@ -66,21 +66,23 @@ void Mundo::dibuja() {
         break;
     case OPONENTE:
         mostrarMenuOponente();
-		break;
-	case INSTRUCCIONES_DEMI:
-		mostrarInstruccionesDemi();
-		break;
-	case INSTRUCCIONES_SILVERMAN:
-		mostrarInstruccionesSilverman();
-		break;
-	case INSTRUCCIONES_PIEZAS:
-		mostrarInstruccionesPiezas();
-		break;
-    }
-    
-   
+        break;
+    case INSTRUCCIONES_DEMI:
+        mostrarInstruccionesDemi();
+        break;
+    case INSTRUCCIONES_SILVERMAN:
+        mostrarInstruccionesSilverman();
+        break;
+    case INSTRUCCIONES_PIEZAS:
+        mostrarInstruccionesPiezas();
+        break;
 
+    case LEYENDA:
+        mostrarLeyenda();
+        break;
+    }
 }
+
 
 void Mundo::renderizarTexto(const std::string& texto, float x, float y, void* fuente) {
     glColor3f(1.0f, 1.0f, 1.0f); // Color del texto (blanco)
@@ -585,50 +587,37 @@ void Mundo::procesarClick(int x, int y) {
         }
 	}
     if (estadoActual == OPONENTE) {
-        // Convertir coordenadas de ventana a OpenGL [-1, 1]
-        float x_gl = (float)x / 400.0f - 1.0f;      // Correcto para 800px de ancho
+        float x_gl = (float)x / 400.0f - 1.0f;
         float y_gl = 1.0f - (float)y / 300.0f;
 
-
-
-        // Comprobamos las opciones en el área de botones
         if (x_gl >= -0.45f && x_gl <= 0.45f) {
             if (y_gl >= 0.55f && y_gl <= 0.65f) {
-                // Opción 1: VS Jugador
-                if (modoJuego == 1) {
-                    activarIA = false;
-                    iniciarJuego();
-                }
-                else if (modoJuego == 2) {
-                    activarIA = false;
-                    iniciar2dojuego();
-                }
-                std::cout << "Opción 1: Jugador VS Jugador" << std::endl;
+                // VS Jugador
+                activarIA = false;      // Guardamos la elección para luego
+                proximoVsIA = false;    // También si quieres guardar aparte
+                estadoActual = LEYENDA; // Cambiamos a mostrar leyenda
                 glutPostRedisplay();
+                std::cout << "Opción 1: Jugador VS Jugador" << std::endl;
                 return;
             }
             else if (y_gl >= 0.35f && y_gl <= 0.45f) {
-                // Opción 2: VS IA
-                if (modoJuego == 1) {
-                    activarIA = true;
-                    iniciarJuego();
-                }
-                else if (modoJuego == 2) {
-                    activarIA = true;
-                    iniciar2dojuego();
-                }
+                // VS IA
+                activarIA = true;
+                proximoVsIA = true;
+                estadoActual = LEYENDA; // Cambiamos a mostrar leyenda
+                glutPostRedisplay();
                 std::cout << "Opción 2: Jugador VS IA" << std::endl;
                 return;
             }
             else if (y_gl >= -0.05f && y_gl <= 0.05f) {
-                // Opción 4: Volver al menu
-                setEstadoActual(MENU); // <-- Cambia esto
+                // Volver al menú
+                setEstadoActual(MENU);
                 glutPostRedisplay();
                 return;
             }
-
         }
     }
+
     if (juegoEnPausa) {
         // Convertir coordenadas de ventana a OpenGL [-1, 1]
         float x_gl = (float)x / 400.0f - 1.0f; // 800px de ancho
@@ -751,6 +740,13 @@ void Mundo::procesarClick(int x, int y) {
 
         return;
     }
+    if (estadoActual == LEYENDA) {
+        activarIA = proximoVsIA;
+        if (modoJuego == 1) iniciarJuego();
+        else iniciar2dojuego();
+        return;
+    }
+
 }
 
 void Mundo::mostrarConfirmacionMenu() {
@@ -1042,7 +1038,7 @@ void Mundo::mostrarMenuOponente() {
     renderizarTextoGrande("MODO DE JUEGO", -0.45f, 0.8f, 0.0008f);
     renderizarTexto("1. Jugador VS Jugador", -0.4f, 0.58f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("2. Jugador VS Maquina", -0.4f, 0.38f, GLUT_BITMAP_HELVETICA_12);
-    renderizarTexto("4. Volver", -0.4f, -0.02f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("3. Volver", -0.4f, -0.02f, GLUT_BITMAP_HELVETICA_12);
 
     glutSwapBuffers(); // Mostrar el contenido
 }
@@ -1148,6 +1144,89 @@ void Mundo::mostrarInstruccionesPiezas() {
     renderizarTexto("- Caballos se mueven en L.", -0.5f, 0.35f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("- Rey se mueve una casilla en cualquier dirección.", -0.5f, 0.30f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("Presione ESC para volver al menu...", -0.5f, -0.3f, GLUT_BITMAP_HELVETICA_12);
+
+    glutSwapBuffers();
+}
+void Mundo::dibujarPieza(float x, float y, const char* nombre, int color) {
+    char archivo[100] = "imagenes/";
+    strcat_s(archivo, sizeof(archivo), nombre);
+    strcat_s(archivo, sizeof(archivo), "_");
+    if (color == 0)
+        strcat_s(archivo, sizeof(archivo), "blanco.png");
+    else
+        strcat_s(archivo, sizeof(archivo), "negro.png");
+
+    unsigned texID = ETSIDI::getTexture(archivo).id;
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texID);
+
+    // Mejorar calidad con filtrado lineal
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0); glVertex2f(x, y);
+    glTexCoord2f(1, 0); glVertex2f(x + 0.2f, y);
+    glTexCoord2f(1, 1); glVertex2f(x + 0.2f, y - 0.2f);
+    glTexCoord2f(0, 1); glVertex2f(x, y - 0.2f);
+    glEnd();
+
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_BLEND);
+
+    renderizarTexto(nombre, x + 0.22f, y - 0.1f, GLUT_BITMAP_HELVETICA_18);
+}
+
+
+void Mundo::mostrarLeyenda() {
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1, 1, -1, 1);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glColor3f(0.2f, 0.2f, 0.2f);
+    glBegin(GL_QUADS);
+    glVertex2f(-1, 1);
+    glVertex2f(1, 1);
+    glVertex2f(1, -1);
+    glVertex2f(-1, -1);
+    glEnd();
+
+    renderizarTexto("Equipo Blanco", -0.85f, 0.7f, GLUT_BITMAP_HELVETICA_18);
+    renderizarTexto("Equipo Negro", 0.15f, 0.7f, GLUT_BITMAP_HELVETICA_18);
+
+    const char* piezasModo1[] = { "rey", "reina", "torre", "peon" };              // Silverman
+    const char* piezasModo2[] = { "rey", "torre", "caballo", "alfil", "peon" };   // Demi
+
+    const char** piezas;
+    int numPiezas;
+
+    if (modoJuego == 1) {
+        piezas = piezasModo1;
+        numPiezas = 4;
+    }
+    else {
+        piezas = piezasModo2;
+        numPiezas = 5;
+    }
+
+    float y = (modoJuego == 1) ? 0.4f : 0.5f;
+    float separacion = -0.3f;
+
+    for (int i = 0; i < numPiezas; i++) {
+        dibujarPieza(-0.85f, y + i * separacion, piezas[i], 0);  // Blanco
+        dibujarPieza(0.15f, y + i * separacion, piezas[i], 1);  // Negro
+    }
+
+    renderizarTexto("Haz clic para continuar", -0.3f, -0.85f, GLUT_BITMAP_HELVETICA_12);
 
     glutSwapBuffers();
 }

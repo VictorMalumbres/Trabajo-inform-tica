@@ -11,10 +11,10 @@ void Caballo::dibuja() {
 
     GLuint texID;
     if (getBando() == 0) {
-        texID = ETSIDI::getTexture("imagenes/PerroBlanco.png").id;
+        texID = ETSIDI::getTexture("imagenes/caballo_blanco.png").id;
     }
     else {
-        texID = ETSIDI::getTexture("imagenes/PerroNegro.png").id;
+        texID = ETSIDI::getTexture("imagenes/caballo_negro.png").id;
     }
 
     if (texID == 0) {

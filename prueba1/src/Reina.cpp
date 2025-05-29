@@ -10,8 +10,8 @@ void Reina::dibuja() {
     glPushMatrix();
     glTranslated(getX() + 0.5f, getY() + 0.5f, 0);
 
-    GLuint texID = (getBando() == 0) ? ETSIDI::getTexture("imagenes/ReinaBlanca.png").id
-        : ETSIDI::getTexture("imagenes/ReinaNegro.png").id;
+    GLuint texID = (getBando() == 0) ? ETSIDI::getTexture("imagenes/reina_blanco.png").id
+        : ETSIDI::getTexture("imagenes/reina_negro.png").id;
 
     if (texID == 0) {
         glPopMatrix();

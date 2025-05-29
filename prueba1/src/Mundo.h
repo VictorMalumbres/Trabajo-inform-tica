@@ -14,7 +14,8 @@ enum EstadoMundo {
     OPONENTE,
     INSTRUCCIONES_DEMI,
 	INSTRUCCIONES_SILVERMAN,
-    INSTRUCCIONES_PIEZAS
+    INSTRUCCIONES_PIEZAS,
+    LEYENDA
 };
 
 class Mundo {
@@ -89,4 +90,9 @@ public:
     bool isIAActiva() const { return activarIA; };
     int getModoJuego() const { return modoJuego; };
     IA& getIA() { return iaNegras; };
+
+    bool proximoVsIA;  // Para saber si jugarás contra IA o contra jugador
+
+    void dibujarPieza(float x, float y, const char* nombre, int color);
+    void mostrarLeyenda();
 };
