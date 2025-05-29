@@ -15,7 +15,8 @@ enum EstadoMundo {
     INSTRUCCIONES_DEMI,
 	INSTRUCCIONES_SILVERMAN,
     INSTRUCCIONES_PIEZAS,
-    LEYENDA
+    LEYENDA,
+    JAQUE_MATE
 };
 
 class Mundo {
@@ -77,6 +78,7 @@ public:
     int jugadorGanador = -1; // 0 = blancas, 1 = negras
     void mostrarMenuVictoria();
     void mostrarMenuEmpate();
+    void mostrarVentanaJaqueMate();
 
     int coronacionX = -1;
     int coronacionY = -1;

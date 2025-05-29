@@ -69,9 +69,6 @@ public:
 
     bool esCapturaAlPaso(int col, int fila, int bando) const;
 
-    bool estaEnJaque(int bando) const;
-    void actualizarEstadoJaque();
-
     std::vector<std::pair<int, int>> casillasEnJaque;
 
     Tablero* clonar() const;
@@ -80,8 +77,12 @@ public:
         return (bando == 0) ? reyBlanco : reyNegro;
     }
 
+    bool estaEnJaque(int bando) const;
+    void actualizarEstadoJaque();
     bool esStalemate(int bando);  //Rey ahogado
     bool materialInsuficiente() const;  //Material insuficiente (Rey o Rey+Alfil o Rey+Caballo)
+
+    bool esJaqueMate(int bando);  // NUEVA FUNCIÓN JAQUE
 
 };
 #endif // TABLERO_H

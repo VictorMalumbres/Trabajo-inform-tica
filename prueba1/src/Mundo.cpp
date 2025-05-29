@@ -76,13 +76,14 @@ void Mundo::dibuja() {
     case INSTRUCCIONES_PIEZAS:
         mostrarInstruccionesPiezas();
         break;
-
     case LEYENDA:
         mostrarLeyenda();
         break;
+    case JAQUE_MATE:
+        mostrarVentanaJaqueMate();
+        break;
     }
 }
-
 
 void Mundo::renderizarTexto(const std::string& texto, float x, float y, void* fuente) {
     glColor3f(1.0f, 1.0f, 1.0f); // Color del texto (blanco)
@@ -369,18 +370,13 @@ void Mundo::mostrarPausa() {
     glVertex2f(-0.5f, yBotonSalirJuego - alturaBoton);
     glEnd();
 
-
     renderizarTexto("Ver Leyenda", -0.17f, 0.4f, GLUT_BITMAP_HELVETICA_18);
     renderizarTexto("Reiniciar partida", -0.17f, 0.2f, GLUT_BITMAP_HELVETICA_18);
     renderizarTexto("Volver al menu", -0.17f, 0.0f, GLUT_BITMAP_HELVETICA_18);
     renderizarTexto("Salir del juego", -0.17f, -0.2f, GLUT_BITMAP_HELVETICA_18);
 
-
-
-
     glutSwapBuffers();
 }
-
 
 void Mundo::iniciarJuego() {
     mundo.volumenMusica();
@@ -781,7 +777,6 @@ void Mundo::procesarClick(int x, int y) {
             }
         }
 
-
         return;
     }
     if (estadoActual == LEYENDA) {
@@ -791,6 +786,24 @@ void Mundo::procesarClick(int x, int y) {
         return;
     }
 
+    if (estadoActual == JAQUE_MATE) {
+        float x_gl = (float)x / 400.0f - 1.0f;
+        float y_gl = 1.0f - (float)y / 300.0f;
+
+        // Botón: Volver al Menú Principal
+        if (x_gl >= -0.4f && x_gl <= 0.4f && y_gl >= -0.05f && y_gl <= 0.1f) {
+            //reiniciar
+            if (modoJuego == 1) iniciarJuego();
+            else iniciar2dojuego();
+            estadoActual = MENU;
+            glutPostRedisplay();
+        }
+
+        // Botón: Salir del Juego
+        if (x_gl >= -0.4f && x_gl <= 0.4f && y_gl >= -0.3f && y_gl <= -0.15f) {
+            exit(0);
+        }
+    }
 }
 
 void Mundo::mostrarConfirmacionMenu() {
@@ -1127,7 +1140,6 @@ void Mundo::mostrarInstruccionesDemi() {
     glutSwapBuffers();
 }
 
-
 void Mundo::mostrarInstruccionesSilverman() {
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -1191,6 +1203,7 @@ void Mundo::mostrarInstruccionesPiezas() {
 
     glutSwapBuffers();
 }
+
 void Mundo::dibujarPieza(float x, float y, const char* nombre, int color) {
     char archivo[100] = "imagenes/";
     strcat_s(archivo, sizeof(archivo), nombre);
@@ -1224,7 +1237,6 @@ void Mundo::dibujarPieza(float x, float y, const char* nombre, int color) {
 
     renderizarTexto(nombre, x + 0.22f, y - 0.1f, GLUT_BITMAP_HELVETICA_18);
 }
-
 
 void Mundo::mostrarLeyenda() {
     glMatrixMode(GL_PROJECTION);
@@ -1271,6 +1283,47 @@ void Mundo::mostrarLeyenda() {
     }
 
     renderizarTexto("Haz clic para continuar", -0.3f, -0.85f, GLUT_BITMAP_HELVETICA_12);
+
+    glutSwapBuffers();
+}
+
+void Mundo::mostrarVentanaJaqueMate() {
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Fondo
+    glColor3f(0.1f, 0.1f, 0.1f);
+    glBegin(GL_QUADS);
+    glVertex2f(-1.0f, 1.0f); glVertex2f(1.0f, 1.0f);
+    glVertex2f(1.0f, -1.0f); glVertex2f(-1.0f, -1.0f);
+    glEnd();
+
+    // Mensaje de Jaque Mate
+    glColor3f(1.0f, 0.0f, 0.0f); // Rojo
+    std::string mensaje = (jugadorGanador == 0) ? "¡Jaque mate! Ganan las BLANCAS" : "¡Jaque mate! Ganan las NEGRAS";
+    renderizarTextoGrande(mensaje.c_str(), -0.5f, 0.5f, 0.0007f);
+
+    // Botón: Volver a jugar
+    glColor3f(0.2f, 0.6f, 0.2f);
+    glBegin(GL_QUADS);
+    glVertex2f(-0.4f, 0.1f); glVertex2f(0.4f, 0.1f);
+    glVertex2f(0.4f, -0.05f); glVertex2f(-0.4f, -0.05f);
+    glEnd();
+    renderizarTexto("Volver a jugar", -0.15f, 0.02f, GLUT_BITMAP_HELVETICA_18);
+
+    // Botón: Volver al menú
+    glColor3f(0.2f, 0.2f, 0.6f);
+    glBegin(GL_QUADS);
+    glVertex2f(-0.4f, -0.15f); glVertex2f(0.4f, -0.15f);
+    glVertex2f(0.4f, -0.3f); glVertex2f(-0.4f, -0.3f);
+    glEnd();
+    renderizarTexto("Volver al menú", -0.17f, -0.23f, GLUT_BITMAP_HELVETICA_18);
 
     glutSwapBuffers();
 }

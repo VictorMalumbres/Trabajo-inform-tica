@@ -289,6 +289,42 @@ bool Tablero::estaEnJaque(int bando) const {
     return false;
 }
 
+bool Tablero::esJaqueMate(int bando) {
+    if (!estaEnJaque(bando)) return false;
+
+    for (Pieza* p : piezas) {
+        if (p->getBando() != bando) continue;
+        auto movs = p->movimientosPosibles(*this);
+        for (auto& m : movs) {
+            std::unique_ptr<Tablero> copia(this->clonar());
+            Pieza* pc = copia->obtenerPieza(p->getX(), p->getY());
+            if (!pc) continue;
+            if (pc->mueve(*copia, m.first, m.second)) {
+                // Simular el movimiento sin usar colocarPieza()
+                int originalX = pc->getX();
+                int originalY = pc->getY();
+                Pieza* capturada = copia->obtenerPieza(m.first, m.second);
+
+                if (capturada) {
+                    // Eliminar la pieza simulada
+                    auto& piezasCopia = copia->getPiezas();
+                    piezasCopia.erase(std::remove(piezasCopia.begin(), piezasCopia.end(), capturada), piezasCopia.end());
+                    delete capturada;
+                }
+
+                pc->setPosicion(m.second, m.first);
+                copia->actualizarEstadoJaque();
+
+                if (!copia->estaEnJaque(bando)) {
+                    return false;  // Hay al menos un movimiento que evita el jaque
+                }
+            }
+
+        }
+    }
+    return true;
+}
+
 void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool simular) {
     // Comprobar que es el turno de la pieza
     if (pieza->getBando() != turno) {
@@ -387,6 +423,15 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool s
 
     // Actualizar estado de jaque tras mover
     actualizarEstadoJaque();
+
+    if (esJaqueMate(turno)) {
+        if (mundo) {
+            mundo->jugadorGanador = 1 - turno; // El otro jugador gana
+            mundo->setEstadoActual(JAQUE_MATE);
+            glutPostRedisplay();
+        }
+        return;
+    }
 
     glutPostRedisplay();
 

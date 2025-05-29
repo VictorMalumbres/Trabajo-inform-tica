@@ -18,8 +18,30 @@ void IA::jugar(Tablero& tablero) {
         for (auto& mv : movs) {
             int col = mv.first, fil = mv.second;
             int score = IA::evaluarJugada(tablero, p, col, fil, bando_);
-            if (p->mueve(tablero, col, fil))
-                jugadas.push_back(Movimiento{ p, col, fil }), puntuaciones.push_back(score);
+            if (p->mueve(tablero, col, fil)) {
+                std::unique_ptr<Tablero> copia(tablero.clonar());
+                Pieza* pc = copia->obtenerPieza(p->getX(), p->getY());
+                if (!pc) continue;
+
+                if (pc->mueve(*copia, col, fil)) {
+                    // Simular el movimiento manualmente
+                    Pieza* capturada = copia->obtenerPieza(col, fil);
+                    if (capturada) {
+                        auto& piezasCopia = copia->getPiezas();
+                        piezasCopia.erase(std::remove(piezasCopia.begin(), piezasCopia.end(), capturada), piezasCopia.end());
+                        delete capturada;
+                    }
+
+                    pc->setPosicion(fil, col);
+                    copia->actualizarEstadoJaque();
+
+                    if (!copia->estaEnJaque(bando_)) {
+                        jugadas.push_back(Movimiento{ p, col, fil });
+                        puntuaciones.push_back(score);
+                    }
+                }
+            }
+
         }
     }
     if (jugadas.empty()) return;
