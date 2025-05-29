@@ -2,7 +2,11 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
+<<<<<<< Updated upstream
       <FullPath>C:\Users\Alvaro\Documents\GitHub\Trabajo-inform-tica\prueba1\x64\Debug\prueba1.exe</FullPath>
+=======
+      <FullPath>C:\Users\victo\Documents\GitHub\Trabajo-inform-tica\prueba1\x64\Debug\prueba1.exe</FullPath>
+>>>>>>> Stashed changes
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

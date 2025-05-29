@@ -22,6 +22,10 @@ public:
 
     static int contarProteccionRey(Tablero& tablero, int bando);
 
+    int contarAmenazasAlrededorRey(Tablero& tablero, int bando);
+
+	int movilidadCercaDelRey(Tablero& tablero, int bando);
+
     Pieza* elegirPiezaCoronacion(int x, int y);
 
 private:

@@ -57,9 +57,17 @@ int IA::evaluarJugada(Tablero& tablero, Pieza* pieza, int col, int fil, int band
         score += objetivo->getValor() * 10;
     }
 
-    // Penaliza si la pieza queda amenazada tras mover
+    // Penaliza si la pieza que se mueve queda amenazada tras mover
     if (IA::estaAmenazada(tablero, col, fil, bando)) {
-        score -= pieza->getValor();
+        score -= pieza->getValor() * 2;
+    }
+
+    // Penaliza si hay otras piezas propias valiosas amenazadas
+    for (Pieza* aliada : tablero.getPiezas()) {
+        if (aliada->getBando() != bando || aliada == pieza) continue;
+        if (aliada->getValor() >= 5 && IA::estaAmenazada(tablero, aliada->getX(), aliada->getY(), bando)) {
+            score -= aliada->getValor();
+        }
     }
 
     // Si la pieza es el rey, penaliza si se mueve a una casilla amenazada
@@ -67,11 +75,10 @@ int IA::evaluarJugada(Tablero& tablero, Pieza* pieza, int col, int fil, int band
         score -= 1000;
     }
 
-    // Penaliza si deja al rey propio en jaque
+    // Penaliza si deja al rey propio en jaque (solo si ya está en jaque)
     if (tablero.estaEnJaque(bando)) {
         score -= 1000;
     }
-	// Bonifica si mueve a una casilla segura (no amenazada)
 
     // Bonifica si tras mover, una pieza rival queda amenazada
     for (Pieza* rival : tablero.getPiezas()) {
@@ -80,12 +87,12 @@ int IA::evaluarJugada(Tablero& tablero, Pieza* pieza, int col, int fil, int band
         }
     }
 
-    // Bonifica si tras mover, el rey está más protegido
-    int proteccionAntes = contarProteccionRey(tablero, bando);
+    if (objetivo && objetivo->getBando() != bando) {
+        score += objetivo->getValor() * 5; // Bonificación proporcional al valor
+    }
 
-    // Si la jugada mueve una pieza a una casilla adyacente al rey, bonifica si esa casilla estaba amenazada
+    // Bonifica si la jugada mueve una pieza aliada a una casilla adyacente al rey y esa casilla estaba amenazada
     Rey* rey = tablero.getRey(bando);
-
     int rx = rey->getX();
     int ry = rey->getY();
     if (std::abs(col - rx) <= 1 && std::abs(fil - ry) <= 1 && !(col == rx && fil == ry)) {
@@ -94,19 +101,47 @@ int IA::evaluarJugada(Tablero& tablero, Pieza* pieza, int col, int fil, int band
         }
     }
 
-    // (Opcional) Si la pieza que se mueve es el rey, bonifica si se mueve a una casilla no amenazada
+    // Bonifica si la pieza que se mueve es el rey y va a una casilla segura
     if (pieza == rey && !IA::estaAmenazada(tablero, col, fil, bando)) {
-        score += 10; // Bonificación por mover el rey a una casilla segura
+        score += 5;
     }
 
+    // Evalúa la seguridad del rey: penaliza amenazas alrededor del rey
+    int amenazasAlrededor = IA::contarAmenazasAlrededorRey(tablero, bando);
+    score -= amenazasAlrededor * 3;
+
+    // Bonifica la movilidad de piezas aliadas cerca del rey (más movilidad, mejor defensa)
+    int movilidad = IA::movilidadCercaDelRey(tablero, bando);
+    score += movilidad;
 
     // Bonifica si la jugada protege una pieza propia valiosa
-    // (Por ejemplo, si tras mover, una pieza propia amenazada ya no lo está)
-    // Esto requiere simular el movimiento y comprobar amenazas antes y después
+    for (Pieza* aliada : tablero.getPiezas()) {
+        if (aliada->getBando() != bando) continue;
+        // Considera valiosa si su valor es alto
+        if (aliada->getValor() >= 5 && aliada != pieza) {
+            // Si la pieza aliada está amenazada
+            if (IA::estaAmenazada(tablero, aliada->getX(), aliada->getY(), bando)) {
+                // ¿La jugada mueve una pieza a una casilla desde la que podría defender a la valiosa?
+                auto movs = pieza->movimientosPosibles(tablero);
+                for (const auto& mv : movs) {
+                    if (mv.first == aliada->getX() && mv.second == aliada->getY()) {
+                        score += aliada->getValor(); // Bonifica por proteger
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
+    // Bonifica si mueve a una casilla segura (no amenazada), priorizando piezas de mayor valor
+    if (!IA::estaAmenazada(tablero, col, fil, bando)) {
+        // Bonificación proporcional al valor de la pieza
+        score += pieza->getValor() * 5; // Ajusta el multiplicador según lo que valores
+    }
 
     return score;
 }
+
 
 // Función auxiliar para contar piezas que protegen al rey
 int IA::contarProteccionRey(Tablero& tablero, int bando) {
@@ -128,7 +163,44 @@ int IA::contarProteccionRey(Tablero& tablero, int bando) {
     return proteccion;
 }
 
+int IA::contarAmenazasAlrededorRey(Tablero& tablero, int bando) {
+    Rey* rey = tablero.getRey(bando);
+    int x = rey->getX();
+    int y = rey->getY();
+    int amenazas = 0;
+    for (int dx = -1; dx <= 1; ++dx) {
+        for (int dy = -1; dy <= 1; ++dy) {
+            if (dx == 0 && dy == 0) continue;
+            int nx = x + dx;
+            int ny = y + dy;
+            if (nx >= 0 && nx < tablero.getNumColumnas() && ny >= 0 && ny < tablero.getNumFilas()) {
+                if (IA::estaAmenazada(tablero, nx, ny, bando))
+                    amenazas++;
+            }
+        }
+    }
+    return amenazas;
+}
+
+int IA::movilidadCercaDelRey(Tablero& tablero, int bando) {
+    Rey* rey = tablero.getRey(bando);
+    int rx = rey->getX();
+    int ry = rey->getY();
+    int movilidad = 0;
+    for (Pieza* aliada : tablero.getPiezas()) {
+        if (aliada->getBando() != bando || aliada == rey) continue;
+        int ax = aliada->getX();
+        int ay = aliada->getY();
+        // Considera piezas en casillas adyacentes al rey
+        if (std::abs(ax - rx) <= 1 && std::abs(ay - ry) <= 1) {
+            movilidad += aliada->movimientosPosibles(tablero).size();
+        }
+    }
+    return movilidad;
+}
+
 Pieza* IA::elegirPiezaCoronacion(int x, int y) {  //Aqui se puede añadir si la IA quiere una u otra pieza
     //de momento siempre Torre:
     return new Torre(x, y, bando_);
 }
+
