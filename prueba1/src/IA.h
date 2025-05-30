@@ -18,8 +18,6 @@ public:
     // Calcula la mejor jugada y la ejecuta sobre 'tablero'
     void jugar(Tablero& tablero);
 
-    static bool estaAmenazada(Tablero& tablero, int col, int fil, int bandoPropio);
-
     Pieza* elegirPiezaCoronacion(int x, int y);
 
 private:

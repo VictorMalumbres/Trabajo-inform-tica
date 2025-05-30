@@ -111,29 +111,6 @@ IA::minimax(Tablero* tablero, int depth, int alpha, int beta, bool maximizingPla
             val = 0;
         }
 
-        /*if (depth == maxDepth_) {
-            // Recorremos sin filtros y devolvemos la primera válida
-            for (Pieza* p : tablero->getPiezas()) {
-                if (p->getBando() != jugador) continue;
-                int x = p->getX(), y = p->getY();
-                for (auto& mv : p->movimientosPosibles(*tablero)) {
-                    Tablero* hijo = tablero->clonar();
-                    Pieza* ph = hijo->obtenerPieza(x, y);
-                    if (!ph) { delete hijo; continue; }
-                    hijo->colocarPieza(ph, mv.first, mv.second, true);
-                    // Solo aceptamos si no deja al rey en jaque
-                    if (!hijo->estaEnJaque(jugador)) {
-                        Movimiento mov{ x, y, mv.first, mv.second };
-                        delete hijo;
-                        return { evaluarTablero(*tablero), mov };
-                    }
-                    delete hijo;
-                }
-            }
-        }
-        // Subniveles o fallo absoluto: devolvemos jaque o tablas
-        return { val, {0,0,0,0} };*/
-
         if (depth == maxDepth_) {
             for (Pieza* p : tablero->getPiezas()) {
                 if (p->getBando() != jugador) continue;
@@ -196,17 +173,6 @@ int IA::evaluarTablero(Tablero& tablero) const {
         score += (p->getBando() == bando_) ? v : -v;
     }
     return score;
-}
-
-bool IA::estaAmenazada(Tablero& tablero, int col, int fil, int bandoPropio) {
-    for (Pieza* p : tablero.getPiezas()) {
-        if (p->getBando() == bandoPropio) continue;
-        for (auto& mv : p->movimientosPosibles(tablero)) {
-            if (mv.first == col && mv.second == fil)
-                return true;
-        }
-    }
-    return false;
 }
 
 Pieza* IA::elegirPiezaCoronacion(int x, int y) {  //Aqui se puede añadir si la IA quiere una u otra pieza
