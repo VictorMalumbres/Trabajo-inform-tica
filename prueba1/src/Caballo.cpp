@@ -51,7 +51,6 @@ void Caballo::dibuja() {
     glPopMatrix();
 }
 
-
 bool Caballo::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
 
     int origenX = getX();
@@ -63,14 +62,12 @@ bool Caballo::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
     // Movimiento típico de caballo: 2 en una dirección y 1 en la otra
     if (!((dx == 2 && dy == 1) || (dx == 1 && dy == 2))) {
         return false;
+
+        // El caballo puede saltar piezas, así que no verificamos el camino
+        // Solo verificar si la casilla destino tiene una pieza del mismo bando
     }
 
-    // El caballo puede saltar piezas, así que no verificamos el camino
-    // Solo verificar si la casilla destino tiene una pieza del mismo bando
-
-
     return true; // Movimiento válido
-
 }
 
 std::vector<std::pair<int, int>> Caballo::movimientosPosibles(Tablero& tablero) {
@@ -100,4 +97,3 @@ std::vector<std::pair<int, int>> Caballo::movimientosPosibles(Tablero& tablero) 
     }
     return movimientos;
 }
-

@@ -14,4 +14,3 @@ int Pieza::getY() {
 int Pieza::getBando() {
 	return bando;
 }
-

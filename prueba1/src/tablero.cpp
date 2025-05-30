@@ -468,7 +468,6 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool s
     }
 }
 
-
 void Tablero::anadirPieza(Pieza* pieza) {
     piezas.push_back(pieza);
 }
@@ -602,7 +601,6 @@ bool Tablero::materialInsuficiente() const {
         };
     return escaso(blancas) && escaso(negras);
 }
-
 
 bool Tablero::esJaqueMate(int bando) {
     // 1. Si el rey no está en jaque, no es jaque mate

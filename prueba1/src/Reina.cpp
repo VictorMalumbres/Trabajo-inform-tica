@@ -44,11 +44,6 @@ void Reina::dibuja() {
     glPopMatrix();
 }
 
-
-
-
-
-
 bool Reina::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
     int origenX = getX();
     int origenY = getY();
@@ -101,6 +96,3 @@ std::vector<std::pair<int, int>> Reina::movimientosPosibles(Tablero& tablero) {
     }
     return movimientos;
 }
-
-
-

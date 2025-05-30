@@ -57,11 +57,6 @@ void Rey::dibuja() {
     glPopMatrix();
 }
 
-
-
-
-
-
 bool Rey::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
     int origenX = getX();
     int origenY = getY();
@@ -76,7 +71,6 @@ bool Rey::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
     // Puede capturar cualquier pieza (aliada o enemiga)
     return true;
 }
-
 
 std::vector<std::pair<int, int>> Rey::movimientosPosibles(Tablero& tablero) {
     std::vector<std::pair<int, int>> movimientos;

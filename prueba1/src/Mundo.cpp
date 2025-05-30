@@ -83,7 +83,6 @@ void Mundo::dibuja() {
     }
 }
 
-
 void Mundo::renderizarTexto(const std::string& texto, float x, float y, void* fuente) {
     glColor3f(1.0f, 1.0f, 1.0f); // Color del texto (blanco)
     glRasterPos2f(x, y);         // Posición del texto
@@ -380,7 +379,6 @@ void Mundo::mostrarPausa() {
 
     glutSwapBuffers();
 }
-
 
 void Mundo::iniciarJuego() {
     mundo.volumenMusica();
@@ -1151,7 +1149,6 @@ void Mundo::mostrarInstruccionesDemi() {
     glutSwapBuffers();
 }
 
-
 void Mundo::mostrarInstruccionesSilverman() {
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -1215,6 +1212,7 @@ void Mundo::mostrarInstruccionesPiezas() {
 
     glutSwapBuffers();
 }
+
 void Mundo::dibujarPieza(float x, float y, const char* nombre, int color) {
     char archivo[100] = "imagenes/";
     strcat_s(archivo, sizeof(archivo), nombre);
@@ -1248,7 +1246,6 @@ void Mundo::dibujarPieza(float x, float y, const char* nombre, int color) {
 
     renderizarTexto(nombre, x + 0.22f, y - 0.1f, GLUT_BITMAP_HELVETICA_18);
 }
-
 
 void Mundo::mostrarLeyenda() {
     glMatrixMode(GL_PROJECTION);

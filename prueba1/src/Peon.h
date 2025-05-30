@@ -20,6 +20,4 @@ public:
     Pieza* clonar() const {
         return new Peon(*this);  // usa el constructor copia predeterminado
     }
-
-
 };

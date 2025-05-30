@@ -109,7 +109,6 @@ bool Peon::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
 
 }
 
-
 std::vector<std::pair<int, int>> Peon::movimientosPosibles(Tablero& tablero) {
     std::vector<std::pair<int, int>> movimientos;
     int x = getX();

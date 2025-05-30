@@ -38,6 +38,4 @@ public:
     virtual int getValor() const = 0;
 
     virtual Pieza* clonar() const = 0;
-
-
 };

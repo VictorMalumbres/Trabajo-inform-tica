@@ -72,7 +72,6 @@ void Alfil::dibuja() {
     }
 }
 
-
 bool Alfil::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
     int origenX = getX();
     int origenY = getY();
@@ -125,5 +124,3 @@ std::vector<std::pair<int, int>> Alfil::movimientosPosibles(Tablero& tablero) {
     }
     return movimientos;
 }
-
-

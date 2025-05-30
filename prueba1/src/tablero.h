@@ -88,4 +88,3 @@ public:
 
 };
 #endif // TABLERO_H
-
