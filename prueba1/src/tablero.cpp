@@ -24,7 +24,7 @@ void Tablero::dibuja() {
     float casillaSizeX = 1.0f;
     float casillaSizeY = 1.0f;
 
-    // 1. Dibuja el fondo del tablero (casillas normales)
+    // Dibuja el fondo del tablero (casillas normales)
     for (int i = 0; i < 5; ++i) {  // 5 filas
         for (int j = 0; j < 4; ++j) {  // 4 columnas
 
@@ -78,7 +78,7 @@ void Tablero::dibuja() {
         glEnd();
     }
 
-    // 2. Dibuja las casillas resaltadas en rojo (AQUÍ VA EL CÓDIGO NUEVO)
+    // Dibuja las casillas resaltadas en rojo
     for (const auto& pos : casillasResaltadas) {
         int col = pos.first;
         int fil = pos.second;
@@ -138,7 +138,7 @@ void Tablero::dibuja2() {
         }
     }
 
-    // --- BLOQUE NUEVO PARA CASILLAS EN JAQUE (rosa) ---
+    // CASILLAS EN JAQUE (rosa)
     for (const auto& pos : casillasEnJaque) {
         int col = pos.first;
         int fil = pos.second;
@@ -150,7 +150,7 @@ void Tablero::dibuja2() {
         glVertex3f(col * casillaSizeX, (fil + 1) * casillaSizeY, 0.2f);
         glEnd();
     }
-    // -------------------------------------------
+
 
     // Casillas resaltadas normales (rojo)
     for (const auto& pos : casillasResaltadas) {
@@ -314,7 +314,7 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool s
         }
     }
 
-    // --- Captura al paso ---
+    // Captura al paso
     if (peonMovido && abs(nuevaColumna - pieza->getX()) == 1 &&
         nuevaFila - pieza->getY() == (pieza->getBando() == 0 ? 1 : -1)) {
 
@@ -380,7 +380,7 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool s
 
     glutPostRedisplay();
 
-    // ----------- CORONACIÓN DEL PEÓN -----------
+    // CORONACIÓN DEL PEÓN
     Peon* peon = dynamic_cast<Peon*>(pieza);
     if (peon) {
         int filaCoronacion = (peon->getBando() == 0) ? (numFilas - 1) : 0;
@@ -415,7 +415,7 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool s
             return;
         }
     }
-    // ----------- FIN CORONACIÓN DEL PEÓN -----------
+    // FIN CORONACIÓN DEL PEÓN
 
     if (!esAvanceDoble) {
         ultimoPeonDobleX = -1;
@@ -603,11 +603,11 @@ bool Tablero::materialInsuficiente() const {
 }
 
 bool Tablero::esJaqueMate(int bando) {
-    // 1. Si el rey no está en jaque, no es jaque mate
+    // Si el rey no está en jaque, no es jaque mate
     if (!estaEnJaque(bando))
         return false;
 
-    // 2. Busca si existe algún movimiento legal que saque al rey del jaque
+    // Busca si existe algún movimiento legal que saque al rey del jaque
     for (Pieza* p : piezas) {
         if (p->getBando() != bando) continue;
         int x = p->getX(), y = p->getY();

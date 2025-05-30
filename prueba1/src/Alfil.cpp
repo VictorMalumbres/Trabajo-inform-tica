@@ -15,8 +15,8 @@ void Alfil::dibuja() {
         glTranslated(getX() + 0.5f, getY() + 0.5f, 0);  // Centrado en la celda
 
         glEnable(GL_TEXTURE_2D);
-        glEnable(GL_BLEND);  // <-- Activa blending para transparencia
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  // <-- Función de mezcla correcta
+        glEnable(GL_BLEND);  // Activa blending para transparencia
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  // Función de mezcla correcta
 
         glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/alfil_blanco.png").id);
 
@@ -34,7 +34,7 @@ void Alfil::dibuja() {
         glTexCoord2d(0, 0); glVertex3f(-size, size, 0);
         glEnd();
 
-        glDisable(GL_BLEND);  // <-- Desactiva blending
+        glDisable(GL_BLEND);  // Desactiva blending
         glDisable(GL_TEXTURE_2D);
         glPopMatrix();  // Restauramos la matriz original
     }
@@ -48,7 +48,7 @@ void Alfil::dibuja() {
 
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_BLEND);  // <-- Activa blending para transparencia
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  // <-- Función de mezcla correcta
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  // Función de mezcla correcta
 
         glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/alfil_negro.png").id);
 
@@ -66,7 +66,7 @@ void Alfil::dibuja() {
         glTexCoord2d(0, 0); glVertex3f(-size, size, 0);
         glEnd();
 
-        glDisable(GL_BLEND);  // <-- Desactiva blending
+        glDisable(GL_BLEND);  // Desactiva blending
         glDisable(GL_TEXTURE_2D);
         glPopMatrix();  // Restauramos la matriz original
     }

@@ -71,13 +71,13 @@ IA::minimax(Tablero* tablero, int depth, int alpha, int beta, bool maximizingPla
 
             hijo->colocarPieza(ph, nx, ny, true);
 
-            // 2) Si dejamos al propio rey en jaque => descartamos
+            // Si dejamos al propio rey en jaque => descartamos
             if (hijo->estaEnJaque(jugador)) {
                 delete hijo;
                 continue;
             }
 
-            // 3) Llamada recursiva
+            // Llamada recursiva
             int score = minimax(hijo, depth - 1, alpha, beta,
                 !maximizingPlayer).first;
             delete hijo;

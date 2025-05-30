@@ -2,6 +2,7 @@
 #include <freeglut.h>
 #include "ETSIDI.h"
 #include "Tablero.h"
+#include <memory>
 
 void Rey::dibuja() {
     if (resaltado);
@@ -34,11 +35,9 @@ void Rey::dibuja() {
 
     glBindTexture(GL_TEXTURE_2D, texID);
 
-    // Si tu entorno soporta mipmaps, descomenta la siguiente línea:
-    // glGenerateMipmap(GL_TEXTURE_2D);
 
     // Configura los filtros para mejor calidad
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // o GL_LINEAR_MIPMAP_LINEAR si usas mipmaps
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     glColor3f(1.0f, 1.0f, 1.0f); // Color blanco
@@ -57,20 +56,33 @@ void Rey::dibuja() {
     glPopMatrix();
 }
 
+
 bool Rey::mueve(Tablero& tablero, int nuevaColumna, int nuevaFila) {
-    int origenX = getX();
-    int origenY = getY();
+    // Verifica si el movimiento es válido según las reglas del rey
+    int dx = abs(nuevaColumna - getX());
+    int dy = abs(nuevaFila - getY());
+    if ((dx > 1) || (dy > 1) || (dx == 0 && dy == 0))
+        return false;
 
-    int dx = nuevaColumna - origenX;
-    int dy = nuevaFila - origenY;
+    // Verifica que no haya una pieza propia en el destino
+    Pieza* destino = tablero.obtenerPieza(nuevaColumna, nuevaFila);
+    if (destino && destino->getBando() == getBando())
+        return false;
 
-    // El rey se mueve una casilla en cualquier dirección
-    if (std::abs(dx) > 1 || std::abs(dy) > 1) return false;
+    // Simula el movimiento en una copia del tablero
+    std::unique_ptr<Tablero> copia(tablero.clonar());
+    Pieza* reyCopia = copia->obtenerPieza(getX(), getY());
+    if (!reyCopia) return false;
+    reyCopia->setPosicion(nuevaFila, nuevaColumna);
+    copia->actualizarEstadoJaque();
 
-    // Ya no se comprueba el bando de la pieza destino
-    // Puede capturar cualquier pieza (aliada o enemiga)
+    // Si el rey queda en jaque tras el movimiento, no se permite
+    if (copia->estaEnJaque(getBando()))
+        return false;
+
     return true;
 }
+
 
 std::vector<std::pair<int, int>> Rey::movimientosPosibles(Tablero& tablero) {
     std::vector<std::pair<int, int>> movimientos;

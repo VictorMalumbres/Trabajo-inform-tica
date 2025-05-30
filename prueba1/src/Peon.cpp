@@ -30,9 +30,6 @@ void Peon::dibuja() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    // Si tu entorno soporta mipmaps y quieres usar:
-    // glGenerateMipmap(GL_TEXTURE_2D);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
     glColor3f(1.0f, 1.0f, 1.0f);  // Color blanco para no alterar la textura
 

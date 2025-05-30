@@ -234,12 +234,6 @@ void manejarTeclado(unsigned char key, int x, int y) {
         }
     }
 
-    /* else if (mundo.getEstadoActual() == INSTRUCCIONES && key == 27) { // 27 = ESC
-            mundo.setEstadoActual(MENU);
-            glutPostRedisplay();
-            return;
-        }*/
-
 
     else if ((mundo.getEstadoActual() == INSTRUCCIONES ||
         mundo.getEstadoActual() == INSTRUCCIONES_DEMI ||
@@ -427,7 +421,7 @@ void Mundo::iniciar2dojuego() {
 
 void Mundo::cerrarAplicacion() {
     std::cout << "Saliendo del juego..." << std::endl;
-    //glutLeaveMainLoop(); // Cierra la ventana y termina el bucle principal de GLUT
+    //glutLeaveMainLoop(); // Cierra la ventana y termina el bucle principal de GLUT, no funciona
     exit(0); // Termina el programa
 }
 
@@ -449,10 +443,10 @@ void Mundo::procesarClick(int x, int y) {
         // Botón NO: x entre 0.1 y 0.4, y entre -0.3 y -0.1
         if (x_gl >= 0.1f && x_gl <= 0.4f && y_gl >= -0.3f && y_gl <= -0.1f) {
             if (mundo.enJuego == true) {
-                setEstadoActual(JUEGO); // <-- Vuelve al juego si estabamos jugando
+                setEstadoActual(JUEGO); // Vuelve al juego si estabamos jugando
             }
             else if (mundo.enJuego == false) {
-                setEstadoActual(MENU); // <-- Vuelve al menu si no estabamos jugando
+                setEstadoActual(MENU); // Vuelve al menu si no estabamos jugando
             }
             glutPostRedisplay();
             return;
@@ -589,7 +583,7 @@ void Mundo::procesarClick(int x, int y) {
             }
             else if (y_gl >= -0.05f && y_gl <= 0.05f) {
                 // Opción 4: Salir
-                setEstadoActual(CONFIRMAR_SALIR); // <-- Cambia esto
+                setEstadoActual(CONFIRMAR_SALIR); // Cambia esto
                 glutPostRedisplay();
                 return;
             }
@@ -903,28 +897,9 @@ void Mundo::mostrarMenuVictoria() {
     glVertex2f(1.0f, -1.0f); glVertex2f(-1.0f, -1.0f);
     glEnd();
 
-    /*
-    // Mostrar mensaje de Jaque Mate si el estado es victoria
-    if (mundo && mundo->getEstadoActual() == VICTORIA) {
-        glColor3f(1.0f, 0.0f, 0.0f); // Rojo
-        glRasterPos2f(0.5f, numFilas / 2.0f); // Ajusta la posición según tu tablero
-
-        std::string mensaje = "JAQUE MATE";
-        for (char c : mensaje) {
-            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
-        }
-
-        // Mostrar el ganador:
-        std::string ganador = (mundo->jugadorGanador == 0) ? "Ganan BLANCAS" : "Ganan NEGRAS";
-        glRasterPos2f(0.5f, numFilas / 2.0f - 1.0f); // Un poco más abajo
-        for (char c : ganador) {
-            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
-        }
-    }
-    */
 
     // Mensaje "JAQUE MATE" grande y centrado arriba
-    renderizarTextoGrande("JAQUE MATE", -0.43f, 0.7f, 0.0012f);
+    renderizarTextoGrande("JAQUE MATE", -0.47f, 0.7f, 0.0012f);
 
     // Mensaje de victoria (más pequeño y centrado)
     glColor3f(1.0f, 1.0f, 0.0f);
