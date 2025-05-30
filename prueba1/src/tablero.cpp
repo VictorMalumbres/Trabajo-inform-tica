@@ -1,9 +1,13 @@
-﻿#include "Tablero.h"
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include "Tablero.h"
 #include <freeglut.h>
 #include <iostream>
 #include <string>
+#include <ctime>
+#include <sstream>
 #include "Mundo.h"
-#include "Pieza.h"
+#include "Pieza.h"  
+#include "Historial.h"
 
 Tablero::Tablero() {
     // Constructor de Tablero, inicializa el vector de piezas
@@ -296,6 +300,7 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool s
         return; // No es turno de esta pieza
     }
     // Validar movimiento usando la pieza
+
     if (!pieza->mueve(*this, nuevaColumna, nuevaFila)) {
         return; // Movimiento inválido
     }
@@ -308,7 +313,7 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool s
         int deltaFila = nuevaFila - pieza->getY();
         if (abs(deltaFila) == 2) {
             ultimoPeonDobleX = nuevaColumna;
-            ultimoPeonDobleY = nuevaFila - (deltaFila / 2);  // casilla intermedia
+            ultimoPeonDobleY = nuevaFila - (deltaFila / 2); // casilla intermedia
             turnoPeonDoble = pieza->getBando();
             esAvanceDoble = true;
         }
@@ -348,22 +353,27 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool s
             }
             else {
                 if (dynamic_cast<Rey*>(*it)) {
-                    if (pieza->getBando() == 0) {
-                        if (mundo) {
-                            mundo->jugadorGanador = 0;
-                            mundo->setEstadoActual(VICTORIA);
-                            glutPostRedisplay();
-                        }
-                    }
-                    else {
-                        if (mundo) {
-                            mundo->jugadorGanador = 1;
-                            mundo->setEstadoActual(VICTORIA);
-                            glutPostRedisplay();
-                        }
+                    if (mundo) {
+                        mundo->jugadorGanador = pieza->getBando();
+
+                        // === GUARDAR EN HISTORIAL (Victoria por captura de rey) ===
+                        time_t ahora = time(nullptr);
+                        stringstream ss;
+                        ss << asctime(localtime(&ahora));
+                        string fechaHora = ss.str();
+
+                        string modo = (mundo->getModoJuego() == 1 ? "Silverman" : "Demi");
+                        string ganador = (pieza->getBando() == 0 ? "Blancas" : "Negras");
+                        string oponente = (mundo->isIAActiva() ? "IA" : "Jugador");
+
+                        mundo->historial.agregarPartida(fechaHora, modo, ganador, oponente, contadorMovimiento);
+
+                        mundo->setEstadoActual(VICTORIA);
+                        glutPostRedisplay();
                     }
                     return;
                 }
+
                 delete* it;
                 piezas.erase(it);
                 capturado = true;
@@ -374,10 +384,8 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool s
 
     // Mover la pieza
     pieza->setPosicion(nuevaFila, nuevaColumna);
-
     // Actualizar estado de jaque tras mover
     actualizarEstadoJaque();
-
     glutPostRedisplay();
 
     // CORONACIÓN DEL PEÓN
@@ -430,18 +438,22 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool s
             contadorMovimiento = 0;
         }
 
-        if (contadorMovimiento >= 100) {
-            mundo->setEstadoActual(EMPATE);
-            return;
-        }
+        if (contadorMovimiento >= 100 || esStalemate(turno) || materialInsuficiente()) {
+            if (mundo) {
+                // === GUARDAR EN HISTORIAL (EMPATE) ===
+                time_t ahora = time(nullptr);
+                stringstream ss;
+                ss << asctime(localtime(&ahora));
+                string fechaHora = ss.str();
 
-        if (esStalemate(turno)) {
-            mundo->setEstadoActual(EMPATE);
-            return;
-        }
+                string modo = (mundo->getModoJuego() == 1 ? "Silverman" : "Demi");
+                string ganador = "Empate";
+                string oponente = (mundo->isIAActiva() ? "IA" : "Jugador");
 
-        if (materialInsuficiente()) {
-            mundo->setEstadoActual(EMPATE);
+                mundo->historial.agregarPartida(fechaHora, modo, ganador, oponente, contadorMovimiento);
+
+                mundo->setEstadoActual(EMPATE);
+            }
             return;
         }
     }
@@ -454,9 +466,23 @@ void Tablero::colocarPieza(Pieza* pieza, int nuevaColumna, int nuevaFila, bool s
     // Comprobar jaque mate antes de cambiar el turno
     int bandoActual = pieza->getBando();
     int bandoOponente = 1 - bandoActual;
+
     if (!simular && esJaqueMate(bandoOponente)) {
         if (mundo) {
             mundo->jugadorGanador = bandoActual;
+
+            // === GUARDAR EN HISTORIAL (Jaque Mate) ===
+            time_t ahora = time(nullptr);
+            stringstream ss;
+            ss << asctime(localtime(&ahora));
+            string fechaHora = ss.str();
+
+            string modo = (mundo->getModoJuego() == 1 ? "Silverman" : "Demi");
+            string ganador = (bandoActual == 0 ? "Blancas" : "Negras");
+            string oponente = (mundo->isIAActiva() ? "IA" : "Jugador");
+
+            mundo->historial.agregarPartida(fechaHora, modo, ganador, oponente, contadorMovimiento);
+
             mundo->setEstadoActual(VICTORIA);
             glutPostRedisplay();
         }

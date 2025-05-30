@@ -10,6 +10,7 @@
 #include "Reina.h"
 #include "Rey.h"
 #include "Peon.h"
+#include "Historial.h"
 
 class Mundo;
 class Tablero {
@@ -84,7 +85,5 @@ public:
     bool materialInsuficiente() const;  //Material insuficiente (Rey o Rey+Alfil o Rey+Caballo)
 
     bool esJaqueMate(int bando);
-
-
 };
 #endif // TABLERO_H

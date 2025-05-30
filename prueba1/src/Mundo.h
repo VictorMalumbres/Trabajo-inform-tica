@@ -1,6 +1,7 @@
 #pragma once
 #include "Tablero.h"
 #include "IA.h"
+#include "Historial.h"
 
 enum EstadoMundo {
     MENU,
@@ -16,13 +17,15 @@ enum EstadoMundo {
 	INSTRUCCIONES_SILVERMAN,
     INSTRUCCIONES_PIEZAS,
     LEYENDA,
-    JAQUE_MATE
+    JAQUE_MATE,
+    HISTORIAL,
 };
 
 class Mundo {
 private:
     Tablero tablero;
     Tablero tablero2;
+
     int modoJuego; // 1 para 4x5, 2 para 4x8
     int volumen = 2;  //0-> No hay musica   1->Musica 15%   2->Musica 50%   3->Musica 100%
 
@@ -75,6 +78,7 @@ public:
 
     // ** Declaración de la función manejarTeclado **
     static void manejarTeclado(unsigned char key, int x, int y);
+    Historial historial;
     int jugadorGanador = -1; // 0 = blancas, 1 = negras
     void mostrarMenuVictoria();
     void mostrarMenuEmpate();
@@ -97,4 +101,6 @@ public:
 
     void dibujarPieza(float x, float y, const char* nombre, int color);
     void mostrarLeyenda();
+
+    void mostrarHistorialEnVentana();
 };

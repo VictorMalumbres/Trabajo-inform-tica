@@ -80,6 +80,9 @@ void Mundo::dibuja() {
     case LEYENDA:
         mostrarLeyenda();
         break;
+    case HISTORIAL:
+        mostrarHistorialEnVentana();
+        break;
     }
 }
 
@@ -151,21 +154,24 @@ void Mundo::mostrarMenuEnVentana() {
 
     // Dibujar rectángulos de fondo para cada opción
     glBegin(GL_QUADS);
-    glVertex2f(-0.45f, 0.65f); glVertex2f(0.45f, 0.65f);
+    glVertex2f(-0.45f, 0.65f); glVertex2f(0.45f, 0.65f); //menú
     glVertex2f(0.45f, 0.55f); glVertex2f(-0.45f, 0.55f);
 
-    glVertex2f(-0.45f, 0.45f); glVertex2f(0.45f, 0.45f);
+    glVertex2f(-0.45f, 0.45f); glVertex2f(0.45f, 0.45f); //1
     glVertex2f(0.45f, 0.35f); glVertex2f(-0.45f, 0.35f);
 
-    glVertex2f(-0.45f, 0.25f); glVertex2f(0.45f, 0.25f);
+    glVertex2f(-0.45f, 0.25f); glVertex2f(0.45f, 0.25f); //2
     glVertex2f(0.45f, 0.15f); glVertex2f(-0.45f, 0.15f);
 
-    glVertex2f(-0.45f, 0.05f); glVertex2f(0.45f, 0.05f);
+    glVertex2f(-0.45f, 0.05f); glVertex2f(0.45f, 0.05f); //3
     glVertex2f(0.45f, -0.05f); glVertex2f(-0.45f, -0.05f);
 
-    glColor3f(0.0f, 0.5f, 0.0f); // verde
-    glVertex2f(-0.45f, -0.25f); glVertex2f(0.45f, -0.25f);
+    glVertex2f(-0.45f, -0.25f); glVertex2f(0.45f, -0.25f); //4
     glVertex2f(0.45f, -0.15f); glVertex2f(-0.45f, -0.15f);
+
+    glColor3f(0.0f, 0.5f, 0.0f); // verde
+    glVertex2f(-0.45f, -0.45f); glVertex2f(0.45f, -0.45f); //seleccionar
+    glVertex2f(0.45f, -0.35f); glVertex2f(-0.45f, -0.35f);
     glEnd();
 
     // Dibujar el título del menú
@@ -173,8 +179,9 @@ void Mundo::mostrarMenuEnVentana() {
     renderizarTexto("1. Ver instrucciones del juego", -0.4f, 0.58f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("2. Jugar partida SILVERMAN 4X5", -0.4f, 0.38f, GLUT_BITMAP_HELVETICA_12);
     renderizarTexto("3. Jugar partida DEMI", -0.4f, 0.18f, GLUT_BITMAP_HELVETICA_12);
-    renderizarTexto("4. Salir", -0.4f, -0.02f, GLUT_BITMAP_HELVETICA_12);
-    renderizarTexto("Seleccione una opcion con el raton...", -0.3f, -0.22f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("4. Ver historial de partidas", -0.4f, -0.02f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("5. Salir", -0.4f, -0.22f, GLUT_BITMAP_HELVETICA_12);
+    renderizarTexto("Seleccione una opcion con el raton...", -0.3f, -0.42f, GLUT_BITMAP_HELVETICA_12);
 
     //Instrucciones de la música en el juego
     renderizarTexto("Usa + o - para cambiar el volumen en el juego", 0.45f, -0.38f, GLUT_BITMAP_HELVETICA_10);
@@ -279,6 +286,13 @@ void manejarTeclado(unsigned char key, int x, int y) {
             mundo.volumenMusica();
         }
     }
+
+    else if (mundo.getEstadoActual() == HISTORIAL && key == 27) {
+        mundo.setEstadoActual(MENU);
+        glutPostRedisplay();
+        return;
+    }
+
 }
 
 void Mundo::volumenMusica() {
@@ -556,8 +570,6 @@ void Mundo::procesarClick(int x, int y) {
         float x_gl = (float)x / 400.0f - 1.0f;      // Correcto para 800px de ancho
         float y_gl = 1.0f - (float)y / 300.0f;
 
-
-
         // Comprobamos las opciones en el área de botones
         if (x_gl >= -0.45f && x_gl <= 0.45f) {
             if (y_gl >= 0.55f && y_gl <= 0.65f) {
@@ -582,12 +594,18 @@ void Mundo::procesarClick(int x, int y) {
                 return;
             }
             else if (y_gl >= -0.05f && y_gl <= 0.05f) {
-                // Opción 4: Salir
-                setEstadoActual(CONFIRMAR_SALIR); // Cambia esto
+                estadoActual = HISTORIAL;
+                std::cout << "Opción 4: Historial" << std::endl;
                 glutPostRedisplay();
                 return;
             }
-
+            else if (y_gl >= -0.25f && y_gl <= -0.15f) {
+                // Opción 5: Salir
+                setEstadoActual(CONFIRMAR_SALIR);
+                std::cout << "Opción 5: SALIR" << std::endl;
+                glutPostRedisplay();
+                return;
+            }
         }
     }
 
@@ -1268,5 +1286,40 @@ void Mundo::mostrarLeyenda() {
 
     renderizarTexto("Haz clic para continuar", -0.3f, -0.85f, GLUT_BITMAP_HELVETICA_12);
 
+    glutSwapBuffers();
+}
+
+void Mundo::mostrarHistorialEnVentana() {
+    glClear(GL_COLOR_BUFFER_BIT);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    renderizarTextoGrande("HISTORIAL DE PARTIDAS", -0.45f, 0.8f, 0.0008f);
+
+    float y = 0.6f;
+    float espacio = 0.17f;
+
+    if (historial.estaVacio()) {
+        renderizarTexto("No hay partidas registradas aun.", -0.5f, y, GLUT_BITMAP_HELVETICA_18);
+    }
+    else {
+        for (int i = historial.getCantidad() - 1; i >= 0; --i) {
+            Partida p = historial.getPartida(i);
+
+            renderizarTexto(("Fecha: " + p.fechaHora).c_str(), -0.9f, y, GLUT_BITMAP_HELVETICA_12);
+            renderizarTexto(("Modo: " + p.modoJuego).c_str(), -0.9f, y - 0.04f, GLUT_BITMAP_HELVETICA_12);
+            renderizarTexto(("Ganador: " + p.ganador).c_str(), -0.9f, y - 0.08f, GLUT_BITMAP_HELVETICA_12);
+            renderizarTexto(("Oponente: " + p.oponente).c_str(), -0.9f, y - 0.12f, GLUT_BITMAP_HELVETICA_12);
+            renderizarTexto(("Movimientos: " + to_string(p.movimientos)).c_str(), -0.9f, y - 0.16f, GLUT_BITMAP_HELVETICA_12);
+
+            y -= espacio;
+        }
+    }
+
+    renderizarTexto("Presiona ESC para volver al menu", -0.5f, -0.85f, GLUT_BITMAP_HELVETICA_12);
     glutSwapBuffers();
 }
