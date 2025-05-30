@@ -378,14 +378,10 @@ void Mundo::mostrarPausa() {
     glVertex2f(-0.5f, yBotonSalirJuego - alturaBoton);
     glEnd();
 
-
     renderizarTexto("Ver Leyenda", -0.17f, 0.4f, GLUT_BITMAP_HELVETICA_18);
     renderizarTexto("Reiniciar partida", -0.17f, 0.2f, GLUT_BITMAP_HELVETICA_18);
     renderizarTexto("Volver al menu", -0.17f, 0.0f, GLUT_BITMAP_HELVETICA_18);
     renderizarTexto("Salir del juego", -0.17f, -0.2f, GLUT_BITMAP_HELVETICA_18);
-
-
-
 
     glutSwapBuffers();
 }
@@ -794,7 +790,6 @@ void Mundo::procesarClick(int x, int y) {
             }
         }
 
-
         return;
     }
     if (estadoActual == LEYENDA) {
@@ -809,7 +804,6 @@ void Mundo::procesarClick(int x, int y) {
         }
         return;
     }
-
 }
 
 void Mundo::mostrarConfirmacionMenu() {
@@ -1310,7 +1304,7 @@ void Mundo::mostrarHistorialEnVentana() {
     renderizarTextoGrande("HISTORIAL DE PARTIDAS", -0.45f, 0.8f, 0.0008f);
 
     float y = 0.6f;
-    float espacio = 0.17f;
+    float espacio = 0.30f;
 
     if (historial.estaVacio()) {
         renderizarTexto("No hay partidas registradas aun.", -0.5f, y, GLUT_BITMAP_HELVETICA_18);
