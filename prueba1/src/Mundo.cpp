@@ -9,6 +9,8 @@ bool juegoEnPausa = false;
 
 bool musica = false;  //Para cargar la musica en mostrarMenuEnVentana una sola vez (luego se encarga setEstadoActual)
 
+bool leyendaParaInicio = false;
+
 Mundo::Mundo() : estadoActual(MENU), modoJuego(1), seleccionX(-1), seleccionY(-1) {} // forzamos el estado inicial
 
 void Mundo::inicializaModo1() {
@@ -619,19 +621,19 @@ void Mundo::procesarClick(int x, int y) {
 
         if (x_gl >= -0.45f && x_gl <= 0.45f) {
             if (y_gl >= 0.55f && y_gl <= 0.65f) {
-                // VS Jugador
-                activarIA = false;      // Guardamos la elección para luego
-                proximoVsIA = false;    // También si quieres guardar aparte
-                estadoActual = LEYENDA; // Cambiamos a mostrar leyenda
+                activarIA = false;
+                proximoVsIA = false;
+                leyendaParaInicio = true; // <--- Añade esto
+                estadoActual = LEYENDA;
                 glutPostRedisplay();
                 std::cout << "Opción 1: Jugador VS Jugador" << std::endl;
                 return;
             }
             else if (y_gl >= 0.35f && y_gl <= 0.45f) {
-                // VS IA
                 activarIA = true;
                 proximoVsIA = true;
-                estadoActual = LEYENDA; // Cambiamos a mostrar leyenda
+                leyendaParaInicio = true;
+                estadoActual = LEYENDA;
                 glutPostRedisplay();
                 std::cout << "Opción 2: Jugador VS IA" << std::endl;
                 return;
@@ -653,6 +655,7 @@ void Mundo::procesarClick(int x, int y) {
         // Botón "Ver Leyenda"
         if (x_gl >= -0.5f && x_gl <= 0.5f && y_gl >= 0.40f && y_gl <= 0.55f) {
             juegoEnPausa = false;
+            leyendaParaInicio = false;
             setEstadoActual(LEYENDA);
             glutPostRedisplay();
             return;
@@ -777,9 +780,15 @@ void Mundo::procesarClick(int x, int y) {
         return;
     }
     if (estadoActual == LEYENDA) {
-        activarIA = proximoVsIA;
-        if (modoJuego == 1) iniciarJuego();
-        else iniciar2dojuego();
+        if (leyendaParaInicio) {
+            activarIA = proximoVsIA;
+            if (modoJuego == 1) iniciarJuego();
+            else iniciar2dojuego();
+        }
+        else {
+            setEstadoActual(JUEGO);
+            glutPostRedisplay();
+        }
         return;
     }
 
